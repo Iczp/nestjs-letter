@@ -58,6 +58,10 @@ module default {
             annotation title := '用户类型';
             default := UserType.Unset
         };
+
+        property erp_user_id -> str {
+            annotation title := 'Erp用户ID';
+        };
     }
 
     type Customer extending User {
