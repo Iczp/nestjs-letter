@@ -1,21 +1,75 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { PagedRequestInput } from 'src/dtos/PagedRequestInput';
+
 import { ICrudService } from './ICrudService';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import e, { createClient } from 'dbschema/edgeql-js'; // auto-generated code
 import { ObjectTypeExpression } from 'dbschema/edgeql-js/typesystem';
+
+import { GetListInput } from './GetListInput';
+import { NotFoundException } from '@nestjs/common';
+
 import { $expr_PathNode } from 'dbschema/edgeql-js/path';
+import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
+import { $bool } from 'dbschema/edgeql-js/modules/std';
+import { Cardinality } from 'dbschema/edgeql-js/reflection';
 
 const client = createClient();
 
-export abstract class CrudService<TDto, TDetailDto, TCreateInput, TUpdateInput>
-  implements ICrudService<TDto, TDetailDto, TCreateInput, TUpdateInput>
+export abstract class CrudService<
+  TDto,
+  TDetailDto,
+  TGetListInput extends GetListInput,
+  TCreateInput,
+  TUpdateInput,
+> implements
+    ICrudService<TDto, TDetailDto, TGetListInput, TCreateInput, TUpdateInput>
 {
-  public abstract entityName: string;
+  // constructor(private readonly entity: ObjectTypeExpression | $expr_PathNode) {}
   public abstract entity: ObjectTypeExpression | $expr_PathNode;
 
-  protected itemQuery(id: string, entity: ObjectTypeExpression): object {
+  public fi(
+    currentExpr: any,
+    condition: boolean,
+    newExpr: $expr_Operator<$bool, Cardinality>,
+    operator: any = 'and',
+  ) {
+    if (condition) {
+      return e.op(currentExpr, operator, newExpr);
+    }
+    return currentExpr;
+  }
+
+  public itemSelect(id: string, entity: ObjectTypeExpression): object {
     return entity['*'];
+  }
+
+  public createSelect(
+    entity: ObjectTypeExpression,
+    input: TCreateInput,
+  ): object {
+    return entity['*'];
+  }
+
+  public updateSelect(
+    entity: ObjectTypeExpression,
+    id: string,
+    input: TUpdateInput,
+  ): object {
+    return entity['*'];
+  }
+
+  public listSelect(
+    entity: ObjectTypeExpression,
+    input: TGetListInput,
+  ): object {
+    return entity['*'];
+  }
+
+  public listFilter(
+    entity: ObjectTypeExpression,
+    input: TGetListInput,
+  ): $expr_Operator<$bool, Cardinality> {
+    return e.op(entity['is_deleted'], '=', e.bool(false));
   }
 
   public mapToUpdateEntity(
@@ -49,43 +103,51 @@ export abstract class CrudService<TDto, TDetailDto, TCreateInput, TUpdateInput>
   }
 
   public async getItem(id: string): Promise<TDetailDto> {
-    const prams = this.itemQuery(id, this.entity) as object;
     console.log('getItem id', id);
-    console.log('getItem prams', prams);
-
-    const query = e.select(this.entity, (entity) => ({
-      filter_single: e.op(entity['id'], '=', e.uuid(id)),
-      ...prams,
-    }));
+    const query = e.select(this.entity, (entity) => {
+      return {
+        filter_single: e.op(
+          e.op(entity['is_deleted'], '=', e.bool(false)),
+          'and',
+          e.op(entity['id'], '=', e.uuid(id)),
+        ),
+        ...this.itemSelect(id, this.entity),
+      };
+    });
     const ret = await query.run(client);
+
     console.log('getItem result', ret);
+
+    if (!ret) {
+      throw new NotFoundException(`Item not found,id:${id}`);
+    }
     return this.mapToDetailDto(ret);
   }
 
-  public async getList(
-    input: PagedRequestInput,
-  ): Promise<PagedResultDto<TDto>> {
+  public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {
     const totalCount = e.count(
-      e.select(e.User, (entity) => ({
-        filter: e.op(entity.is_deleted, '=', e.bool(false)),
+      e.select(this.entity, (entity) => ({
+        filter: this.listFilter(entity, input),
       })),
     );
 
     console.log('totalCount', totalCount);
 
-    const list = e.select(this.entity, (entity) => ({
-      ...entity['*'],
-      offset: e.int64(input.skin),
-      limit: e.int64(input.maxResultCount),
-      filter: e.op(entity['is_deleted'], '=', e.bool(false)),
-      order_by: [
-        {
-          expression: entity['creation_time'],
-          direction: e.ASC,
-          empty: e.EMPTY_LAST,
-        },
-      ],
-    }));
+    const list = e.select(this.entity, (entity) => {
+      return {
+        offset: e.int64(input.skin),
+        limit: e.int64(input.maxResultCount),
+        filter: this.listFilter(entity, input),
+        order_by: [
+          {
+            expression: entity['creation_time'],
+            direction: e.ASC,
+            empty: e.EMPTY_LAST,
+          },
+        ],
+        ...this.listSelect(entity, input),
+      };
+    });
 
     // const entities = await query.run(client);
     const ret = await e.select({ totalCount, list }).run(client);
@@ -104,7 +166,7 @@ export abstract class CrudService<TDto, TDetailDto, TCreateInput, TUpdateInput>
       this.mapToCreateEntity(this.entity, input) as never,
     );
     const queryDisplay = e.select(queryCreate, (entity) => ({
-      ...entity['*'],
+      ...this.createSelect(this.entity, input),
     }));
     const ret = await queryDisplay.run(client);
     return this.mapToDetailDto(ret);
@@ -122,7 +184,6 @@ export abstract class CrudService<TDto, TDetailDto, TCreateInput, TUpdateInput>
     });
 
     const queryDisplay = e.select(queryUpdate, (entity) => ({
-      ...entity['*'],
       order_by: [
         {
           expression: entity['creation_time'],
@@ -130,6 +191,7 @@ export abstract class CrudService<TDto, TDetailDto, TCreateInput, TUpdateInput>
           empty: e.EMPTY_LAST,
         },
       ],
+      ...this.updateSelect(this.entity, id, input),
     }));
     const item = await queryDisplay.run(client);
 

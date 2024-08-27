@@ -8,7 +8,7 @@ import { IService } from './ICrudService';
 export abstract class CrudController<
   TDto,
   TDetailDto,
-  TGetListInput,
+  TGetListInput extends object,
   TCreateInput,
   TUpdateInput,
 > extends BaseController {

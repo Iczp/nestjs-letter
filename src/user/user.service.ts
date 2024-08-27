@@ -1,29 +1,75 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import e from 'dbschema/edgeql-js'; // auto-generated code
+import e, { is } from 'dbschema/edgeql-js'; // auto-generated code
 import { UserCreateInput } from './dtos/UserCreateInput';
 import { UserUpdateInput } from './dtos/UserUpdateInput';
 import { UserDto } from './dtos/UserDto';
 import { CrudService } from 'src/bases/CrudService';
 import { UserDetailDto } from './dtos/UserDetailDto';
+import { UserGetListInput } from './dtos/UserGetListInput';
+import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
+import { $bool } from 'dbschema/edgeql-js/modules/std';
+import { ObjectTypeExpression } from 'dbschema/edgeql-js/reflection';
+import { Cardinality } from 'edgedb/dist/reflection';
+import { UserTypeKeys } from 'src/enums/UserType';
+
+// dep = {
+//   name: true,
+//   users: {
+//     name: true,
+//     phone: true,
+//     user_type: true,
+//   },
+// };
 
 @Injectable()
 export class UserService extends CrudService<
   UserDto,
   UserDetailDto,
+  UserGetListInput,
   UserCreateInput,
   UserUpdateInput
 > {
-  public entityName: string = 'User';
-  public entity: any = e.User;
+  // constructor() {
+  //   super(e.User);
+  // }
+  public readonly entity = e.User;
+
+  override listFilter(
+    entity: ObjectTypeExpression,
+    input: UserGetListInput,
+  ): $expr_Operator<$bool, Cardinality> {
+    let f = super.listFilter(entity, input);
+    const arr = [f];
+    // if (input.userType.toString() != '') {
+    // }
+    if (UserTypeKeys.includes(input.userType)) {
+      f = e.op(
+        f,
+        'and',
+        e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)),
+      );
+    }
+
+    // e.all();
+
+    // f = this.fi(
+    //   f,
+    //   input.userType.toString() != '',
+    //   e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)),
+    // );
+
+    return f;
+  }
 
   public override mapToUpdateEntity(
     entity: any,
     input: UserUpdateInput,
   ): { [x: string]: any } {
     return {
-      name: input.name ? input.name : entity.name,
-      phone: input.phone ? input.phone : entity.phone,
-      gender: input.gender ? input.gender : entity.gender,
+      name: input.name ?? entity.name,
+      phone: input.phone ?? entity.phone,
+      gender: input.gender ?? entity.gender,
     };
   }
 
