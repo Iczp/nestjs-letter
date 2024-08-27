@@ -1,34 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 import { Gender, UserType } from 'dbschema/interfaces';
+import { GetListInput } from 'src/bases/GetListInput';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
 import { UserTypeEnums, UserTypeKeys } from 'src/enums/UserType';
 
-export class UserCreateInput {
-  @IsNotEmpty()
-  @ApiProperty()
-  public name!: string;
-
+export class UserGetListInput extends GetListInput {
   @ApiProperty({
     default: UserTypeEnums[UserTypeEnums.Unknown],
     enum: UserTypeKeys,
   })
-  public userType?: UserType;
+  userType?: UserType;
 
   //   @IsInt()
   @ApiProperty({
     default: GenderEnums[GenderEnums.Unset],
     enum: GenderKeys,
   })
-  public gender?: Gender;
+  gender?: Gender;
 
+  @IsBoolean()
   @ApiProperty()
-  public phone?: string;
-
-  @ApiProperty()
-  public is_enabled: boolean;
-
-  //   @IsInt()
-  //   @ApiProperty()
-  //   max_count?: number;
+  is_enabled?: boolean;
 }

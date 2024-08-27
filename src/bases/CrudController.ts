@@ -1,35 +1,56 @@
-
 import { PagedRequestInput } from 'src/dtos/PagedRequestInput';
 import { BaseController } from './BaseController';
 import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
-export class CrudBaseController extends BaseController {
+import { ApiProperty } from '@nestjs/swagger';
+import { IService } from './ICrudService';
+
+export abstract class CrudBaseController extends BaseController {
+  public service: IService;
   constructor() {
     super();
   }
 
+  @ApiProperty({ description: '获取列表' })
   @Get('')
-  async getList(@Query() input: PagedRequestInput) {
+  async getList(
+    @Query() input: PagedRequestInput,
+  ): Promise<PagedResultDto<any>> {
     console.log(input);
+
+    this.createQueryFilter();
+    //...
+    //...
+    this.mapToDto();
+
+    return this.service.getList(input);
   }
 
+  mapToDto() {}
+  createQueryFilter() {}
+
+  @ApiProperty({ description: '获取单个' })
   @Get(':id')
-  async getItem(@Param() id: string) {
-    console.log(id);
+  public async getItem(id: string) {
+    return this.service.getItem(id);
   }
 
   @Post('')
-  async create(@Body() input: any) {
+  public async create(@Body() input: any) {
     console.log(input);
+    return this.service.create(input);
   }
 
   @Put(':id')
-  async upate(@Param() id: string, @Body() input: any) {
+  public async update(@Param() id: string, @Body() input: any) {
     console.log(id, input);
+    return this.service.update(id, input);
   }
 
   @Delete(':id')
-  async delete(@Query('id') id: string) {
+  public async delete(@Query('id') id: string) {
     console.log(id);
+    await this.service.delete(id);
   }
 }

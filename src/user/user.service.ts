@@ -2,41 +2,74 @@ import { Injectable } from '@nestjs/common';
 
 import { createClient } from 'edgedb';
 import e from 'dbschema/edgeql-js'; // auto-generated code
-import { User } from 'dbschema/interfaces'; // auto-generated code
 import { UserCreateInput } from './dtos/UserCreateInput';
 import { UserUpdateInput } from './dtos/UserUpdateInput';
+import { PagedRequestInput } from 'src/dtos/PagedRequestInput';
+import { UserDto } from './dtos/UserDto';
+import { PagedResultDto } from 'src/dtos/PagedResultDto';
+import { CrudService } from 'src/bases/CrudService';
+import { UserDetailDto } from './dtos/UserDetailDto';
+
 const client = createClient();
 
 @Injectable()
-export class UserService {
-  async getItem(id: string) {
-    const query = e.select(e.User, (entity) => ({
-      ...e.User['*'],
-      filter_single: e.op(entity.id, '=', e.uuid(id)),
-    }));
-
-    const result = await query.run(client);
-    return result;
+export class UserService extends CrudService<
+  UserDto,
+  UserDetailDto,
+  UserCreateInput,
+  UserUpdateInput
+> {
+  public entityName: string = 'User';
+  public entity: any = e.User;
+  itemQuery(): object {
+    throw new Error('Method not implemented.');
   }
-  async getList(name?: string, maxResultCount = 10, skipCount = 0) {
-    const totalCount = e.count(e.User);
+  // async getItem(id: string) {
+  //   const query = e.select(e.User, (entity) => ({
+  //     ...e.User['*'],
+  //     filter_single: e.op(entity.id, '=', e.uuid(id)),
+  //   }));
+
+  //   const result = await query.run(client);
+  //   return result[0];
+  // }
+  async getList(input: PagedRequestInput) {
+    const totalCount = e.count(
+      e.select(e.User, (entity) => ({
+        filter: e.op(entity.is_deleted, '=', e.bool(false)),
+      })),
+    );
+
     console.log('totalCount', totalCount);
-    const query = e.select(e.User, (user) => ({
-      ...e.User['*'],
-      offset: e.int64(skipCount),
-      limit: e.int64(maxResultCount),
-      filter: e.op(user.is_deleted, '=', e.bool(false)),
+
+    const list = e.select(e.User, (entity) => ({
+      ...entity['*'],
+      offset: e.int64(input.skin),
+      limit: e.int64(input.maxResultCount),
+      filter: e.op(entity.is_deleted, '=', e.bool(false)),
       order_by: [
         {
-          expression: user.name,
+          expression: entity.name,
           direction: e.ASC,
           empty: e.EMPTY_LAST,
         },
       ],
     }));
 
-    const list = await query.run(client);
-    return list;
+    // const entities = await query.run(client);
+    const q = await e.select({ totalCount, list }).run(client);
+
+    const items = q.list.map((item) => {
+      return <UserDto>{
+        name: item.name,
+        userType: item.user_type,
+        gender: item.gender,
+        phone: item.phone,
+        is_enabled: item.is_enabled,
+      };
+    });
+
+    return new PagedResultDto<UserDto>(q.totalCount, items);
   }
 
   async create(input: UserCreateInput) {
@@ -60,9 +93,7 @@ export class UserService {
 
   async update(id: string, input: UserUpdateInput) {
     // Return an empty list if no filter 'name' is provided.
-    if (!id) {
-      return [];
-    }
+
     const queryUpdate = e.update(e.User, (user) => ({
       filter: e.op(user.id, '=', e.uuid(id)),
       set: {
@@ -83,22 +114,22 @@ export class UserService {
         },
       ],
     }));
-
-    return await queryDisplay.run(client);
+    const result = await queryDisplay.run(client);
+    return result[0];
     // return await this.getItem(id);
   }
 
-  async delete(name: string) {
+  async delete(id: string) {
     // Return an empty list if no filter 'name' is provided.
-    if (!name) {
-      return [];
+    if (!id) {
+      return;
     }
     const queryDelete = e.delete(e.User, (user) => ({
-      filter: e.op(user.name, '=', name),
+      filter: e.op(user.name, '=', id),
     }));
     const queryDisplay = e.select(queryDelete, (user) => ({
       id: true,
-      name: true,
+      // name: true,
       //   age: true,
       //   height: true,
       //   is_deceased: true,
@@ -110,7 +141,7 @@ export class UserService {
         },
       ],
     }));
-
-    return await queryDisplay.run(client);
+    const result = await queryDisplay.run(client);
+    console.log(result);
   }
 }
