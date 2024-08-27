@@ -8,20 +8,43 @@ import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 
 const client = createClient();
 
-export abstract class CrudService<TDto, TDetailDto, TCteateInput, TUpdateInput>
-  implements ICrudService<TDto, TDetailDto, TCteateInput, TUpdateInput>
+export abstract class CrudService<TDto, TDetailDto, TCreateInput, TUpdateInput>
+  implements ICrudService<TDto, TDetailDto, TCreateInput, TUpdateInput>
 {
   public abstract entityName: string;
   public abstract entity: ObjectTypeExpression | $expr_PathNode;
 
-  protected itemQuery(id: string, obj: ObjectTypeExpression): object {
-    return obj['*'];
+  protected itemQuery(id: string, entity: ObjectTypeExpression): object {
+    return entity['*'];
   }
 
-  mapToDto(item: any): TDto {
+  public mapToUpdateEntity(
+    entity: any,
+    input: TUpdateInput,
+  ): { [x: string]: any } {
+    const result = {};
+    if (entity.last_modification_time) {
+      result['last_modification_time'] = e.datetime_current();
+    }
+    return {
+      ...result,
+      ...input,
+    };
+  }
+
+  public mapToCreateEntity(
+    entity: any,
+    input: TCreateInput,
+  ): { [x: string]: any } {
+    return {
+      ...input,
+    };
+  }
+
+  public mapToDto(item: any): TDto {
     return item as TDto;
   }
-  mapToDetailDto(item: any): TDetailDto {
+  public mapToDetailDto(item: any): TDetailDto {
     return item as TDetailDto;
   }
 
@@ -75,28 +98,58 @@ export abstract class CrudService<TDto, TDetailDto, TCteateInput, TUpdateInput>
 
     return new PagedResultDto<TDto>(ret.totalCount, items);
   }
-  public async create(input: TCteateInput): Promise<TDetailDto> {
+  public async create(input: TCreateInput): Promise<TDetailDto> {
     const queryCreate = e.insert(
       this.entity as $expr_PathNode,
-      {
-        ...(input as object),
-      } as never,
+      this.mapToCreateEntity(this.entity, input) as never,
     );
-
-    const queryDisplay = e.select(queryCreate, () => ({
-      id: true,
-      name: true,
-      //   age: true,
-      //   height: true,
-      //   is_deceased: true,
+    const queryDisplay = e.select(queryCreate, (entity) => ({
+      ...entity['*'],
     }));
     const ret = await queryDisplay.run(client);
     return this.mapToDetailDto(ret);
   }
-  public update(id: string, input: TUpdateInput): Promise<TDetailDto> {
-    throw new Error('Method not implemented.');
+  public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
+    const queryUpdate = e.update(this.entity, (entity) => {
+      const params = { ...this.mapToUpdateEntity(entity, input) };
+      if (entity['last_modification_time']) {
+        params['last_modification_time'] = e.datetime_current();
+      }
+      return {
+        filter: e.op(entity['id'], '=', e.uuid(id)),
+        set: params,
+      };
+    });
+
+    const queryDisplay = e.select(queryUpdate, (entity) => ({
+      ...entity['*'],
+      order_by: [
+        {
+          expression: entity['creation_time'],
+          direction: e.DESC,
+          empty: e.EMPTY_LAST,
+        },
+      ],
+    }));
+    const item = await queryDisplay.run(client);
+
+    return this.mapToDetailDto(item);
   }
-  public delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+
+  public async delete(id: string): Promise<void> {
+    // const queryDelete = e.delete(this.entity, (entity) => ({
+    //   filter_single: e.op(entity[id], '=', e.uuid(id)),
+    // }));
+
+    const queryUpdate = e.update(this.entity, (entity) => ({
+      filter_single: e.op(entity['id'], '=', e.uuid(id)),
+      set: {
+        is_deleted: e.bool(true),
+        deletion_time: e.datetime_current(),
+      },
+    }));
+
+    const result = await queryUpdate.run(client);
+    console.log(result);
   }
 }

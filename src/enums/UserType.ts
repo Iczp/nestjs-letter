@@ -1,5 +1,5 @@
 export enum UserTypeEnums {
-  Unknown,
+  Unset,
   Customer,
   ShopManager,
 }

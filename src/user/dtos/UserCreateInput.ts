@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsIn } from 'class-validator';
 import { Gender, UserType } from 'dbschema/interfaces';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
 import { UserTypeEnums, UserTypeKeys } from 'src/enums/UserType';
@@ -10,14 +10,15 @@ export class UserCreateInput {
   public name!: string;
 
   @ApiProperty({
-    default: UserTypeEnums[UserTypeEnums.Unknown],
+    default: UserTypeEnums[UserTypeEnums.Unset],
     enum: UserTypeKeys,
   })
+  @IsIn(UserTypeKeys)
   public userType?: UserType;
 
-  //   @IsInt()
+  @IsIn(GenderKeys)
   @ApiProperty({
-    default: GenderEnums[GenderEnums.Unset],
+    default: GenderEnums[GenderEnums.Unknown],
     enum: GenderKeys,
   })
   public gender?: Gender;

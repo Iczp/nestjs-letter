@@ -7,8 +7,6 @@ export class PagedRequestInput {
     description: '关键字',
     required: false,
   })
-  // @IsNotEmpty()
-  // @Type(() => String)
   @MaxLength(100)
   @IsOptional()
   public keyword?: string;
@@ -30,4 +28,11 @@ export class PagedRequestInput {
   })
   // @IsInt()
   public skin?: number;
+
+  @ApiProperty({
+    type: String,
+    description: '排序',
+    required: false,
+  })
+  public sort?: string;
 }

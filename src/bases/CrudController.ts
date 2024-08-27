@@ -5,7 +5,7 @@ import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { ApiOperation } from '@nestjs/swagger';
 import { IService } from './ICrudService';
 
-export abstract class CrudBaseController<
+export abstract class CrudController<
   TDto,
   TDetailDto,
   TGetListInput,
@@ -18,27 +18,28 @@ export abstract class CrudBaseController<
     super();
   }
 
-  @ApiOperation({ summary: '获取列表', description: '获取列表' })
   @Get('')
+  @ApiOperation({ summary: '获取列表', description: '获取列表' })
   async getList(@Query() input: TGetListInput): Promise<PagedResultDto<TDto>> {
     console.log(input);
     return this.service.getList(input);
   }
-  @ApiOperation({ summary: '获取单个', description: '获取单个' })
+
   @Get(':id')
+  @ApiOperation({ summary: '获取单个', description: '获取单个' })
   public async getItem(@Param('id') id: string): Promise<TDetailDto> {
     return this.service.getItem(id);
   }
 
-  @ApiOperation({ summary: '新增', description: `` })
   @Post('')
+  @ApiOperation({ summary: '新增', description: `` })
   public async create(@Body() input: TCreateInput): Promise<TDetailDto> {
     console.log(input);
     return this.service.create(input);
   }
 
-  @ApiOperation({ summary: '修改', description: `` })
   @Put(':id')
+  @ApiOperation({ summary: '修改', description: `` })
   public async update(
     @Param('id') id: string,
     @Body() input: TUpdateInput,
