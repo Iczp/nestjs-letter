@@ -4,9 +4,9 @@ import { createClient } from 'edgedb';
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { UserCreateInput } from './dtos/UserCreateInput';
 import { UserUpdateInput } from './dtos/UserUpdateInput';
-import { PagedRequestInput } from 'src/dtos/PagedRequestInput';
+// import { PagedRequestInput } from 'src/dtos/PagedRequestInput';
 import { UserDto } from './dtos/UserDto';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
+// import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { CrudService } from 'src/bases/CrudService';
 import { UserDetailDto } from './dtos/UserDetailDto';
 
@@ -21,9 +21,7 @@ export class UserService extends CrudService<
 > {
   public entityName: string = 'User';
   public entity: any = e.User;
-  itemQuery(): object {
-    throw new Error('Method not implemented.');
-  }
+
   // async getItem(id: string) {
   //   const query = e.select(e.User, (entity) => ({
   //     ...e.User['*'],
@@ -33,44 +31,44 @@ export class UserService extends CrudService<
   //   const result = await query.run(client);
   //   return result[0];
   // }
-  async getList(input: PagedRequestInput) {
-    const totalCount = e.count(
-      e.select(e.User, (entity) => ({
-        filter: e.op(entity.is_deleted, '=', e.bool(false)),
-      })),
-    );
+  // async getList(input: PagedRequestInput) {
+  //   const totalCount = e.count(
+  //     e.select(e.User, (entity) => ({
+  //       filter: e.op(entity.is_deleted, '=', e.bool(false)),
+  //     })),
+  //   );
 
-    console.log('totalCount', totalCount);
+  //   console.log('totalCount', totalCount);
 
-    const list = e.select(e.User, (entity) => ({
-      ...entity['*'],
-      offset: e.int64(input.skin),
-      limit: e.int64(input.maxResultCount),
-      filter: e.op(entity.is_deleted, '=', e.bool(false)),
-      order_by: [
-        {
-          expression: entity.name,
-          direction: e.ASC,
-          empty: e.EMPTY_LAST,
-        },
-      ],
-    }));
+  //   const list = e.select(e.User, (entity) => ({
+  //     ...entity['*'],
+  //     offset: e.int64(input.skin),
+  //     limit: e.int64(input.maxResultCount),
+  //     filter: e.op(entity.is_deleted, '=', e.bool(false)),
+  //     order_by: [
+  //       {
+  //         expression: entity.name,
+  //         direction: e.ASC,
+  //         empty: e.EMPTY_LAST,
+  //       },
+  //     ],
+  //   }));
 
-    // const entities = await query.run(client);
-    const q = await e.select({ totalCount, list }).run(client);
+  //   // const entities = await query.run(client);
+  //   const q = await e.select({ totalCount, list }).run(client);
 
-    const items = q.list.map((item) => {
-      return <UserDto>{
-        name: item.name,
-        userType: item.user_type,
-        gender: item.gender,
-        phone: item.phone,
-        is_enabled: item.is_enabled,
-      };
-    });
+  //   const items = q.list.map((item) => {
+  //     return <UserDto>{
+  //       name: item.name,
+  //       userType: item.user_type,
+  //       gender: item.gender,
+  //       phone: item.phone,
+  //       is_enabled: item.is_enabled,
+  //     };
+  //   });
 
-    return new PagedResultDto<UserDto>(q.totalCount, items);
-  }
+  //   return new PagedResultDto<UserDto>(q.totalCount, items);
+  // }
 
   async create(input: UserCreateInput) {
     const queryCreate = e.insert(e.User, {

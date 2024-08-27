@@ -1,53 +1,53 @@
-import { PagedRequestInput } from 'src/dtos/PagedRequestInput';
 import { BaseController } from './BaseController';
 import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiOperation } from '@nestjs/swagger';
 import { IService } from './ICrudService';
 
-export abstract class CrudBaseController extends BaseController {
-  public service: IService;
-  constructor() {
+export abstract class CrudBaseController<
+  TDto,
+  TDetailDto,
+  TGetListInput,
+  TCreateInput,
+  TUpdateInput,
+> extends BaseController {
+  // implements ICrudService<TDto, TDetailDto, TCteateInput, TUpdateInput>
+  // public service: IService;
+  constructor(private readonly service: IService) {
     super();
   }
 
-  @ApiProperty({ description: '获取列表' })
+  @ApiOperation({ summary: '获取列表', description: '获取列表' })
   @Get('')
-  async getList(
-    @Query() input: PagedRequestInput,
-  ): Promise<PagedResultDto<any>> {
+  async getList(@Query() input: TGetListInput): Promise<PagedResultDto<TDto>> {
     console.log(input);
-
-    this.createQueryFilter();
-    //...
-    //...
-    this.mapToDto();
-
     return this.service.getList(input);
   }
-
-  mapToDto() {}
-  createQueryFilter() {}
-
-  @ApiProperty({ description: '获取单个' })
+  @ApiOperation({ summary: '获取单个', description: '获取单个' })
   @Get(':id')
-  public async getItem(id: string) {
+  public async getItem(@Param('id') id: string): Promise<TDetailDto> {
     return this.service.getItem(id);
   }
 
+  @ApiOperation({ summary: '新增', description: `` })
   @Post('')
-  public async create(@Body() input: any) {
+  public async create(@Body() input: TCreateInput): Promise<TDetailDto> {
     console.log(input);
     return this.service.create(input);
   }
 
+  @ApiOperation({ summary: '修改', description: `` })
   @Put(':id')
-  public async update(@Param() id: string, @Body() input: any) {
+  public async update(
+    @Param('id') id: string,
+    @Body() input: TUpdateInput,
+  ): Promise<TDetailDto> {
     console.log(id, input);
     return this.service.update(id, input);
   }
 
+  @ApiOperation({ summary: '删除', description: `` })
   @Delete(':id')
   public async delete(@Query('id') id: string) {
     console.log(id);
