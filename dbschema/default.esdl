@@ -1,7 +1,9 @@
 module default {
 
     # MultiTenant
-    global tenant_id: str;
+    global tenant_id: str {
+        default := 'default'
+    };
 
     # CurrentUser
     global current_user_id: uuid;
