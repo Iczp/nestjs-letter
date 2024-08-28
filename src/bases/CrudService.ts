@@ -60,12 +60,9 @@ export abstract class CrudService<
     return e.op(this.entity['id'], '=', e.bool(false));
   }
 
-  public mapToUpdateEntity(
-    entity: any,
-    input: TUpdateInput,
-  ): { [x: string]: any } {
+  public mapToUpdateEntity(input: TUpdateInput): { [x: string]: any } {
     const result = {};
-    if (entity.last_modification_time) {
+    if (this.entity['last_modification_time']) {
       result['last_modification_time'] = e.datetime_current();
     }
     return {
@@ -162,14 +159,20 @@ export abstract class CrudService<
   }
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
     const queryUpdate = e.update(this.entity, (entity) => {
+      const inputDto = {
+        last_modification_time: e.datetime_current(),
+        ...this.mapToUpdateEntity(input),
+      };
+      console.log('update inputDto:', inputDto);
+
       return {
-        filter: e.op(entity['id'], '=', e.uuid(id)),
-        set: {
-          last_modification_time: e.datetime_current(),
-          ...this.mapToUpdateEntity(entity, input),
-        },
+        filter_single: e.op(entity['id'], '=', e.uuid(id)),
+        set: inputDto,
       };
     });
+    const u1 = await queryUpdate.run(client);
+
+    console.log('update result:', u1);
 
     const queryDisplay = e.select(queryUpdate, (entity) => ({
       order_by: [
@@ -181,7 +184,12 @@ export abstract class CrudService<
       ],
       ...this.updateSelect(id, input),
     }));
+
     const item = await queryDisplay.run(client);
+
+    if (!item) {
+      throw new NotFoundException(`Item not found,id:${id}`);
+    }
 
     return this.mapToDetailDto(item);
   }
