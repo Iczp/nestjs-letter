@@ -14,6 +14,8 @@ import { Cardinality } from 'edgedb/dist/reflection';
 import { GenderKeys } from 'src/enums/Gender';
 import { AddIf } from 'src/common/AddIf';
 import { PromiseResult } from 'src/types/PromiseResult';
+import { InsertShape } from 'dbschema/edgeql-js/insert';
+import { ExtractDBType } from 'src/types/ExtractDBType';
 
 // dep = {
 //   name: true,
@@ -37,14 +39,22 @@ export class ActivityCustomerService extends CrudService<
   // }
   public readonly entity = e.ActivityCustomer;
 
-  override listFilter(input: ActivityCustomerGetListInput): any {
-    const fi = new AddIf([
-      e.op(e.ActivityCustomer.is_deleted, '=', e.bool(false)),
-    ])
-
+  override listFilter(
+    input: ActivityCustomerGetListInput,
+    entity: ExtractDBType<typeof e.ActivityCustomer>,
+  ): any {
+    const fi = new AddIf([e.op(entity.is_deleted, '=', e.bool(false))])
+      .addIf(
+        input.is_checked !== undefined,
+        e.op(entity.is_checked, '=', e.bool(input.is_checked)),
+      )
+      .addIf(
+        input.is_invited !== undefined,
+        e.op(entity.is_invited, '=', e.bool(input.is_invited)),
+      )
       .addIf(
         input.is_enabled !== undefined,
-        e.op(e.ActivityCustomer.is_enabled, '=', e.bool(input.is_enabled)),
+        e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
       )
       .toArray();
 

@@ -14,6 +14,12 @@ import { $bool } from 'dbschema/edgeql-js/modules/std';
 import { Cardinality, PrimitiveTypeSet } from 'dbschema/edgeql-js/reflection';
 import { AddIf } from 'src/common/AddIf';
 import { PromiseResult } from 'src/types/PromiseResult';
+import { InsertShape } from 'dbschema/edgeql-js/syntax';
+
+
+// const a: ExtractDBType<typeof e.Area> = {
+
+// }
 
 export abstract class CrudService<
   TDto,
@@ -57,7 +63,7 @@ export abstract class CrudService<
     return this.entity['*'];
   }
 
-  public listFilter(input: TGetListInput) {
+  public listFilter(input: TGetListInput, entity: any) {
     return e.op(this.entity['id'], '=', e.bool(false));
   }
 
@@ -110,19 +116,26 @@ export abstract class CrudService<
   }
 
   public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {
+    // console.log('listFilter', filter);
+    // console.log('toEdgeQL', filter.toEdgeQL());
     const totalCount = e.count(
-      e.select(this.entity as any, (entity) => ({
-        filter: this.listFilter(input),
-      })),
+      e.select(this.entity as any, (entity) => {
+        const filter = this.listFilter(input, entity);
+        return {
+          filter,
+        };
+      }),
     );
 
-    console.log('totalCount', totalCount);
+    // console.log('totalCount', totalCount);
 
     const list = e.select(this.entity, (entity) => {
+      const filter = this.listFilter(input, entity);
+
       return {
         offset: e.int64(input.skip),
         limit: e.int64(input.maxResultCount),
-        filter: this.listFilter(input),
+        filter,
         order_by: [
           {
             expression: entity['creation_time'],

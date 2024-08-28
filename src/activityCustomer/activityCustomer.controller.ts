@@ -65,7 +65,7 @@ export class ActivityCustomerController extends CrudController<
     return super.update(id, input);
   }
 
-  @Post('check/:id')
+  @Post('checked/:id')
   @ApiOperation({ summary: '设置 是否签到' })
   public setIsChecked(
     @Param('id') id: string,
@@ -75,7 +75,7 @@ export class ActivityCustomerController extends CrudController<
   }
 
   @Post('invited/:id')
-  @ApiOperation({ summary: '设置 是否签到' })
+  @ApiOperation({ summary: '设置 是否已邀请' })
   public setIsActived(
     @Param('id') id: string,
     @Query('is_invited') is_invited: boolean,
