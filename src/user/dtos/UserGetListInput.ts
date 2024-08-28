@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsIn } from 'class-validator';
+import { IsBoolean, IsIn, IsOptional } from 'class-validator';
 import { Gender, UserType } from 'dbschema/interfaces';
 import { GetListInput } from 'src/bases/GetListInput';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
@@ -20,6 +20,7 @@ export class UserGetListInput extends GetListInput {
   })
   public gender?: Gender;
 
+  @IsOptional()
   @IsBoolean()
   @ApiProperty({
     default: true,

@@ -11,7 +11,7 @@ import { NotFoundException } from '@nestjs/common';
 import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
 import { $bool } from 'dbschema/edgeql-js/modules/std';
-import { Cardinality } from 'dbschema/edgeql-js/reflection';
+import { Cardinality, PrimitiveTypeSet } from 'dbschema/edgeql-js/reflection';
 
 const client = createClient();
 
@@ -65,10 +65,7 @@ export abstract class CrudService<
     return entity['*'];
   }
 
-  public listFilter(
-    entity: ObjectTypeExpression,
-    input: TGetListInput,
-  ): $expr_Operator<$bool, Cardinality> {
+  public listFilter(entity: ObjectTypeExpression, input: TGetListInput) {
     return e.op(entity['id'], '=', e.bool(false));
   }
 
@@ -125,15 +122,9 @@ export abstract class CrudService<
   }
 
   public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {
-    const a: $expr_Operator<$bool, Cardinality> = e.op(
-      this.entity['is_deleted'],
-      '=',
-      e.bool(false),
-    );
     const totalCount = e.count(
-      e.select(this.entity, (entity) => ({
-        // filter: e.all(...this.listFilter(entity, input)),
-        // filter: e.all(a, a),
+      e.select(this.entity as any, (entity) => ({
+        filter: this.listFilter(entity, input),
       })),
     );
 
@@ -141,9 +132,9 @@ export abstract class CrudService<
 
     const list = e.select(this.entity, (entity) => {
       return {
-        offset: e.int64(input.skin),
+        offset: e.int64(input.skip),
         limit: e.int64(input.maxResultCount),
-        // filter: this.listFilter(entity, input),
+        filter: this.listFilter(entity, input),
         order_by: [
           {
             expression: entity['creation_time'],

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, MaxLength } from 'class-validator';
+import { IsInt, IsOptional, MaxLength } from 'class-validator';
 
 export class PagedRequestInput {
   @ApiProperty({
@@ -17,7 +17,7 @@ export class PagedRequestInput {
     required: true,
     default: 10,
   })
-  // @IsInt()
+  @IsInt()
   public maxResultCount?: number;
 
   @ApiProperty({
@@ -26,8 +26,8 @@ export class PagedRequestInput {
     required: false,
     default: 0,
   })
-  // @IsInt()
-  public skin?: number;
+  @IsInt()
+  public skip?: number;
 
   @ApiProperty({
     type: String,

@@ -12,6 +12,8 @@ import { $bool } from 'dbschema/edgeql-js/modules/std';
 import { ObjectTypeExpression } from 'dbschema/edgeql-js/reflection';
 import { Cardinality } from 'edgedb/dist/reflection';
 import { UserTypeKeys } from 'src/enums/UserType';
+import { GenderKeys } from 'src/enums/Gender';
+import { AddIf } from 'src/common/AddIf';
 
 // dep = {
 //   name: true,
@@ -38,21 +40,23 @@ export class UserService extends CrudService<
   override listFilter(
     entity: ObjectTypeExpression,
     input: UserGetListInput,
-  ): $expr_Operator<$bool, Cardinality> {
-    // let f = super.listFilter(entity, input);
-    // const arr = [f];
-    // if (input.userType.toString() != '') {
-    // }
+  ): any {
+    const fi = new AddIf([e.op(e.User.is_deleted, '=', e.bool(false))])
+      .addIf(
+        UserTypeKeys.includes(input.userType),
+        e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)),
+      )
+      .addIf(
+        GenderKeys.includes(input.gender),
+        e.op(e.User.gender, '=', e.cast(e.Gender, input.gender)),
+      )
+      .addIf(
+        input.is_enabled !== undefined,
+        e.op(e.User.is_enabled, '=', e.bool(input.is_enabled)),
+      )
+      .toArray();
 
-    const arr = [
-      e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)),
-    ];
-
-    if (UserTypeKeys.includes(input.userType)) {
-      arr.push(e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)));
-    }
-
-    return undefined;
+    return e.all(e.set(...fi));
   }
 
   public override mapToUpdateEntity(

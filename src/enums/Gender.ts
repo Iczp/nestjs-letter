@@ -1,7 +1,7 @@
 export enum GenderEnums {
-  Unknown,
-  Male,
-  Female,
+  Unknown = 'Unknown',
+  Male = 'Male',
+  Female = 'Female',
 }
 
 export const GenderKeys = Object.keys(GenderEnums).filter((key) => isNaN(+key));
