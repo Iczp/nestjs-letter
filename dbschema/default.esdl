@@ -2,7 +2,7 @@ module default {
 
     # MultiTenant
     global tenant_id: str {
-        default := 'default'
+        default := ('default')
     };
 
     # CurrentUser
@@ -21,19 +21,16 @@ module default {
         annotation description := 'All entities extending BaseEntity';
 
         property creation_time -> datetime {
-            # default := (select datetime_current());
             annotation title := '创建时间';
             default := (std::datetime_current());
         }
 
         property deletion_time -> datetime {
-            # default := (select datetime_current());
             annotation title := '删除时间';
             # default := (std::datetime_current());
         }
 
         property last_modification_time -> datetime {
-            # default := (select datetime_current());
             annotation title := '最后修改时间';
             # default := (std::datetime_current());
         };
@@ -45,11 +42,10 @@ module default {
 
         required tenant_id -> str {
             annotation title := '租户';
-            default := 'default'
+            default := ('default')
         }
 
         required is_deleted -> bool {
-            # default := (select datetime_current());
             annotation title := '是否已删除';
             default := (false);
         };
@@ -165,9 +161,9 @@ module default {
             default := (std::datetime_current());
         };
 
-        property is_actived -> datetime {
+        property is_actived -> bool {
             annotation title := '是否活跃';
-            default := (std::datetime_current());
+            default := (true);
         };
 
         # multi customers: ActivityCustomer {

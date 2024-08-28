@@ -74,10 +74,7 @@ export abstract class CrudService<
     };
   }
 
-  public mapToCreateEntity(
-    entity: any,
-    input: TCreateInput,
-  ): { [x: string]: any } {
+  public mapToCreateEntity(input: TCreateInput): { [x: string]: any } {
     return {
       ...input,
     };
@@ -152,17 +149,14 @@ export abstract class CrudService<
   }
 
   public async create(input: TCreateInput): Promise<TDetailDto> {
-    console.log('create input', input);
-
+    const inputDto = this.mapToCreateEntity(input);
+    console.log('create inputDto', inputDto);
     const queryCreate = e.insert(
       this.entity as $expr_PathNode,
-      this.mapToCreateEntity(this.entity, input) as never,
+      inputDto as never,
     );
-    const c = await queryCreate.run(client);
 
-    const queryDisplay = e.select(queryCreate, (entity) => ({
-      ...this.createSelect(input),
-    }));
+    const queryDisplay = e.select(queryCreate, () => this.createSelect(input));
     const ret = await queryDisplay.run(client);
     return this.mapToDetailDto(ret);
   }
