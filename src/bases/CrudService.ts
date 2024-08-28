@@ -12,6 +12,7 @@ import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
 import { $bool } from 'dbschema/edgeql-js/modules/std';
 import { Cardinality, PrimitiveTypeSet } from 'dbschema/edgeql-js/reflection';
+import { AddIf } from 'src/common/AddIf';
 
 const client = createClient();
 
@@ -43,30 +44,20 @@ export abstract class CrudService<
     return entity['*'];
   }
 
-  public createSelect(
-    entity: ObjectTypeExpression,
-    input: TCreateInput,
-  ): object {
-    return entity['*'];
+  public createSelect(input: TCreateInput): object {
+    return this.entity['*'];
   }
 
-  public updateSelect(
-    entity: ObjectTypeExpression,
-    id: string,
-    input: TUpdateInput,
-  ): object {
-    return entity['*'];
+  public updateSelect(id: string, input: TUpdateInput): object {
+    return this.entity['*'];
   }
 
-  public listSelect(
-    entity: ObjectTypeExpression,
-    input: TGetListInput,
-  ): object {
-    return entity['*'];
+  public listSelect(input: TGetListInput): object {
+    return this.entity['*'];
   }
 
-  public listFilter(entity: ObjectTypeExpression, input: TGetListInput) {
-    return e.op(entity['id'], '=', e.bool(false));
+  public listFilter(input: TGetListInput) {
+    return e.op(this.entity['id'], '=', e.bool(false));
   }
 
   public mapToUpdateEntity(
@@ -102,12 +93,14 @@ export abstract class CrudService<
   public async getItem(id: string): Promise<TDetailDto> {
     console.log('getItem id', id);
     const query = e.select(this.entity, (entity) => {
-      return {
-        filter_single: e.op(
+      const fi = new AddIf([e.op(entity['id'], '=', e.uuid(id))])
+        .addIf(
+          entity['is_deleted'],
           e.op(entity['is_deleted'], '=', e.bool(false)),
-          'and',
-          e.op(entity['id'], '=', e.uuid(id)),
-        ),
+        )
+        .toArray();
+      return {
+        filter_single: e.all(e.set(...fi)),
         ...this.itemSelect(id, this.entity),
       };
     });
@@ -124,7 +117,7 @@ export abstract class CrudService<
   public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {
     const totalCount = e.count(
       e.select(this.entity as any, (entity) => ({
-        filter: this.listFilter(entity, input),
+        filter: this.listFilter(input),
       })),
     );
 
@@ -134,7 +127,7 @@ export abstract class CrudService<
       return {
         offset: e.int64(input.skip),
         limit: e.int64(input.maxResultCount),
-        filter: this.listFilter(entity, input),
+        filter: this.listFilter(input),
         order_by: [
           {
             expression: entity['creation_time'],
@@ -142,7 +135,7 @@ export abstract class CrudService<
             empty: e.EMPTY_LAST,
           },
         ],
-        ...this.listSelect(entity, input),
+        ...this.listSelect(input),
       };
     });
 
@@ -164,20 +157,19 @@ export abstract class CrudService<
       this.mapToCreateEntity(this.entity, input) as never,
     );
     const queryDisplay = e.select(queryCreate, (entity) => ({
-      ...this.createSelect(this.entity, input),
+      ...this.createSelect(input),
     }));
     const ret = await queryDisplay.run(client);
     return this.mapToDetailDto(ret);
   }
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
     const queryUpdate = e.update(this.entity, (entity) => {
-      const params = { ...this.mapToUpdateEntity(entity, input) };
-      if (entity['last_modification_time']) {
-        params['last_modification_time'] = e.datetime_current();
-      }
       return {
         filter: e.op(entity['id'], '=', e.uuid(id)),
-        set: params,
+        set: {
+          last_modification_time: e.datetime_current(),
+          ...this.mapToUpdateEntity(entity, input),
+        },
       };
     });
 
@@ -189,7 +181,7 @@ export abstract class CrudService<
           empty: e.EMPTY_LAST,
         },
       ],
-      ...this.updateSelect(this.entity, id, input),
+      ...this.updateSelect(id, input),
     }));
     const item = await queryDisplay.run(client);
 

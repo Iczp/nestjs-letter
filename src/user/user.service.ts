@@ -37,10 +37,7 @@ export class UserService extends CrudService<
   // }
   public readonly entity = e.User;
 
-  override listFilter(
-    entity: ObjectTypeExpression,
-    input: UserGetListInput,
-  ): any {
+  override listFilter(input: UserGetListInput): any {
     const fi = new AddIf([e.op(e.User.is_deleted, '=', e.bool(false))])
       .addIf(
         UserTypeKeys.includes(input.userType),
@@ -59,10 +56,10 @@ export class UserService extends CrudService<
     return e.all(e.set(...fi));
   }
 
-  public override mapToUpdateEntity(
-    entity: any,
-    input: UserUpdateInput,
-  ): { [x: string]: any } {
+  public override mapToUpdateEntity(input: UserUpdateInput): {
+    [x: string]: any;
+  } {
+    const entity = e.User;
     return {
       name: input.name ?? entity.name,
       phone: input.phone ?? entity.phone,
@@ -70,10 +67,9 @@ export class UserService extends CrudService<
     };
   }
 
-  public override mapToCreateEntity(
-    entity: any,
-    input: UserCreateInput,
-  ): { [x: string]: any } {
+  public override mapToCreateEntity(input: UserCreateInput): {
+    [x: string]: any;
+  } {
     return {
       name: input.name,
       gender: input.gender,
