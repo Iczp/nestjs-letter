@@ -7,6 +7,7 @@ import { CrudService } from 'src/bases/CrudService';
 import { ActivityDetailDto } from './dtos/ActivityDetailDto';
 import { ActivityGetListInput } from './dtos/ActivityGetListInput';
 import { AddIf } from 'src/common/AddIf';
+import { PromiseResult } from 'src/types/PromiseResult';
 
 @Injectable()
 export class ActivityService extends CrudService<
@@ -30,11 +31,9 @@ export class ActivityService extends CrudService<
     return e.all(e.set(...fi));
   }
 
-  public override mapToUpdateEntity(input: ActivityUpdateInput): {
-    [x: string]: any;
-  } {
+  public override mapToUpdateEntity(input: ActivityUpdateInput): PromiseResult {
     const entity = e.Activity;
-    return {
+    return Promise.resolve({
       title: input.title ?? entity.title,
       coverUrl: input.coverUrl ?? entity.coverUrl,
       description: input.description ?? entity.description,
@@ -44,13 +43,11 @@ export class ActivityService extends CrudService<
       end_time: input.end_time ?? entity.end_time,
       is_actived:
         input.is_actived !== undefined ? input.is_actived : entity.is_actived,
-    };
+    });
   }
 
-  public override mapToCreateEntity(input: ActivityCreateInput): {
-    [x: string]: any;
-  } {
-    return {
+  public override mapToCreateEntity(input: ActivityCreateInput): PromiseResult {
+    return Promise.resolve({
       title: input.title,
       coverUrl: input.coverUrl,
       description: input.description,
@@ -59,6 +56,6 @@ export class ActivityService extends CrudService<
       start_time: input.start_time,
       end_time: input.end_time,
       is_actived: input.is_actived,
-    };
+    });
   }
 }

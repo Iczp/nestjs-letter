@@ -13,8 +13,7 @@ import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
 import { $bool } from 'dbschema/edgeql-js/modules/std';
 import { Cardinality, PrimitiveTypeSet } from 'dbschema/edgeql-js/reflection';
 import { AddIf } from 'src/common/AddIf';
-
-const client = createClient();
+import { PromiseResult } from 'src/types/PromiseResult';
 
 export abstract class CrudService<
   TDto,
@@ -27,6 +26,8 @@ export abstract class CrudService<
 {
   // constructor(private readonly entity: ObjectTypeExpression | $expr_PathNode) {}
   public abstract entity: ObjectTypeExpression | $expr_PathNode;
+
+  public client = createClient();
 
   public fi(
     currentExpr: any,
@@ -60,28 +61,28 @@ export abstract class CrudService<
     return e.op(this.entity['id'], '=', e.bool(false));
   }
 
-  public mapToUpdateEntity(input: TUpdateInput): { [x: string]: any } {
+  public mapToUpdateEntity(input: TUpdateInput): PromiseResult {
     const result = {};
     if (this.entity['last_modification_time']) {
       result['last_modification_time'] = e.datetime_current();
     }
-    return {
+    return Promise.resolve({
       ...result,
       ...input,
-    };
+    });
   }
 
-  public mapToCreateEntity(input: TCreateInput): { [x: string]: any } {
-    return {
+  public mapToCreateEntity(input: TCreateInput): PromiseResult {
+    return Promise.resolve({
       ...input,
-    };
+    });
   }
 
-  public mapToDto(item: any): TDto {
-    return item as TDto;
+  public mapToDto(item: any): Promise<TDto> {
+    return Promise.resolve(item as TDto);
   }
-  public mapToDetailDto(item: any): TDetailDto {
-    return item as TDetailDto;
+  public mapToDetailDto(item: any): Promise<TDetailDto> {
+    return Promise.resolve(item as TDetailDto);
   }
 
   public async getItem(id: string): Promise<TDetailDto> {
@@ -98,14 +99,14 @@ export abstract class CrudService<
         ...this.itemSelect(id, this.entity),
       };
     });
-    const ret = await query.run(client);
+    const ret = await query.run(this.client);
 
     console.log('getItem result', ret);
 
     if (!ret) {
       throw new NotFoundException(`Item not found,id:${id}`);
     }
-    return this.mapToDetailDto(ret);
+    return await this.mapToDetailDto(ret);
   }
 
   public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {
@@ -133,20 +134,22 @@ export abstract class CrudService<
       };
     });
 
-    // const entities = await query.run(client);
-    const ret = await e.select({ totalCount, list }).run(client);
+    // const entities = await query.run(this.client);
+    const ret = await e.select({ totalCount, list }).run(this.client);
 
-    const items = (Array.isArray(ret.list) ? ret.list : [ret.list]).map(
-      (item) => {
-        return this.mapToDto(item);
-      },
-    );
+    const _items = Array.isArray(ret.list) ? ret.list : [ret.list];
 
+    const promises = _items.map(async (item) => {
+      const dto = await this.mapToDto(item);
+      return dto;
+    });
+
+    const items = await Promise.all(promises);
     return new PagedResultDto<TDto>(ret.totalCount, items);
   }
 
   public async create(input: TCreateInput): Promise<TDetailDto> {
-    const inputDto = this.mapToCreateEntity(input);
+    const inputDto = await this.mapToCreateEntity(input);
     console.log('create inputDto', inputDto);
     const queryCreate = e.insert(
       this.entity as $expr_PathNode,
@@ -154,9 +157,18 @@ export abstract class CrudService<
     );
 
     const queryDisplay = e.select(queryCreate, () => this.createSelect(input));
-    const ret = await queryDisplay.run(client);
-    return this.mapToDetailDto(ret);
+    const ret = await queryDisplay.run(this.client);
+    return await this.mapToDetailDto(ret);
   }
+
+  public async updateEntity(id: string, obj: { [x: string]: any }) {
+    const q = e.update(this.entity, (entity) => ({
+      filter_single: e.op(entity['id'], '=', e.uuid(id)),
+      set: obj,
+    }));
+    return await q.run(this.client);
+  }
+
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
     const queryUpdate = e.update(this.entity, (entity) => {
       const inputDto = {
@@ -170,7 +182,7 @@ export abstract class CrudService<
         set: inputDto,
       };
     });
-    const u1 = await queryUpdate.run(client);
+    const u1 = await queryUpdate.run(this.client);
 
     console.log('update result:', u1);
 
@@ -185,13 +197,13 @@ export abstract class CrudService<
       ...this.updateSelect(id, input),
     }));
 
-    const item = await queryDisplay.run(client);
+    const item = await queryDisplay.run(this.client);
 
     if (!item) {
       throw new NotFoundException(`Item not found,id:${id}`);
     }
 
-    return this.mapToDetailDto(item);
+    return await this.mapToDetailDto(item);
   }
 
   public async delete(id: string): Promise<void> {
@@ -207,7 +219,7 @@ export abstract class CrudService<
       },
     }));
 
-    const result = await queryUpdate.run(client);
+    const result = await queryUpdate.run(this.client);
     console.log(result);
   }
 }

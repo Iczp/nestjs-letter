@@ -14,6 +14,7 @@ import { Cardinality } from 'edgedb/dist/reflection';
 import { UserTypeKeys } from 'src/enums/UserType';
 import { GenderKeys } from 'src/enums/Gender';
 import { AddIf } from 'src/common/AddIf';
+import { PromiseResult } from 'src/types/PromiseResult';
 
 // dep = {
 //   name: true,
@@ -56,26 +57,22 @@ export class UserService extends CrudService<
     return e.all(e.set(...fi));
   }
 
-  public override mapToUpdateEntity(input: UserUpdateInput): {
-    [x: string]: any;
-  } {
+  public override mapToUpdateEntity(input: UserUpdateInput): PromiseResult {
     const entity = e.User;
-    return {
+    return Promise.resolve({
       name: input.name ?? entity.name,
       phone: input.phone ?? entity.phone,
       gender: input.gender ?? entity.gender,
-    };
+    });
   }
 
-  public override mapToCreateEntity(input: UserCreateInput): {
-    [x: string]: any;
-  } {
-    return {
+  public override mapToCreateEntity(input: UserCreateInput): PromiseResult {
+    return Promise.resolve({
       name: input.name,
       gender: input.gender,
       user_type: input.userType,
       phone: input.phone,
       is_enabled: input.is_enabled,
-    };
+    });
   }
 }
