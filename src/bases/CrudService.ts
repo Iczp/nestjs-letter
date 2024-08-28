@@ -69,7 +69,7 @@ export abstract class CrudService<
     entity: ObjectTypeExpression,
     input: TGetListInput,
   ): $expr_Operator<$bool, Cardinality> {
-    return e.op(entity['is_deleted'], '=', e.bool(false));
+    return e.op(entity['id'], '=', e.bool(false));
   }
 
   public mapToUpdateEntity(
@@ -125,9 +125,15 @@ export abstract class CrudService<
   }
 
   public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {
+    const a: $expr_Operator<$bool, Cardinality> = e.op(
+      this.entity['is_deleted'],
+      '=',
+      e.bool(false),
+    );
     const totalCount = e.count(
       e.select(this.entity, (entity) => ({
-        filter: this.listFilter(entity, input),
+        // filter: e.all(...this.listFilter(entity, input)),
+        // filter: e.all(a, a),
       })),
     );
 
@@ -137,7 +143,7 @@ export abstract class CrudService<
       return {
         offset: e.int64(input.skin),
         limit: e.int64(input.maxResultCount),
-        filter: this.listFilter(entity, input),
+        // filter: this.listFilter(entity, input),
         order_by: [
           {
             expression: entity['creation_time'],
@@ -160,6 +166,7 @@ export abstract class CrudService<
 
     return new PagedResultDto<TDto>(ret.totalCount, items);
   }
+
   public async create(input: TCreateInput): Promise<TDetailDto> {
     const queryCreate = e.insert(
       this.entity as $expr_PathNode,

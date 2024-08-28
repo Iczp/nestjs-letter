@@ -1,5 +1,15 @@
 module default {
 
+    # MultiTenant
+    global tenant_id: str;
+
+    # CurrentUser
+    global current_user_id: uuid;
+
+    global current_user := (
+        select User filter .id = global current_user_id
+    );
+
     scalar type Gender extending enum<Unknown, Male, Female>;
 
     scalar type UserType extending enum<Unset, Employee, Customer, ShopManager>;
@@ -17,13 +27,13 @@ module default {
         property deletion_time -> datetime {
             # default := (select datetime_current());
             annotation title := '删除时间';
-            default := (std::datetime_current());
+            # default := (std::datetime_current());
         }
 
         property last_modification_time -> datetime {
             # default := (select datetime_current());
             annotation title := '最后修改时间';
-            default := (std::datetime_current());
+            # default := (std::datetime_current());
         };
 
         property is_enabled -> bool {
@@ -31,11 +41,28 @@ module default {
             default := (true);
         };
 
-        property is_deleted -> bool {
+        required tenant_id -> str {
+            annotation title := '租户';
+            default := 'default'
+        }
+
+        required is_deleted -> bool {
             # default := (select datetime_current());
             annotation title := '是否已删除';
             default := (false);
         };
+
+        access policy allowAll
+            allow all
+            using (true);
+
+        access policy denySelect
+            deny select
+            using (.is_deleted=true);
+
+        # access policy tenant
+        #     allow select
+        #     using ((global tenant_id = .tenant_id) ?? false);
     }
 
     type User extending BaseEntity {

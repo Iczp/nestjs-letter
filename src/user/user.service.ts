@@ -39,27 +39,20 @@ export class UserService extends CrudService<
     entity: ObjectTypeExpression,
     input: UserGetListInput,
   ): $expr_Operator<$bool, Cardinality> {
-    let f = super.listFilter(entity, input);
-    const arr = [f];
+    // let f = super.listFilter(entity, input);
+    // const arr = [f];
     // if (input.userType.toString() != '') {
     // }
+
+    const arr = [
+      e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)),
+    ];
+
     if (UserTypeKeys.includes(input.userType)) {
-      f = e.op(
-        f,
-        'and',
-        e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)),
-      );
+      arr.push(e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)));
     }
 
-    // e.all();
-
-    // f = this.fi(
-    //   f,
-    //   input.userType.toString() != '',
-    //   e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)),
-    // );
-
-    return f;
+    return undefined;
   }
 
   public override mapToUpdateEntity(
