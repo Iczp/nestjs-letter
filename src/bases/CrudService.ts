@@ -152,10 +152,14 @@ export abstract class CrudService<
   }
 
   public async create(input: TCreateInput): Promise<TDetailDto> {
+    console.log('create input', input);
+
     const queryCreate = e.insert(
       this.entity as $expr_PathNode,
       this.mapToCreateEntity(this.entity, input) as never,
     );
+    const c = await queryCreate.run(client);
+
     const queryDisplay = e.select(queryCreate, (entity) => ({
       ...this.createSelect(input),
     }));
