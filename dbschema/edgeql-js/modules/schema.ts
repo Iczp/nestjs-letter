@@ -697,6 +697,7 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is User]": $.LinkDesc<_default.$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is ShopManager]": $.LinkDesc<_default.$ShopManager, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is Customer]": $.LinkDesc<_default.$Customer, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is current_user]": $.LinkDesc<_default.$current_user, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<intersection_of": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<subject": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

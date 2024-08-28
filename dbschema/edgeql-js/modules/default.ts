@@ -20,10 +20,11 @@ const UserType: $UserType = $.makeType<$UserType>(_.spec, "4ec22418-6345-11ef-b5
 
 export type $BaseEntityλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "creation_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
-  "deletion_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
-  "is_deleted": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
-  "last_modification_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "deletion_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "last_modification_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "is_enabled": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
+  "is_deleted": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, true>;
+  "tenant_id": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, true>;
 }>;
 type $BaseEntity = $.ObjectType<"default::BaseEntity", $BaseEntityλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
@@ -118,9 +119,41 @@ const $ShopManager = $.makeType<$ShopManager>(_.spec, "4ec3264a-6345-11ef-ab69-9
 
 const ShopManager: $.$expr_PathNode<$.TypeSet<$ShopManager, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($ShopManager, $.Cardinality.Many), null);
 
+export type $current_userλShape = $.typeutil.flatten<$UserλShape & {
+}>;
+type $current_user = $.ObjectType<"default::current_user", $current_userλShape, null, [
+  ...$User['__exclusives__'],
+]>;
+const $current_user = $.makeType<$current_user>(_.spec, "66b80734-6448-11ef-9873-cdacbcaf5ca6", _.syntax.literal);
+
+const current_user: $.$expr_PathNode<$.TypeSet<$current_user, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($current_user, $.Cardinality.Many), null);
+
+const $default__globals: {  current_user: _.syntax.$expr_Global<
+              // "default::current_user",
+              $current_user,
+              $.Cardinality.AtMostOne
+              >,  current_user_id: _.syntax.$expr_Global<
+              // "default::current_user_id",
+              _std.$uuid,
+              $.Cardinality.AtMostOne
+              >,  tenant_id: _.syntax.$expr_Global<
+              // "default::tenant_id",
+              _std.$str,
+              $.Cardinality.One
+              >} = {  current_user: _.syntax.makeGlobal(
+              "default::current_user",
+              $.makeType(_.spec, "66b80734-6448-11ef-9873-cdacbcaf5ca6", _.syntax.literal),
+              $.Cardinality.AtMostOne) as any,  current_user_id: _.syntax.makeGlobal(
+              "default::current_user_id",
+              $.makeType(_.spec, "00000000-0000-0000-0000-000000000100", _.syntax.literal),
+              $.Cardinality.AtMostOne) as any,  tenant_id: _.syntax.makeGlobal(
+              "default::tenant_id",
+              $.makeType(_.spec, "00000000-0000-0000-0000-000000000101", _.syntax.literal),
+              $.Cardinality.One) as any};
 
 
-export { Gender, UserType, $BaseEntity, BaseEntity, $Activity, Activity, $ActivityCustomer, ActivityCustomer, $User, User, $Customer, Customer, $ShopManager, ShopManager };
+
+export { Gender, UserType, $BaseEntity, BaseEntity, $Activity, Activity, $ActivityCustomer, ActivityCustomer, $User, User, $Customer, Customer, $ShopManager, ShopManager, $current_user, current_user };
 
 type __defaultExports = {
   "Gender": typeof Gender;
@@ -130,7 +163,9 @@ type __defaultExports = {
   "ActivityCustomer": typeof ActivityCustomer;
   "User": typeof User;
   "Customer": typeof Customer;
-  "ShopManager": typeof ShopManager
+  "ShopManager": typeof ShopManager;
+  "current_user": typeof current_user;
+  "global": typeof $default__globals
 };
 const __defaultExports: __defaultExports = {
   "Gender": Gender,
@@ -140,6 +175,8 @@ const __defaultExports: __defaultExports = {
   "ActivityCustomer": ActivityCustomer,
   "User": User,
   "Customer": Customer,
-  "ShopManager": ShopManager
+  "ShopManager": ShopManager,
+  "current_user": current_user,
+  "global": $default__globals
 };
 export default __defaultExports;
