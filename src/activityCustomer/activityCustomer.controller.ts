@@ -28,7 +28,7 @@ export class ActivityCustomerController extends CrudController<
   ActivityCustomerCreateInput,
   ActivityCustomerUpdateInput
 > {
-  constructor(private readonly service: ActivityCustomerService) {
+  constructor(readonly service: ActivityCustomerService) {
     super(service);
   }
 

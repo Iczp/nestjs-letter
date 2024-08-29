@@ -1,5 +1,8 @@
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { GetListInput } from './GetListInput';
+import { Workbook } from 'exceljs';
+import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
+import { ExcelBookDto } from 'src/dtos/ExcelBookDto';
 
 export interface ICrudService<
   TDto,
@@ -21,4 +24,12 @@ export interface IService {
   create(input: any): Promise<any>;
   update(id: string, input: any): Promise<any>;
   delete(id: string): Promise<void>;
+  importExcel(workbook: Workbook): Promise<ExcelImportResult>;
+  /**
+   * 生成excel的sheet
+   * @param workbook t
+   */
+  generateExcelBook(workbook: Workbook): Promise<ExcelBookDto>;
+
+  // generateExcelData(workbook: Workbook): Promise<ExcelSheetDto[]>;
 }
