@@ -11,7 +11,7 @@ import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
 import { $bool } from 'dbschema/edgeql-js/modules/std';
 import { Cardinality } from 'dbschema/edgeql-js/reflection';
-import { AddIf } from 'src/common/AddIf';
+import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 
 // const a: ExtractDBType<typeof e.Area> = {
@@ -91,14 +91,14 @@ export abstract class CrudService<
   public async getItem(id: string): Promise<TDetailDto> {
     console.log('getItem id', id);
     const query = e.select(this.entity, (entity) => {
-      const fi = new AddIf([e.op(entity['id'], '=', e.uuid(id))])
+      const filter = new Filters([e.op(entity['id'], '=', e.uuid(id))])
         .addIf(
           entity['is_deleted'],
           e.op(entity['is_deleted'], '=', e.bool(false)),
         )
-        .toArray();
+        .all();
       return {
-        filter_single: e.all(e.set(...fi)),
+        filter_single: filter,
         ...this.itemSelect(id, this.entity),
       };
     });

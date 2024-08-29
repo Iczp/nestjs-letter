@@ -6,7 +6,7 @@ import { ActivityDto } from './dtos/ActivityDto';
 import { CrudService } from 'src/bases/CrudService';
 import { ActivityDetailDto } from './dtos/ActivityDetailDto';
 import { ActivityGetListInput } from './dtos/ActivityGetListInput';
-import { AddIf } from 'src/common/AddIf';
+import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 
 @Injectable()
@@ -20,15 +20,13 @@ export class ActivityService extends CrudService<
   public readonly entity = e.Activity;
 
   override listFilter(input: ActivityGetListInput): any {
-    const fi = new AddIf([e.op(e.Activity.is_deleted, '=', e.bool(false))])
+    return new Filters([e.op(e.Activity.is_deleted, '=', e.bool(false))])
 
       .addIf(
         input.is_enabled !== undefined,
         e.op(e.Activity.is_enabled, '=', e.bool(input.is_enabled)),
       )
-      .toArray();
-
-    return e.all(e.set(...fi));
+      .all();
   }
 
   public override mapToUpdateEntity(input: ActivityUpdateInput): PromiseResult {

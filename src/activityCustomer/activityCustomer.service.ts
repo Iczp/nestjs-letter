@@ -6,18 +6,10 @@ import { ActivityCustomerDto } from './dtos/ActivityCustomerDto';
 import { CrudService } from 'src/bases/CrudService';
 import { ActivityCustomerDetailDto } from './dtos/ActivityCustomerDetailDto';
 import { ActivityCustomerGetListInput } from './dtos/ActivityCustomerGetListInput';
-import { AddIf } from 'src/common/AddIf';
+import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExtractDBType } from 'src/types/ExtractDBType';
-
-// dep = {
-//   name: true,
-//   users: {
-//     name: true,
-//     phone: true,
-//     user_type: true,
-//   },
-// };
+import { isEmpty } from 'src/common/validator';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<
@@ -36,22 +28,20 @@ export class ActivityCustomerService extends CrudService<
     input: ActivityCustomerGetListInput,
     entity: ExtractDBType<typeof e.ActivityCustomer>,
   ): any {
-    const fi = new AddIf([e.op(entity.is_deleted, '=', e.bool(false))])
+    return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
       .addIf(
-        input.is_checked !== undefined,
+        !isEmpty(input.is_checked),
         e.op(entity.is_checked, '=', e.bool(input.is_checked)),
       )
       .addIf(
-        input.is_invited !== undefined,
+        !isEmpty(input.is_invited),
         e.op(entity.is_invited, '=', e.bool(input.is_invited)),
       )
       .addIf(
-        input.is_enabled !== undefined,
+        !isEmpty(input.is_enabled),
         e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
       )
-      .toArray();
-
-    return e.all(e.set(...fi));
+      .all();
   }
 
   public override mapToUpdateEntity(
