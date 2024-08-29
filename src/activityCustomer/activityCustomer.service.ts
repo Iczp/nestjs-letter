@@ -1,20 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotAcceptableException } from '@nestjs/common';
-import e, { is } from 'dbschema/edgeql-js'; // auto-generated code
+import e from 'dbschema/edgeql-js'; // auto-generated code
 import { ActivityCustomerCreateInput } from './dtos/ActivityCustomerCreateInput';
 import { ActivityCustomerUpdateInput } from './dtos/ActivityCustomerUpdateInput';
 import { ActivityCustomerDto } from './dtos/ActivityCustomerDto';
 import { CrudService } from 'src/bases/CrudService';
 import { ActivityCustomerDetailDto } from './dtos/ActivityCustomerDetailDto';
 import { ActivityCustomerGetListInput } from './dtos/ActivityCustomerGetListInput';
-import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
-import { $bool } from 'dbschema/edgeql-js/modules/std';
-import { ObjectTypeExpression } from 'dbschema/edgeql-js/reflection';
-import { Cardinality } from 'edgedb/dist/reflection';
-import { GenderKeys } from 'src/enums/Gender';
 import { AddIf } from 'src/common/AddIf';
 import { PromiseResult } from 'src/types/PromiseResult';
-import { InsertShape } from 'dbschema/edgeql-js/insert';
 import { ExtractDBType } from 'src/types/ExtractDBType';
 
 // dep = {

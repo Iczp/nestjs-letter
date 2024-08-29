@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { ICrudService } from './ICrudService';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import e, { createClient } from 'dbschema/edgeql-js'; // auto-generated code
@@ -11,11 +10,9 @@ import { NotFoundException } from '@nestjs/common';
 import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
 import { $bool } from 'dbschema/edgeql-js/modules/std';
-import { Cardinality, PrimitiveTypeSet } from 'dbschema/edgeql-js/reflection';
+import { Cardinality } from 'dbschema/edgeql-js/reflection';
 import { AddIf } from 'src/common/AddIf';
 import { PromiseResult } from 'src/types/PromiseResult';
-import { InsertShape } from 'dbschema/edgeql-js/syntax';
-
 
 // const a: ExtractDBType<typeof e.Area> = {
 
