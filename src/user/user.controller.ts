@@ -19,7 +19,7 @@ import { UserGetListInput } from './dtos/UserGetListInput';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
 @Controller('user')
-@ApiTags('user')
+@ApiTags('User')
 export class UserController extends CrudController<
   UserDto,
   UserDetailDto,

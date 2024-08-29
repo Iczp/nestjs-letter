@@ -158,7 +158,7 @@ module default {
 
         property end_time -> datetime {
             annotation title := '结束时间';
-            default := (std::datetime_current());
+            # default := (std::datetime_current());
         };
 
         property is_actived -> bool {
@@ -201,13 +201,28 @@ module default {
             annotation title := '邀请人名称';
         };
 
+        property last_invite_time -> datetime {
+            annotation title := '最后邀请时间';
+            # default := (std::datetime_current());
+        };
+
         property is_invited -> bool {
             annotation title := '是否邀请';
             default := (false);
         };
 
         property is_checked -> bool {
+            annotation title := '是否审核';
+            default := (false);
+        };
+
+        property is_signed -> bool {
             annotation title := '是否签到';
+            default := (false);
+        };
+
+        property is_gifted -> bool {
+            annotation title := '是否发放礼品';
             default := (false);
         };
 
@@ -221,6 +236,38 @@ module default {
 
         link inviter : ShopManager {
             annotation title := '邀请人';
+        };
+    }
+
+    type SignLog extending BaseEntity {
+        annotation title := '签到日志';
+
+        property customer_name -> str {
+            annotation title := '客户名称';
+        };
+
+        property remarks -> str {
+            annotation title := '备注';
+        };
+
+        link owner: ActivityCustomer {
+            annotation title := '签到者';
+        };
+    }
+
+    type GiftLog extending BaseEntity {
+        annotation title := '礼品发放日志';
+
+        property customer_name -> str {
+            annotation title := '客户名称';
+        };
+
+        property remarks -> str {
+            annotation title := '备注';
+        };
+
+        link owner: ActivityCustomer {
+            annotation title := '领取者';
         };
     }
 
