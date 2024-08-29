@@ -13,7 +13,7 @@ export abstract class ExcelService implements IExcelService {
   // constructor(private readonly entity: ObjectTypeExpression | $expr_PathNode) {}
   constructor() {
     this.generateExcel = this.generateExcel.bind(this);
-    this.generateExample = this.generateExample.bind(this);
+    this.generateExampleExcel = this.generateExampleExcel.bind(this);
   }
 
   public abstract entity: ObjectTypeExpression | $expr_PathNode;
@@ -155,7 +155,7 @@ SELECT ObjectType {
     });
   }
 
-  public async generateExample(): Promise<ExcelWorkbook> {
+  public async generateExampleExcel(): Promise<ExcelWorkbook> {
     return this.createExcel({
       getColumns: this.getExampleColumns,
       getName: this.getExampleSheetName,

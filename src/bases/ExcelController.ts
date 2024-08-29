@@ -49,7 +49,7 @@ export abstract class ExcelController extends BaseController {
   public async getExcelTemplate(@Res() res: Response) {
     this.resExcelFile({
       res,
-      fn: this.service.generateExample,
+      fn: this.service.generateExampleExcel,
     });
   }
 

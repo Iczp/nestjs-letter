@@ -13,7 +13,7 @@ export interface IExcelService {
    */
   generateExcel(): Promise<ExcelWorkbook>;
 
-  generateExample(): Promise<ExcelWorkbook>;
+  generateExampleExcel(): Promise<ExcelWorkbook>;
 
   // generateExcelData(workbook: Workbook): Promise<ExcelSheetDto[]>;
 }
