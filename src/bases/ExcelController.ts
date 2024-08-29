@@ -16,6 +16,7 @@ import { ExcelUploadInput } from 'src/dtos/ExcelUploadInput';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { Response } from 'express';
 import { IExcelService } from './IExcelService';
+import { ExcelWorkbook } from 'src/dtos/ExcelWorkbook';
 export abstract class ExcelController extends BaseController {
   // public readonly excelService: IExcelService;
   constructor(readonly service: IExcelService) {
@@ -23,25 +24,42 @@ export abstract class ExcelController extends BaseController {
     // this.excelService = excelService;
   }
 
-  @Get('excel/tpl')
-  @ApiOperation({ summary: 'excel 模板', description: `excel 模板` })
-  public async getExcelTemplate(@Res() res: Response) {
-    const workbook = new Workbook();
-
-    const { filename } = await this.service.generateExcel(workbook);
-
+  private async resExcelFile({
+    res,
+    fn,
+  }: {
+    res: Response;
+    fn: () => Promise<ExcelWorkbook>;
+  }) {
+    const { filename, workbook } = await fn();
     const headers = {
       'Content-Type':
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       'Content-Disposition': `attachment; filename="${filename}";`,
     };
-
     Object.entries(headers).forEach((item) => {
       res.setHeader(item[0], item[1]);
     });
-
     await workbook.xlsx.write(res);
     res.end();
+  }
+
+  @Get('excel/tpl')
+  @ApiOperation({ summary: 'excel 模板', description: `excel 模板` })
+  public async getExcelTemplate(@Res() res: Response) {
+    this.resExcelFile({
+      res,
+      fn: this.service.generateExample,
+    });
+  }
+
+  @Get('excel/export')
+  @ApiOperation({ summary: 'excel 模板', description: `excel 模板` })
+  public async exportExcel(@Res() res: Response) {
+    this.resExcelFile({
+      res,
+      fn: this.service.generateExcel,
+    });
   }
 
   @Post('excel/import')

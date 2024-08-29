@@ -10,6 +10,8 @@ import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExtractDBType } from 'src/types/ExtractDBType';
 import { isEmpty } from 'src/common/validator';
+import { Column } from 'exceljs';
+import { SchemaType } from 'src/types/SchemaType';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<
@@ -77,15 +79,13 @@ export class ActivityCustomerService extends CrudService<
     };
   }
 
-  // public setCheck(id: string, is_checked: boolean) {
-  //   return this.updateEntity(id, {
-  //     is_checked: is_checked,
-  //   });
-  // }
+  public override getColumns(
+    schemaInfo: SchemaType,
+  ): Promise<Partial<Column>[]> {
+    return super.getColumns(schemaInfo);
+  }
 
-  // public setIsInvited(id: string, is_invited: boolean) {
-  //   return this.updateEntity(id, {
-  //     is_invited: is_invited,
-  //   });
-  // }
+  public override getRows(): Promise<any[]> {
+    return super.getRows();
+  }
 }

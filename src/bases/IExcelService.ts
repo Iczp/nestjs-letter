@@ -1,5 +1,5 @@
 import { Workbook } from 'exceljs';
-import { ExcelBookDto } from 'src/dtos/ExcelBookDto';
+import { ExcelWorkbook } from 'src/dtos/ExcelWorkbook';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 
 export interface IExcelService {
@@ -11,7 +11,9 @@ export interface IExcelService {
    * 生成excel的sheet
    * @param workbook t
    */
-  generateExcel(workbook: Workbook): Promise<ExcelBookDto>;
+  generateExcel(): Promise<ExcelWorkbook>;
+
+  generateExample(): Promise<ExcelWorkbook>;
 
   // generateExcelData(workbook: Workbook): Promise<ExcelSheetDto[]>;
 }

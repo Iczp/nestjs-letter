@@ -5,12 +5,17 @@ import {
 import createClient from 'edgedb';
 import { IExcelService } from './IExcelService';
 import { Column, Workbook } from 'exceljs';
-import { ExcelBookDto } from 'src/dtos/ExcelBookDto';
+import { ExcelWorkbook } from 'src/dtos/ExcelWorkbook';
 import { SchemaType } from 'src/types/SchemaType';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 
 export abstract class ExcelService implements IExcelService {
   // constructor(private readonly entity: ObjectTypeExpression | $expr_PathNode) {}
+  constructor() {
+    this.generateExcel = this.generateExcel.bind(this);
+    this.generateExample = this.generateExample.bind(this);
+  }
+
   public abstract entity: ObjectTypeExpression | $expr_PathNode;
 
   public client = createClient();
@@ -77,18 +82,32 @@ SELECT ObjectType {
   }
 
   public getExcelFilename(schemaInfo: SchemaType): string {
-    const filename = (
-      schemaInfo.name.substring('default::'.length) ??
-      new Date().getTime().toString()
-    ).replace(/[\\\/:*?"<>|]/g, '');
-    return `${filename}.xlsx`;
+    return schemaInfo.name.substring('default::'.length);
+  }
+
+  public getExampleExcelFilename(schemaInfo: SchemaType): string {
+    return schemaInfo.name.substring('default::'.length) + '-example';
   }
 
   public getSheetName(schemaInfo: SchemaType, defaultName?: string): string {
     return schemaInfo.title ?? schemaInfo.name ?? defaultName ?? 'Sheet1';
   }
+  public getExampleSheetName(schemaInfo: SchemaType): string {
+    return schemaInfo.title ?? schemaInfo.name ?? 'ExampleSheet1';
+  }
 
   public getColumns(schemaInfo: SchemaType): Promise<Partial<Column>[]> {
+    return Promise.resolve(
+      schemaInfo.properties
+        .filter((x) => x.title)
+        .map((x) => ({
+          header: x.title ?? x.name,
+          key: x.name,
+          width: 24,
+        })),
+    );
+  }
+  public getExampleColumns(schemaInfo: SchemaType): Promise<Partial<Column>[]> {
     return Promise.resolve(
       schemaInfo.properties
         .filter((x) => x.title)
@@ -103,16 +122,45 @@ SELECT ObjectType {
   public getRows(): Promise<any[]> {
     return Promise.resolve([]);
   }
+  public getExampleRows(): Promise<any[]> {
+    return Promise.resolve([]);
+  }
 
-  public async generateExcel(workbook: Workbook): Promise<ExcelBookDto> {
+  private async createExcel(args: {
+    getColumns: (schemaInfo: SchemaType) => Promise<Partial<Column>[]>;
+    getName: (schemaInfo: SchemaType) => string;
+    getRows: () => Promise<any[]>;
+    getExcelFilename: (schemaInfo: SchemaType) => string;
+  }): Promise<ExcelWorkbook> {
     const schemaInfo = await this.getSchemaInfo();
-    const worksheet = workbook.addWorksheet(this.getSheetName(schemaInfo));
-    // console.log('generateExcelBook', schemaInfo);
-    worksheet.columns = await this.getColumns(schemaInfo);
-    for (const row of await this.getRows()) {
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet(args.getName(schemaInfo));
+    worksheet.columns = await args.getColumns(schemaInfo);
+    for (const row of await args.getRows()) {
       worksheet.addRow(row);
     }
-    const filename = this.getExcelFilename(schemaInfo);
-    return { filename };
+    const filename = (
+      args.getExcelFilename(schemaInfo) ?? new Date().getTime().toString()
+    ).replace(/[\\\/:*?"<>|]/g, '');
+
+    return { workbook, filename: `${filename}.xlsx` };
+  }
+
+  public async generateExcel(): Promise<ExcelWorkbook> {
+    return this.createExcel({
+      getColumns: this.getColumns,
+      getName: this.getSheetName,
+      getRows: this.getRows,
+      getExcelFilename: this.getExcelFilename,
+    });
+  }
+
+  public async generateExample(): Promise<ExcelWorkbook> {
+    return this.createExcel({
+      getColumns: this.getExampleColumns,
+      getName: this.getExampleSheetName,
+      getRows: this.getExampleRows,
+      getExcelFilename: this.getExampleExcelFilename,
+    });
   }
 }
