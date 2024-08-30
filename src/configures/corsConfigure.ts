@@ -21,7 +21,7 @@ export const corsConfigure = (app: INestApplication<any>) => {
   // 配置 CORS
   app.enableCors({
     origin: (origin, callback) => {
-      console.log('origin', origin);
+      console.log('CORS origin', origin);
 
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
@@ -31,6 +31,8 @@ export const corsConfigure = (app: INestApplication<any>) => {
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
+    exposedHeaders: 'Content-Disposition',
+    // credentials: true,
   });
   return app;
 };

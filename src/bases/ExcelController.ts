@@ -16,22 +16,20 @@ import { ExcelUploadInput } from 'src/dtos/ExcelUploadInput';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { Response } from 'express';
 import { IExcelService } from './IExcelService';
-import { ExcelWorkbook } from 'src/dtos/ExcelWorkbook';
-export abstract class ExcelController extends BaseController {
+export abstract class ExcelController<TGetListInput> extends BaseController {
   // public readonly excelService: IExcelService;
-  constructor(readonly service: IExcelService) {
+  constructor(readonly service: IExcelService<TGetListInput>) {
     super();
     // this.excelService = excelService;
   }
 
   private async resExcelFile({
     res,
-    fn,
+    filename,
   }: {
     res: Response;
-    fn: () => Promise<ExcelWorkbook>;
+    filename: string;
   }) {
-    const { filename, workbook } = await fn();
     const headers = {
       'Content-Type':
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -40,30 +38,35 @@ export abstract class ExcelController extends BaseController {
     Object.entries(headers).forEach((item) => {
       res.setHeader(item[0], item[1]);
     });
-    await workbook.xlsx.write(res);
-    res.end();
   }
 
   @Get('excel/tpl')
   @ApiOperation({ summary: 'excel 模板', description: `excel 模板` })
   public async getExcelTemplate(@Res() res: Response) {
-    this.resExcelFile({
-      res,
-      fn: this.service.generateExampleExcel,
-    });
+    const { filename, workbook } = await this.service.generateExampleExcel();
+    this.resExcelFile({ res, filename });
+    await workbook.xlsx.write(res);
+    res.end();
   }
 
   @Get('excel/export')
-  @ApiOperation({ summary: 'excel 模板', description: `excel 模板` })
-  public async exportExcel(@Res() res: Response) {
-    this.resExcelFile({
-      res,
-      fn: this.service.generateExcel,
-    });
+  @ApiOperation({ summary: '导出数据到 Excel', description: `Excel 数据` })
+  public async exportExcel(@Res() res: Response, input: TGetListInput) {
+    try {
+      const { filename, workbook } = await this.service.generateExcel(input);
+      this.resExcelFile({ res, filename });
+      await workbook.xlsx.write(res);
+      res.end();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Post('excel/import')
-  @ApiOperation({ summary: '导入数据', description: `文件类型 xlsx | xls` })
+  @ApiOperation({
+    summary: '导入数据',
+    description: `请从 "/xxx/excel/tpl" 中下载模板`,
+  })
   @UseInterceptors(
     FileInterceptor('file', {
       limits: { fileSize: 5 * 1024 * 1024 }, // 5MB

@@ -2,7 +2,7 @@ import { Body, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
 import { ApiOperation } from '@nestjs/swagger';
-import { IService } from './ICrudService';
+import { ICrudService } from './ICrudService';
 import { ExcelController } from './ExcelController';
 export abstract class CrudController<
   TDto,
@@ -10,10 +10,18 @@ export abstract class CrudController<
   TGetListInput extends object,
   TCreateInput,
   TUpdateInput,
-> extends ExcelController {
+> extends ExcelController<TGetListInput> {
   // implements ICrudService<TDto, TDetailDto, TCteateInput, TUpdateInput>
   // public readonly service: IService;
-  constructor(readonly service: IService) {
+  constructor(
+    readonly service: ICrudService<
+      TDto,
+      TDetailDto,
+      TGetListInput,
+      TCreateInput,
+      TUpdateInput
+    >,
+  ) {
     super(service);
     // this.service = service;
   }

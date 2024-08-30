@@ -2,7 +2,7 @@ import { Workbook } from 'exceljs';
 import { ExcelWorkbook } from 'src/dtos/ExcelWorkbook';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 
-export interface IExcelService {
+export interface IExcelService<TGetListInput> {
   importExcel(
     workbook: Workbook,
     request?: { query: any; body: any },
@@ -11,7 +11,7 @@ export interface IExcelService {
    * 生成excel的sheet
    * @param workbook t
    */
-  generateExcel(): Promise<ExcelWorkbook>;
+  generateExcel(input: TGetListInput): Promise<ExcelWorkbook>;
 
   generateExampleExcel(): Promise<ExcelWorkbook>;
 

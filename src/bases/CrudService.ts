@@ -17,7 +17,7 @@ export abstract class CrudService<
     TCreateInput,
     TUpdateInput,
   >
-  extends ExcelService
+  extends ExcelService<TGetListInput>
   implements
     ICrudService<TDto, TDetailDto, TGetListInput, TCreateInput, TUpdateInput>
 {

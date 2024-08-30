@@ -9,11 +9,13 @@ import { ExcelWorkbook } from 'src/dtos/ExcelWorkbook';
 import { SchemaType } from 'src/types/SchemaType';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 
-export abstract class ExcelService implements IExcelService {
+export abstract class ExcelService<TGetListInput>
+  implements IExcelService<TGetListInput>
+{
   // constructor(private readonly entity: ObjectTypeExpression | $expr_PathNode) {}
   constructor() {
-    this.generateExcel = this.generateExcel.bind(this);
-    this.generateExampleExcel = this.generateExampleExcel.bind(this);
+    // this.generateExcel = this.generateExcel.bind(this);
+    // this.generateExampleExcel = this.generateExampleExcel.bind(this);
   }
 
   public abstract entity: ObjectTypeExpression | $expr_PathNode;
@@ -119,7 +121,8 @@ SELECT ObjectType {
     );
   }
 
-  public getRows(): Promise<any[]> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public getRows(input: TGetListInput): Promise<any[]> {
     return Promise.resolve([]);
   }
   public getExampleRows(): Promise<any[]> {
@@ -132,11 +135,13 @@ SELECT ObjectType {
     getRows: () => Promise<any[]>;
     getExcelFilename: (schemaInfo: SchemaType) => string;
   }): Promise<ExcelWorkbook> {
+    console.log('createExcel');
     const schemaInfo = await this.getSchemaInfo();
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(args.getName(schemaInfo));
     worksheet.columns = await args.getColumns(schemaInfo);
-    for (const row of await args.getRows()) {
+    const rows = await args.getRows();
+    for (const row of rows) {
       worksheet.addRow(row);
     }
     const filename = (
@@ -146,11 +151,11 @@ SELECT ObjectType {
     return { workbook, filename: `${filename}.xlsx` };
   }
 
-  public async generateExcel(): Promise<ExcelWorkbook> {
+  public async generateExcel(input: TGetListInput): Promise<ExcelWorkbook> {
     return this.createExcel({
       getColumns: this.getColumns,
       getName: this.getSheetName,
-      getRows: this.getRows,
+      getRows: () => this.getRows(input),
       getExcelFilename: this.getExcelFilename,
     });
   }

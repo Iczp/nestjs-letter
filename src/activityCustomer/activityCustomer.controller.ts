@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivityCustomerService } from './activityCustomer.service';
@@ -18,6 +19,7 @@ import { ActivityCustomerCreateInput } from './dtos/ActivityCustomerCreateInput'
 import { ActivityCustomerUpdateInput } from './dtos/ActivityCustomerUpdateInput';
 import { ActivityCustomerGetListInput } from './dtos/ActivityCustomerGetListInput';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
+import { Response } from 'express';
 
 @Controller('activity-customer')
 @ApiTags('ActivityCustomer')
@@ -87,5 +89,29 @@ export class ActivityCustomerController extends CrudController<
   @ApiOperation({ summary: '删除[活动客户]' })
   public override delete(id: string): Promise<void> {
     return super.delete(id);
+  }
+
+  @Get('excel/out')
+  @ApiOperation({
+    summary: '[活动客户]导出 excel',
+    description: '导出excel 单次导出数据不能太多',
+  })
+  public exportEx(
+    @Res() res: Response,
+    @Query() input: ActivityCustomerGetListInput,
+  ): Promise<void> {
+    return super.exportExcel(res, input);
+  }
+
+  @Get('excel/export')
+  @ApiOperation({
+    summary: '[活动客户]导出 excel',
+    description: '导出excel 单次导出数据不能太多',
+  })
+  public override async exportExcel(
+    @Res() res: Response,
+    @Query() input: ActivityCustomerGetListInput,
+  ): Promise<void> {
+    return super.exportExcel(res, input);
   }
 }

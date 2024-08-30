@@ -80,12 +80,57 @@ export class ActivityCustomerService extends CrudService<
   }
 
   public override getColumns(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     schemaInfo: SchemaType,
   ): Promise<Partial<Column>[]> {
-    return super.getColumns(schemaInfo);
+    return Promise.resolve([
+      { header: 'ID', key: 'id', width: 24 },
+      { header: '客户姓名', key: 'customer_name', width: 24 },
+      { header: '性别', key: 'customer_gender', width: 24 },
+      { header: '客户手机', key: 'customer_phone', width: 24 },
+      { header: '邀请人', key: 'inviter_name', width: 24 },
+      { header: '是否已邀请', key: 'is_invited', width: 24 },
+      { header: '是否签到', key: 'is_signed', width: 24 },
+      { header: '是否赠送礼品', key: 'is_gifted', width: 24 },
+      { header: '备注', key: 'inviter_name', width: 24 },
+    ]);
   }
 
-  public override getRows(): Promise<any[]> {
-    return super.getRows();
+  override async getRows(input: ActivityCustomerGetListInput): Promise<any[]> {
+    console.log('input', input);
+
+    const list = e.select(this.entity, (entity) => {
+      const filter = this.listFilter(input, entity);
+
+      return {
+        ...entity['*'],
+        offset: e.int64(input.skip),
+        limit: e.int64(input.maxResultCount),
+        filter,
+        order_by: [
+          {
+            expression: entity['creation_time'],
+            direction: e.ASC,
+            empty: e.EMPTY_LAST,
+          },
+        ],
+      };
+    });
+
+    const items = await list.run(this.client);
+
+    console.log('items', items);
+
+    return items.map((x) => ({
+      id: x.id,
+      customer_name: x.customer_name,
+      customer_gender: x.customer_gender,
+      customer_phone: x.customer_phone,
+      inviter_name: x.inviter_name,
+      is_invited: x.is_invited,
+      is_signed: x.is_signed,
+      is_gifted: x.is_gifted,
+      remarks: x.remarks,
+    }));
   }
 }
