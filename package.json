@@ -7,10 +7,13 @@
   "website": "https://iczp.net",
   "private": true,
   "license": "MIT",
-  "keywords": [],
+  "keywords": [
+    "nestjs",
+    "edgedb"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/iczp/letter.git"
+    "url": "https://github.com/iczp/nestjs-letter.git"
   },
   "scripts": {
     "build": "nest build",
