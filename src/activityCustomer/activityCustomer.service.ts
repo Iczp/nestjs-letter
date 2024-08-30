@@ -12,6 +12,7 @@ import { ExtractDBType } from 'src/types/ExtractDBType';
 import { isEmpty } from 'src/common/validator';
 import { Column } from 'exceljs';
 import { SchemaType } from 'src/types/SchemaType';
+import { GenderText } from 'src/enums/Gender';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<
@@ -79,12 +80,17 @@ export class ActivityCustomerService extends CrudService<
     };
   }
 
+  public override getSheetName(): string {
+    return '客户列表';
+  }
+
   public override getColumns(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     schemaInfo: SchemaType,
   ): Promise<Partial<Column>[]> {
     return Promise.resolve([
       { header: 'ID', key: 'id', width: 24 },
+      { header: '活动名称', key: 'activity_id', width: 24 },
       { header: '客户姓名', key: 'customer_name', width: 24 },
       { header: '性别', key: 'customer_gender', width: 24 },
       { header: '客户手机', key: 'customer_phone', width: 24 },
@@ -104,6 +110,7 @@ export class ActivityCustomerService extends CrudService<
 
       return {
         ...entity['*'],
+        activity_id: entity.activity.id,
         offset: e.int64(input.skip),
         limit: e.int64(input.maxResultCount),
         filter,
@@ -119,18 +126,27 @@ export class ActivityCustomerService extends CrudService<
 
     const items = await list.run(this.client);
 
-    console.log('items', items);
+    // console.log('items', items);
 
     return items.map((x) => ({
       id: x.id,
+      activity_id: x.activity_id,
       customer_name: x.customer_name,
-      customer_gender: x.customer_gender,
+      customer_gender: GenderText[x.customer_gender],
       customer_phone: x.customer_phone,
       inviter_name: x.inviter_name,
-      is_invited: x.is_invited,
-      is_signed: x.is_signed,
-      is_gifted: x.is_gifted,
+      is_invited: x.is_invited ? '是' : '否',
+      is_signed: x.is_signed ? '是' : '否',
+      is_gifted: x.is_gifted ? '是' : '否',
       remarks: x.remarks,
     }));
+  }
+
+  public toCnBool(v: boolean): string {
+    return v ? '是' : '否';
+  }
+
+  public toCnGender(gender: string): string {
+    return gender ? '是' : '否';
   }
 }

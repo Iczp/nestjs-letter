@@ -91,24 +91,12 @@ export class ActivityCustomerController extends CrudController<
     return super.delete(id);
   }
 
-  @Get('excel/out')
+  @Get('excel/output')
   @ApiOperation({
     summary: '[活动客户]导出 excel',
     description: '导出excel 单次导出数据不能太多',
   })
-  public exportEx(
-    @Res() res: Response,
-    @Query() input: ActivityCustomerGetListInput,
-  ): Promise<void> {
-    return super.exportExcel(res, input);
-  }
-
-  @Get('excel/export')
-  @ApiOperation({
-    summary: '[活动客户]导出 excel',
-    description: '导出excel 单次导出数据不能太多',
-  })
-  public override async exportExcel(
+  public override exportExcel(
     @Res() res: Response,
     @Query() input: ActivityCustomerGetListInput,
   ): Promise<void> {

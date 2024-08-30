@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { swaggerConfigure } from './configures/swaggerConfigure';
-// import { corsConfigure } from './configures/corsConfigure';
+import { corsConfigure } from './configures/corsConfigure';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/AllExceptionsFilter';
@@ -11,7 +11,8 @@ async function bootstrap() {
 
   swaggerConfigure(app, { path: '/' });
 
-  // corsConfigure(app);
+  corsConfigure(app);
+  // app.enableCors({ origin: '*' });
 
   // 全局注册异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter());

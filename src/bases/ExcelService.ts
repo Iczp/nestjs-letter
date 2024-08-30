@@ -91,8 +91,8 @@ SELECT ObjectType {
     return schemaInfo.name.substring('default::'.length) + '-example';
   }
 
-  public getSheetName(schemaInfo: SchemaType, defaultName?: string): string {
-    return schemaInfo.title ?? schemaInfo.name ?? defaultName ?? 'Sheet1';
+  public getSheetName(schemaInfo: SchemaType): string {
+    return schemaInfo.title ?? schemaInfo.name ?? 'Sheet1';
   }
   public getExampleSheetName(schemaInfo: SchemaType): string {
     return schemaInfo.title ?? schemaInfo.name ?? 'ExampleSheet1';
@@ -130,17 +130,21 @@ SELECT ObjectType {
   }
 
   private async createExcel(args: {
-    getColumns: (schemaInfo: SchemaType) => Promise<Partial<Column>[]>;
-    getName: (schemaInfo: SchemaType) => string;
-    getRows: () => Promise<any[]>;
-    getExcelFilename: (schemaInfo: SchemaType) => string;
+    input?: TGetListInput;
+    getColumns: (
+      schemaInfo: SchemaType,
+      input?: TGetListInput,
+    ) => Promise<Partial<Column>[]>;
+    getName: (schemaInfo: SchemaType, input?: TGetListInput) => string;
+    getRows: (input?: TGetListInput) => Promise<any[]>;
+    getExcelFilename: (schemaInfo: SchemaType, input?: TGetListInput) => string;
   }): Promise<ExcelWorkbook> {
     console.log('createExcel');
     const schemaInfo = await this.getSchemaInfo();
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet(args.getName(schemaInfo));
     worksheet.columns = await args.getColumns(schemaInfo);
-    const rows = await args.getRows();
+    const rows = await args.getRows(args.input);
     for (const row of rows) {
       worksheet.addRow(row);
     }
@@ -152,20 +156,38 @@ SELECT ObjectType {
   }
 
   public async generateExcel(input: TGetListInput): Promise<ExcelWorkbook> {
-    return this.createExcel({
-      getColumns: this.getColumns,
-      getName: this.getSheetName,
-      getRows: () => this.getRows(input),
-      getExcelFilename: this.getExcelFilename,
-    });
+    console.log('generateExcel');
+    const schemaInfo = await this.getSchemaInfo();
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet(this.getSheetName(schemaInfo));
+    worksheet.columns = await this.getColumns(schemaInfo);
+    const rows = await this.getRows(input);
+    for (const row of rows) {
+      worksheet.addRow(row);
+    }
+    const filename = (
+      this.getExcelFilename(schemaInfo) ?? new Date().getTime().toString()
+    ).replace(/[\\\/:*?"<>|]/g, '');
+
+    return { workbook, filename: `${filename}.xlsx` };
   }
 
   public async generateExampleExcel(): Promise<ExcelWorkbook> {
-    return this.createExcel({
-      getColumns: this.getExampleColumns,
-      getName: this.getExampleSheetName,
-      getRows: this.getExampleRows,
-      getExcelFilename: this.getExampleExcelFilename,
-    });
+    console.log('generateExcel');
+    const schemaInfo = await this.getSchemaInfo();
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet(
+      this.getExampleSheetName(schemaInfo),
+    );
+    worksheet.columns = await this.getColumns(schemaInfo);
+    const rows = await this.getExampleColumns(schemaInfo);
+    for (const row of rows) {
+      worksheet.addRow(row);
+    }
+    const filename = (
+      this.getExcelFilename(schemaInfo) ?? new Date().getTime().toString()
+    ).replace(/[\\\/:*?"<>|]/g, '');
+
+    return { workbook, filename: `${filename}.xlsx` };
   }
 }

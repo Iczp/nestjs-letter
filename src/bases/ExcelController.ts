@@ -49,17 +49,17 @@ export abstract class ExcelController<TGetListInput> extends BaseController {
     res.end();
   }
 
-  @Get('excel/export')
+  @Get('excel/output')
   @ApiOperation({ summary: '导出数据到 Excel', description: `Excel 数据` })
   public async exportExcel(@Res() res: Response, input: TGetListInput) {
-    try {
-      const { filename, workbook } = await this.service.generateExcel(input);
-      this.resExcelFile({ res, filename });
-      await workbook.xlsx.write(res);
-      res.end();
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+    // try {
+    const { filename, workbook } = await this.service.generateExcel(input);
+    this.resExcelFile({ res, filename });
+    await workbook.xlsx.write(res);
+    res.end();
+    // } catch (error) {
+    //   throw new BadRequestException(error.message);
+    // }
   }
 
   @Post('excel/import')
