@@ -18,4 +18,7 @@ export class ExcelImportResult {
     type: () => [SheetDto],
   })
   public sheets?: SheetDto[];
+
+  @ApiProperty()
+  public data?: any;
 }

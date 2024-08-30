@@ -10,10 +10,11 @@ import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExtractDBType } from 'src/types/ExtractDBType';
 import { isEmpty } from 'src/common/validator';
-import { Column } from 'exceljs';
+import { Column, Workbook } from 'exceljs';
 import { SchemaType } from 'src/types/SchemaType';
 import { GenderText } from 'src/enums/Gender';
 import { exampleColumns, exampleRows } from './activityCustomer.example.data';
+import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<
@@ -111,7 +112,9 @@ export class ActivityCustomerService extends CrudService<
     ]);
   }
 
-  override async getRows(input: ActivityCustomerGetListInput): Promise<any[]> {
+  public override async getRows(
+    input: ActivityCustomerGetListInput,
+  ): Promise<any[]> {
     console.log('input', input);
 
     const list = e.select(this.entity, (entity) => {
@@ -157,5 +160,32 @@ export class ActivityCustomerService extends CrudService<
 
   public toCnGender(gender: string): string {
     return gender ? '是' : '否';
+  }
+
+  public override async importExcel(
+    workbook: Workbook,
+  ): Promise<ExcelImportResult> {
+    const sheet = workbook.getWorksheet(1);
+
+    const items = sheet.getRows(1, sheet.rowCount).map((x) => {
+      return {
+        customer_name: x.getCell(1).value as string,
+        customer_gender: x.getCell(2).value,
+        customer_phone: x.getCell(3).value,
+        inviter_name: x.getCell(4).value,
+        is_invited: x.getCell(5).value,
+      };
+    });
+
+    console.log('items', items);
+    // Nestjs 从Excel导入数据，并用edgedb-js 批量写入数据库
+    items.forEach((x) => {
+      e.insert(e.ActivityCustomer, { customer_name: x.customer_name });
+    });
+
+    return {
+      ...(await super.importExcel(workbook)),
+      data: sheet?.name,
+    };
   }
 }
