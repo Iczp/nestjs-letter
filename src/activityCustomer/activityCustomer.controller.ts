@@ -102,4 +102,13 @@ export class ActivityCustomerController extends CrudController<
   ): Promise<void> {
     return super.exportExcel(res, input);
   }
+
+  // @Post('excel/import')
+  // override importExcel(
+  //   @UploadedFile() file: Express.Multer.File,
+  //   @Query() query: any,
+  //   @Body() body: any,
+  // ): Promise<ExcelImportResult> {
+  //   return super.importExcel(file, query, body);
+  // }
 }

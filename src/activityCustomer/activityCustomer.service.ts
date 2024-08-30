@@ -13,6 +13,7 @@ import { isEmpty } from 'src/common/validator';
 import { Column } from 'exceljs';
 import { SchemaType } from 'src/types/SchemaType';
 import { GenderText } from 'src/enums/Gender';
+import { exampleColumns, exampleRows } from './activityCustomer.example.data';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<
@@ -78,6 +79,14 @@ export class ActivityCustomerService extends CrudService<
       customer_phone: input.customer_phone,
       is_enabled: input.is_enabled,
     };
+  }
+
+  public override getExampleColumns(): Promise<Partial<Column>[]> {
+    return Promise.resolve(exampleColumns);
+  }
+
+  public override getExampleRows(): Promise<any[]> {
+    return Promise.resolve(exampleRows);
   }
 
   public override getSheetName(): string {

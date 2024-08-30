@@ -91,6 +91,7 @@ export abstract class ExcelController<TGetListInput> extends BaseController {
     @Query() query: any,
     @Body() body: any,
   ): Promise<ExcelImportResult> {
+    console.log(body, query);
     const workbook = new Workbook();
     await workbook.xlsx.load(file.buffer);
     return await this.service.importExcel(workbook, { query, body });

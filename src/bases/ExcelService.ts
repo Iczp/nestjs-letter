@@ -179,13 +179,14 @@ SELECT ObjectType {
     const worksheet = workbook.addWorksheet(
       this.getExampleSheetName(schemaInfo),
     );
-    worksheet.columns = await this.getColumns(schemaInfo);
-    const rows = await this.getExampleColumns(schemaInfo);
+    worksheet.columns = await this.getExampleColumns(schemaInfo);
+    const rows = await this.getExampleRows();
     for (const row of rows) {
       worksheet.addRow(row);
     }
     const filename = (
-      this.getExcelFilename(schemaInfo) ?? new Date().getTime().toString()
+      this.getExampleExcelFilename(schemaInfo) ??
+      new Date().getTime().toString()
     ).replace(/[\\\/:*?"<>|]/g, '');
 
     return { workbook, filename: `${filename}.xlsx` };
