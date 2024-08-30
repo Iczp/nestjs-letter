@@ -179,13 +179,33 @@ export class ActivityCustomerService extends CrudService<
 
     console.log('items', items);
     // Nestjs 从Excel导入数据，并用edgedb-js 批量写入数据库
-    items.forEach((x) => {
-      e.insert(e.ActivityCustomer, { customer_name: x.customer_name });
+    const activity = e.select(e.Activity, () => ({
+      filter_single: {
+        id: e.uuid('88f38814-64f0-11ef-90b0-17f95272ef7b'),
+      },
+    }));
+    const query = e.params({ items: e.json }, (params) => {
+      return e.for(e.json_array_unpack(params.items), (item) => {
+        return e.insert(e.ActivityCustomer, {
+          // activity: e.cast(
+          //   e.Activity,
+          //   e.uuid('88f38814-64f0-11ef-90b0-17f95272ef7b'),
+          // ),
+          activity: activity as never,
+          customer_name: e.cast(e.str, item.customer_name),
+        });
+      });
     });
+
+    const result = await query.run(this.client, {
+      items,
+    });
+
+    // console.log('result', result);
 
     return {
       ...(await super.importExcel(workbook)),
-      data: sheet?.name,
+      data: result,
     };
   }
 }
