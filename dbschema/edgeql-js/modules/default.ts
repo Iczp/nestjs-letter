@@ -101,6 +101,7 @@ export type $PermissionλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "sorting": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
   "roles": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, true,  false, false>;
+  "tag": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<permission[is RolePermission]": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, false,  false, false>;
   "<permission": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;

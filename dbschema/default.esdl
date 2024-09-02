@@ -149,6 +149,10 @@ module default {
             annotation title := '编码';
         };
 
+        property tag -> str {
+            annotation title := '标签';
+        };
+
         property sorting -> int64 {
             annotation title := '编码';
         };
