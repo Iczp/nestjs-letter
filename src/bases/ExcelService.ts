@@ -22,7 +22,11 @@ export abstract class ExcelService<TGetListInput>
 
   public client = createClient();
 
-  public async importExcel(workbook: Workbook): Promise<ExcelImportResult> {
+  public async importExcel(
+    workbook: Workbook,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    request?: any,
+  ): Promise<ExcelImportResult> {
     // throw new Error('Method [importExcel] not implemented.');
 
     const sheets = workbook.worksheets.map((x) => ({

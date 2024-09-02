@@ -1,8 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 import { GetListInput } from 'src/bases/GetListInput';
 
 export class ActivityCustomerGetListInput extends GetListInput {
+  @IsOptional()
+  @IsUUID()
+  @ApiProperty({
+    required: false,
+    default: null,
+    description: '活动Id',
+  })
+  public activity_id?: string;
+
   @IsOptional()
   // @IsBoolean()
   @ApiProperty({

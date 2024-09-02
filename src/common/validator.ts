@@ -27,6 +27,15 @@ export const isSymbol = <T>(val: T): boolean => typeof val === 'symbol';
 
 export const isMap = <T>(val: T): boolean => val instanceof Map;
 
+export const isGuid = (val?: any): boolean => {
+  if (typeof val == 'string' && val.length === 36) {
+    const guidRegex =
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/g;
+    return guidRegex.test(val);
+  }
+  return false;
+};
+
 /**
  * Checks if given value is empty (=== '', === null, === undefined, isArray and length > 0).
  */

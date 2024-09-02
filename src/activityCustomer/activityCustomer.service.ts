@@ -9,12 +9,12 @@ import { ActivityCustomerGetListInput } from './dtos/ActivityCustomerGetListInpu
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExtractDBType } from 'src/types/ExtractDBType';
-import { isEmpty } from 'src/common/validator';
 import { Column, Workbook } from 'exceljs';
 import { SchemaType } from 'src/types/SchemaType';
 import { GenderText } from 'src/enums/Gender';
 import { exampleColumns, exampleRows } from './activityCustomer.example.data';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
+import { assert, checker } from 'src/common';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<
@@ -29,21 +29,38 @@ export class ActivityCustomerService extends CrudService<
   // }
   public readonly entity = e.ActivityCustomer;
 
+  public override listSelect(
+    input: ActivityCustomerGetListInput,
+    entity: ExtractDBType<typeof e.ActivityCustomer>,
+  ) {
+    return {
+      ...entity['*'],
+      activity: {
+        id: true,
+        title: true,
+      },
+    };
+  }
+
   override listFilter(
     input: ActivityCustomerGetListInput,
     entity: ExtractDBType<typeof e.ActivityCustomer>,
   ): any {
     return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
       .addIf(
-        !isEmpty(input.is_checked),
+        !checker.isEmpty(input.activity_id),
+        e.op(entity.activity['id'], '=', e.uuid(input.activity_id)),
+      )
+      .addIf(
+        !checker.isEmpty(input.is_checked),
         e.op(entity.is_checked, '=', e.bool(input.is_checked)),
       )
       .addIf(
-        !isEmpty(input.is_invited),
+        !checker.isEmpty(input.is_invited),
         e.op(entity.is_invited, '=', e.bool(input.is_invited)),
       )
       .addIf(
-        !isEmpty(input.is_enabled),
+        !checker.isEmpty(input.is_enabled),
         e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
       )
       .all();
@@ -164,9 +181,18 @@ export class ActivityCustomerService extends CrudService<
 
   public override async importExcel(
     workbook: Workbook,
+    request: any,
   ): Promise<ExcelImportResult> {
-    const sheet = workbook.getWorksheet(1);
+    console.log('body', request.body);
+    const activity_id = request.body.body;
+    assert.If(
+      !checker.isGuid(activity_id),
+      `请输入正确的活动ID,${activity_id}`,
+    );
 
+    // console.log('activity_id', activity_id);
+
+    const sheet = workbook.getWorksheet(1);
     const items = sheet.getRows(1, sheet.rowCount).map((x) => {
       return {
         customer_name: x.getCell(1).value as string,
@@ -181,16 +207,27 @@ export class ActivityCustomerService extends CrudService<
     // Nestjs 从Excel导入数据，并用edgedb-js 批量写入数据库
     const activity = e.select(e.Activity, () => ({
       filter_single: {
-        id: e.uuid('88f38814-64f0-11ef-90b0-17f95272ef7b'),
+        id: e.uuid(activity_id),
       },
     }));
+    const item = await activity.run(this.client);
+    assert.If(!item, `不存在的活动,Id:${activity_id}`);
     const query = e.params({ items: e.json }, (params) => {
       return e.for(e.json_array_unpack(params.items), (item) => {
         return e.insert(e.ActivityCustomer, {
           // activity: e.cast(
           //   e.Activity,
-          //   e.uuid('88f38814-64f0-11ef-90b0-17f95272ef7b'),
+          //   e.select(e.Activity, () => ({
+          //     filter_single: {
+          //       id: e.uuid(activity_id),
+          //     },
+          //   })),
           // ),
+          // activity: e.select(e.Activity, () => ({
+          //   filter_single: {
+          //     id: e.uuid(activity_id),
+          //   },
+          // })),
           activity: activity as never,
           customer_name: e.cast(e.str, item.customer_name),
         });
@@ -204,7 +241,7 @@ export class ActivityCustomerService extends CrudService<
     // console.log('result', result);
 
     return {
-      ...(await super.importExcel(workbook)),
+      ...(await super.importExcel(workbook, request)),
       data: result,
     };
   }

@@ -25,7 +25,7 @@ export abstract class CrudService<
   // public abstract entity: ObjectTypeExpression | $expr_PathNode;
   // public client = createClient();
 
-  public itemSelect(id: string, entity: ObjectTypeExpression): object {
+  public itemSelect(id: string, entity: any): object {
     return entity['*'];
   }
 
@@ -37,7 +37,7 @@ export abstract class CrudService<
     return this.entity['*'];
   }
 
-  public listSelect(input: TGetListInput): object {
+  public listSelect(input: TGetListInput, entity: any): any {
     return this.entity['*'];
   }
 
@@ -109,7 +109,7 @@ export abstract class CrudService<
 
     const list = e.select(this.entity, (entity) => {
       const filter = this.listFilter(input, entity);
-
+      console.log('filter toEdgeQL', filter.toEdgeQL());
       return {
         offset: e.int64(input.skip),
         limit: e.int64(input.maxResultCount),
@@ -121,7 +121,7 @@ export abstract class CrudService<
             empty: e.EMPTY_LAST,
           },
         ],
-        ...this.listSelect(input),
+        ...this.listSelect(input, entity),
       };
     });
 

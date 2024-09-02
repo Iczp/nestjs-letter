@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import { Gender } from 'dbschema/interfaces';
+import { ActivityDto } from 'src/activity/dtos/ActivityDto';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
 
@@ -33,4 +34,9 @@ export class ActivityCustomerDto extends BaseEntityDto {
 
   @ApiProperty()
   public is_enabled?: boolean;
+
+  @ApiProperty({
+    type: () => ActivityDto,
+  })
+  public activity?: ActivityDto;
 }
