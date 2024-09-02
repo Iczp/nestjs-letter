@@ -151,6 +151,19 @@ module default {
             annotation title := '活动说明';
         };
 
+        property qrcode_rect -> str {
+            annotation title := '二维码图片位置';
+        };
+
+        property bg_image -> str {
+            annotation title := '活动图片';
+        };
+
+        property is_image_set -> bool {
+            annotation title := '是否设置了图片模板';
+            default := (false)
+        };
+
         property start_time -> datetime {
             annotation title := '开始时间';
             default := (std::datetime_current());
