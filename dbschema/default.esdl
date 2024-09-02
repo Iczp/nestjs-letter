@@ -127,11 +127,15 @@ module default {
             annotation title := '编码';
         };
 
-        multi link permissions :Permission {
-            annotation title := '角色权限';
-        }
+        multi users := (.<role[is UserRole]);
 
-        multi users := (.<role[is UserRole])
+        multi permissions := (.<role[is RolePermission]);
+    }
+
+    type RolePermission extending BaseEntity {
+        annotation title := '角色权限';
+        required permission: Permission;
+        required role: Role;
     }
 
     type Permission extending BaseEntity {
@@ -148,6 +152,8 @@ module default {
         property sorting -> int64 {
             annotation title := '编码';
         };
+
+        multi roles := (.<permission[is RolePermission]);
     }
 
     # type Customer extending User {

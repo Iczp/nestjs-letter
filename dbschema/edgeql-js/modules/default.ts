@@ -100,8 +100,9 @@ export type $PermissionλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "code": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "sorting": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
-  "<permissions[is Role]": $.LinkDesc<$Role, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<permissions": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "roles": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, true,  false, false>;
+  "<permission[is RolePermission]": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<permission": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Permission = $.ObjectType<"default::Permission", $PermissionλShape, null, [
   ...$BaseEntity['__exclusives__'],
@@ -111,7 +112,6 @@ const $Permission = $.makeType<$Permission>(_.spec, "2a4d570a-6906-11ef-9153-c92
 const Permission: $.$expr_PathNode<$.TypeSet<$Permission, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Permission, $.Cardinality.Many), null);
 
 export type $RoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
-  "permissions": $.LinkDesc<$Permission, $.Cardinality.Many, {}, false, false,  false, false>;
   "code": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "sorting": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
@@ -119,7 +119,9 @@ export type $RoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "is_public": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "is_static": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "users": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, true,  false, false>;
+  "permissions": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, true,  false, false>;
   "<role[is UserRole]": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<role[is RolePermission]": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, false,  false, false>;
   "<role": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Role = $.ObjectType<"default::Role", $RoleλShape, null, [
@@ -128,6 +130,21 @@ type $Role = $.ObjectType<"default::Role", $RoleλShape, null, [
 const $Role = $.makeType<$Role>(_.spec, "2a526fbe-6906-11ef-8211-e1f29b017c6f", _.syntax.literal);
 
 const Role: $.$expr_PathNode<$.TypeSet<$Role, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Role, $.Cardinality.Many), null);
+
+export type $RolePermissionλShape = $.typeutil.flatten<$BaseEntityλShape & {
+  "permission": $.LinkDesc<$Permission, $.Cardinality.One, {}, false, false,  false, false>;
+  "role": $.LinkDesc<$Role, $.Cardinality.One, {}, false, false,  false, false>;
+  "<permissions[is Role]": $.LinkDesc<$Role, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<roles[is Permission]": $.LinkDesc<$Permission, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<permissions": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<roles": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $RolePermission = $.ObjectType<"default::RolePermission", $RolePermissionλShape, null, [
+  ...$BaseEntity['__exclusives__'],
+]>;
+const $RolePermission = $.makeType<$RolePermission>(_.spec, "0e616040-690b-11ef-b11c-756b528def4d", _.syntax.literal);
+
+const RolePermission: $.$expr_PathNode<$.TypeSet<$RolePermission, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($RolePermission, $.Cardinality.Many), null);
 
 export type $SignLogλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "owner": $.LinkDesc<$ActivityCustomer, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
@@ -212,7 +229,7 @@ const $default__globals: {  current_user: _.syntax.$expr_Global<
 
 
 
-export { Gender, UserType, $BaseEntity, BaseEntity, $Activity, Activity, $ActivityCustomer, ActivityCustomer, $GiftLog, GiftLog, $Permission, Permission, $Role, Role, $SignLog, SignLog, $User, User, $UserRole, UserRole, $current_user, current_user };
+export { Gender, UserType, $BaseEntity, BaseEntity, $Activity, Activity, $ActivityCustomer, ActivityCustomer, $GiftLog, GiftLog, $Permission, Permission, $Role, Role, $RolePermission, RolePermission, $SignLog, SignLog, $User, User, $UserRole, UserRole, $current_user, current_user };
 
 type __defaultExports = {
   "Gender": typeof Gender;
@@ -223,6 +240,7 @@ type __defaultExports = {
   "GiftLog": typeof GiftLog;
   "Permission": typeof Permission;
   "Role": typeof Role;
+  "RolePermission": typeof RolePermission;
   "SignLog": typeof SignLog;
   "User": typeof User;
   "UserRole": typeof UserRole;
@@ -238,6 +256,7 @@ const __defaultExports: __defaultExports = {
   "GiftLog": GiftLog,
   "Permission": Permission,
   "Role": Role,
+  "RolePermission": RolePermission,
   "SignLog": SignLog,
   "User": User,
   "UserRole": UserRole,
