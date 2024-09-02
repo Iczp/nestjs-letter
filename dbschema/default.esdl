@@ -243,11 +243,11 @@ module default {
             annotation title := '活动';
         };
 
-        link customer : Customer {
+        link customer : User {
             annotation title := '客户';
         };
 
-        link inviter : ShopManager {
+        link inviter : User {
             annotation title := '邀请人';
         };
     }
