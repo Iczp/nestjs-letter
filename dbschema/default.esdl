@@ -87,6 +87,67 @@ module default {
         property erp_user_id -> str {
             annotation title := 'Erp用户ID';
         };
+
+        link role: Role{
+            annotation title := '用户角色';
+        }
+
+        multi link roles :Role {
+            annotation title := '用户角色';
+        }
+    }
+
+    type Role extending BaseEntity {
+        annotation title := '角色';
+
+        property name -> str {
+            annotation title := '权限名称';
+        };
+
+        property code -> str {
+            annotation title := '编码';
+        };
+
+        property is_static -> bool {
+            annotation title := '是否固有';
+            default := (false)
+        };
+
+        property is_public -> bool {
+            annotation title := '是否公开';
+            default := (false)
+        };
+
+        property is_default -> bool {
+            annotation title := '是否默认';
+            default := (false)
+        };
+
+        property sorting -> int64 {
+            annotation title := '编码';
+        };
+
+        multi link permissions :Permission {
+            annotation title := '角色权限';
+        }
+
+        multi users := (.<role[is User])
+    }
+
+    type Permission extending BaseEntity {
+        annotation title := '权限';
+
+        property name -> str {
+            annotation title := '权限名称';
+        };
+
+        property code -> str {
+            annotation title := '编码';
+        };
+
+        property sorting -> int64 {
+            annotation title := '编码';
+        };
     }
 
     # type Customer extending User {
@@ -283,5 +344,7 @@ module default {
             annotation title := '领取者';
         };
     }
+
+    
 
 }
