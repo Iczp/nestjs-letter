@@ -44,6 +44,9 @@ export type $ActivityλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "max_count": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
   "customers": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, true,  false, false>;
   "is_actived": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
+  "bg_image": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "is_image_set": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
+  "qrcode_rect": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<activity[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<activity": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
@@ -55,8 +58,6 @@ const $Activity = $.makeType<$Activity>(_.spec, "5c4e7ce5-61f9-11ef-96bc-3d7a452
 const Activity: $.$expr_PathNode<$.TypeSet<$Activity, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Activity, $.Cardinality.Many), null);
 
 export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
-  "customer": $.LinkDesc<$Customer, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
-  "inviter": $.LinkDesc<$ShopManager, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "customer_gender": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "customer_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "customer_phone": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
@@ -68,11 +69,11 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "is_gifted": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "is_signed": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "last_invite_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
-  "<activities[is Customer]": $.LinkDesc<$Customer, $.Cardinality.Many, {}, false, false,  false, false>;
+  "customer": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "inviter": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "<customers[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is GiftLog]": $.LinkDesc<$GiftLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is SignLog]": $.LinkDesc<$SignLog, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<activities": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<customers": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
@@ -82,35 +83,6 @@ type $ActivityCustomer = $.ObjectType<"default::ActivityCustomer", $ActivityCust
 const $ActivityCustomer = $.makeType<$ActivityCustomer>(_.spec, "8d5fdf89-61fa-11ef-9470-1dce793282d2", _.syntax.literal);
 
 const ActivityCustomer: $.$expr_PathNode<$.TypeSet<$ActivityCustomer, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($ActivityCustomer, $.Cardinality.Many), null);
-
-export type $UserλShape = $.typeutil.flatten<$BaseEntityλShape & {
-  "gender": $.PropertyDesc<$Gender, $.Cardinality.AtMostOne, false, false, false, true>;
-  "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "phone": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "user_type": $.PropertyDesc<$UserType, $.Cardinality.AtMostOne, false, false, false, true>;
-  "erp_user_id": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-}>;
-type $User = $.ObjectType<"default::User", $UserλShape, null, [
-  ...$BaseEntity['__exclusives__'],
-]>;
-const $User = $.makeType<$User>(_.spec, "7b5c8768-6202-11ef-a03a-1f6d28d9fa6b", _.syntax.literal);
-
-const User: $.$expr_PathNode<$.TypeSet<$User, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($User, $.Cardinality.Many), null);
-
-export type $CustomerλShape = $.typeutil.flatten<Omit<$UserλShape, "user_type"> & {
-  "activities": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
-  "shopCode": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "shopName": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "user_type": $.PropertyDesc<$UserType, $.Cardinality.AtMostOne, false, false, false, true>;
-  "<customer[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<customer": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
-}>;
-type $Customer = $.ObjectType<"default::Customer", $CustomerλShape, null, [
-  ...$User['__exclusives__'],
-]>;
-const $Customer = $.makeType<$Customer>(_.spec, "5c5346f6-61f9-11ef-b205-3d25473dc9e3", _.syntax.literal);
-
-const Customer: $.$expr_PathNode<$.TypeSet<$Customer, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Customer, $.Cardinality.Many), null);
 
 export type $GiftLogλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "owner": $.LinkDesc<$ActivityCustomer, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
@@ -124,18 +96,38 @@ const $GiftLog = $.makeType<$GiftLog>(_.spec, "d30875ff-65aa-11ef-919c-e5685a18e
 
 const GiftLog: $.$expr_PathNode<$.TypeSet<$GiftLog, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GiftLog, $.Cardinality.Many), null);
 
-export type $ShopManagerλShape = $.typeutil.flatten<Omit<$UserλShape, "user_type"> & {
-  "positionName": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "user_type": $.PropertyDesc<$UserType, $.Cardinality.AtMostOne, false, false, false, true>;
-  "<inviter[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<inviter": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+export type $PermissionλShape = $.typeutil.flatten<$BaseEntityλShape & {
+  "code": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "sorting": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
+  "<permissions[is Role]": $.LinkDesc<$Role, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<permissions": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
-type $ShopManager = $.ObjectType<"default::ShopManager", $ShopManagerλShape, null, [
-  ...$User['__exclusives__'],
+type $Permission = $.ObjectType<"default::Permission", $PermissionλShape, null, [
+  ...$BaseEntity['__exclusives__'],
 ]>;
-const $ShopManager = $.makeType<$ShopManager>(_.spec, "4ec3264a-6345-11ef-ab69-99615cfc790c", _.syntax.literal);
+const $Permission = $.makeType<$Permission>(_.spec, "2a4d570a-6906-11ef-9153-c923c64e8301", _.syntax.literal);
 
-const ShopManager: $.$expr_PathNode<$.TypeSet<$ShopManager, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($ShopManager, $.Cardinality.Many), null);
+const Permission: $.$expr_PathNode<$.TypeSet<$Permission, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Permission, $.Cardinality.Many), null);
+
+export type $RoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
+  "permissions": $.LinkDesc<$Permission, $.Cardinality.Many, {}, false, false,  false, false>;
+  "code": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "sorting": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
+  "is_default": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
+  "is_public": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
+  "is_static": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
+  "users": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, true,  false, false>;
+  "<role[is UserRole]": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<role": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $Role = $.ObjectType<"default::Role", $RoleλShape, null, [
+  ...$BaseEntity['__exclusives__'],
+]>;
+const $Role = $.makeType<$Role>(_.spec, "2a526fbe-6906-11ef-8211-e1f29b017c6f", _.syntax.literal);
+
+const Role: $.$expr_PathNode<$.TypeSet<$Role, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Role, $.Cardinality.Many), null);
 
 export type $SignLogλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "owner": $.LinkDesc<$ActivityCustomer, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
@@ -148,6 +140,43 @@ type $SignLog = $.ObjectType<"default::SignLog", $SignLogλShape, null, [
 const $SignLog = $.makeType<$SignLog>(_.spec, "d30d70fb-65aa-11ef-864e-eb245ad97d11", _.syntax.literal);
 
 const SignLog: $.$expr_PathNode<$.TypeSet<$SignLog, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($SignLog, $.Cardinality.Many), null);
+
+export type $UserλShape = $.typeutil.flatten<$BaseEntityλShape & {
+  "gender": $.PropertyDesc<$Gender, $.Cardinality.AtMostOne, false, false, false, true>;
+  "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "phone": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "user_type": $.PropertyDesc<$UserType, $.Cardinality.AtMostOne, false, false, false, true>;
+  "erp_user_id": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "roles": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, true,  false, false>;
+  "<customer[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<inviter[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<user[is UserRole]": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<customer": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<inviter": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $User = $.ObjectType<"default::User", $UserλShape, null, [
+  ...$BaseEntity['__exclusives__'],
+]>;
+const $User = $.makeType<$User>(_.spec, "7b5c8768-6202-11ef-a03a-1f6d28d9fa6b", _.syntax.literal);
+
+const User: $.$expr_PathNode<$.TypeSet<$User, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($User, $.Cardinality.Many), null);
+
+export type $UserRoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
+  "role": $.LinkDesc<$Role, $.Cardinality.One, {}, false, false,  false, false>;
+  "user": $.LinkDesc<$User, $.Cardinality.One, {}, false, false,  false, false>;
+  "<roles[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<users[is Role]": $.LinkDesc<$Role, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<roles[is current_user]": $.LinkDesc<$current_user, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<roles": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<users": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+}>;
+type $UserRole = $.ObjectType<"default::UserRole", $UserRoleλShape, null, [
+  ...$BaseEntity['__exclusives__'],
+]>;
+const $UserRole = $.makeType<$UserRole>(_.spec, "00b71235-690a-11ef-b8cb-e38c09fe0702", _.syntax.literal);
+
+const UserRole: $.$expr_PathNode<$.TypeSet<$UserRole, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($UserRole, $.Cardinality.Many), null);
 
 export type $current_userλShape = $.typeutil.flatten<$UserλShape & {
 }>;
@@ -183,7 +212,7 @@ const $default__globals: {  current_user: _.syntax.$expr_Global<
 
 
 
-export { Gender, UserType, $BaseEntity, BaseEntity, $Activity, Activity, $ActivityCustomer, ActivityCustomer, $User, User, $Customer, Customer, $GiftLog, GiftLog, $ShopManager, ShopManager, $SignLog, SignLog, $current_user, current_user };
+export { Gender, UserType, $BaseEntity, BaseEntity, $Activity, Activity, $ActivityCustomer, ActivityCustomer, $GiftLog, GiftLog, $Permission, Permission, $Role, Role, $SignLog, SignLog, $User, User, $UserRole, UserRole, $current_user, current_user };
 
 type __defaultExports = {
   "Gender": typeof Gender;
@@ -191,11 +220,12 @@ type __defaultExports = {
   "BaseEntity": typeof BaseEntity;
   "Activity": typeof Activity;
   "ActivityCustomer": typeof ActivityCustomer;
-  "User": typeof User;
-  "Customer": typeof Customer;
   "GiftLog": typeof GiftLog;
-  "ShopManager": typeof ShopManager;
+  "Permission": typeof Permission;
+  "Role": typeof Role;
   "SignLog": typeof SignLog;
+  "User": typeof User;
+  "UserRole": typeof UserRole;
   "current_user": typeof current_user;
   "global": typeof $default__globals
 };
@@ -205,11 +235,12 @@ const __defaultExports: __defaultExports = {
   "BaseEntity": BaseEntity,
   "Activity": Activity,
   "ActivityCustomer": ActivityCustomer,
-  "User": User,
-  "Customer": Customer,
   "GiftLog": GiftLog,
-  "ShopManager": ShopManager,
+  "Permission": Permission,
+  "Role": Role,
   "SignLog": SignLog,
+  "User": User,
+  "UserRole": UserRole,
   "current_user": current_user,
   "global": $default__globals
 };
