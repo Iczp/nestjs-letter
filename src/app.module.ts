@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { ActivityModule } from './activity/activity.module';
 import { ActivityCustomerModule } from './activityCustomer/activityCustomer.module';
+import { PermissionsModule } from './permissions/permissions.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ActivityCustomerModule } from './activityCustomer/activityCustomer.modu
     UserModule,
     ActivityModule,
     ActivityCustomerModule,
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
