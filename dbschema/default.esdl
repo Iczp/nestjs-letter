@@ -89,39 +89,39 @@ module default {
         };
     }
 
-    type Customer extending User {
-        annotation title := '客户表';
+    # type Customer extending User {
+    #     annotation title := '客户表';
 
-        overloaded property user_type -> UserType {
-            annotation title := '用户类型';
-            default := UserType.Customer
-        };
+    #     overloaded property user_type -> UserType {
+    #         annotation title := '用户类型';
+    #         default := UserType.Customer
+    #     };
 
-        property shopName -> str {
-            annotation title := '门店名称';
-        };
-        property shopCode -> str {
-            annotation title := '门店编码';
-        };
+    #     property shopName -> str {
+    #         annotation title := '门店名称';
+    #     };
+    #     property shopCode -> str {
+    #         annotation title := '门店编码';
+    #     };
 
-        multi link activities: ActivityCustomer {
-            annotation title := '用户参与的活动列表';
-        };
-    }
+    #     multi link activities: ActivityCustomer {
+    #         annotation title := '用户参与的活动列表';
+    #     };
+    # }
 
-    type ShopManager extending User {
-        annotation title := '邀请人表';
+    # type ShopManager extending User {
+    #     annotation title := '邀请人表';
 
-        overloaded property user_type -> UserType {
-            annotation title := '用户类型';
-            default := UserType.ShopManager
-        };
+    #     overloaded property user_type -> UserType {
+    #         annotation title := '用户类型';
+    #         default := UserType.ShopManager
+    #     };
 
-        property positionName -> str {
-            annotation title := '职位名称';
-        };
+    #     property positionName -> str {
+    #         annotation title := '职位名称';
+    #     };
 
-    }
+    # }
 
     type Activity extending BaseEntity {
         annotation title :=  '活动';
