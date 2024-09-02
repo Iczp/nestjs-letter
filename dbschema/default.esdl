@@ -88,13 +88,13 @@ module default {
             annotation title := 'Erp用户ID';
         };
 
-        link role: Role{
-            annotation title := '用户角色';
-        }
+        multi roles := (.<user[is UserRole])
+    }
 
-        multi link roles :Role {
-            annotation title := '用户角色';
-        }
+    type UserRole extending BaseEntity {
+        annotation title := '用户角色';
+        required user: User;
+        required role: Role;
     }
 
     type Role extending BaseEntity {
@@ -131,7 +131,7 @@ module default {
             annotation title := '角色权限';
         }
 
-        multi users := (.<role[is User])
+        multi users := (.<role[is UserRole])
     }
 
     type Permission extending BaseEntity {
