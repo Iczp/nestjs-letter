@@ -145,8 +145,9 @@ module default {
             annotation title := '权限名称';
         };
 
-        property code -> str {
+        required property code -> str {
             annotation title := '编码';
+            constraint exclusive;
         };
 
         property tag -> str {

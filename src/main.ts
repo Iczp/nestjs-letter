@@ -5,6 +5,7 @@ import { corsConfigure } from './configures/corsConfigure';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/AllExceptionsFilter';
+import * as Activity from './permissions/permissionsConsts';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,8 @@ async function bootstrap() {
 
   // 全局注册异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter());
+
+  console.log('Activity', typeof Activity, Object.keys(Activity));
 
   // 假设你已经通过 ConfigModule 设置了配置
   const configService = app.get(ConfigService); // 通过依赖注入获取 ConfigService
