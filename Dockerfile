@@ -6,7 +6,7 @@ WORKDIR /app
 
 # 将package.json和package-lock.json复制到容器中
 COPY package.json ./
-COPY pnpm-lock.json ./
+COPY pnpm-lock.yaml ./
 
 # 安装生产环境依赖
 # 安装pnpm（如果官方Node.js镜像中不包含pnpm）
@@ -37,6 +37,10 @@ WORKDIR /app
 
 # micromatch 包中存在的 Regular Expression Denial of Service (ReDoS) 漏洞问题
 # RUN npm update micromatch
+
+# 复制构建产物
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
 
 # 暴露端口
 EXPOSE 3000

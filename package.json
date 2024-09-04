@@ -1,5 +1,5 @@
 {
-  "name": "letter",
+  "name": "nest_letter",
   "version": "0.0.1",
   "description": "",
   "author": "zhongpei <1000@intry.cn>",
@@ -43,6 +43,7 @@
     "class-validator": "^0.14.1",
     "edgedb": "^1.5.10",
     "exceljs": "^4.4.0",
+    "express": "^4.19.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
