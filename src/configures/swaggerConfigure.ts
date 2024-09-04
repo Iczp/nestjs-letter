@@ -33,15 +33,28 @@ export const swaggerConfigure = (
     .setDescription(description)
     .setVersion(version)
     .setContact(author, website, email)
-    .addApiKey(
+    // .addApiKey(
+    //   {
+    //     type: 'apiKey',
+    //     name: 'x-api-key',
+    //     in: 'header',
+    //     description: 'API Key',
+    //   },
+    //   'api-key', // 名称标识，用于关联到守卫
+    // )
+
+    // 添加 JWT Bearer 认证
+    .addBearerAuth(
       {
-        type: 'apiKey',
-        name: 'x-api-key',
-        in: 'header',
-        description: 'API Key',
+        type: 'http', // 类型为 http
+        scheme: 'bearer', // 认证方案为 bearer
+        bearerFormat: 'JWT', // (可选) 说明令牌的格式，通常为 'JWT'
+        in: 'header', // (可选) 指定认证信息的位置，通常为 header
+        description: 'Please enter your token bearer', // (可选) 描述信息
       },
-      'api-key', // 名称标识，用于关联到守卫
-    )
+      'bearer',
+    ) // 名称标识，用于关联到守卫
+
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup(settings.path, app, document);
