@@ -17,6 +17,7 @@
   },
   "scripts": {
     "build": "nest build",
+    "build:dc": "docker-compose up --build -d",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
