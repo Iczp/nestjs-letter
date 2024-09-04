@@ -9,6 +9,7 @@ import { UserGetListInput } from './dtos/UserGetListInput';
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { isEmpty } from 'class-validator';
+import { ExtractDBType } from 'src/types/ExtractDBType';
 
 @Injectable()
 export class UserService extends CrudService<
@@ -20,19 +21,19 @@ export class UserService extends CrudService<
 > {
   public readonly entity = e.User;
 
-  override listFilter(input: UserGetListInput): any {
+  override listFilter(
+    input: UserGetListInput,
+    entity: ExtractDBType<typeof e.User>,
+  ): any {
     return new Filters([e.op(e.User.is_deleted, '=', e.bool(false))])
-      .addIf(
-        !isEmpty(input.userType),
-        e.op(e.User.user_type, '=', e.cast(e.UserType, input.userType)),
+      .addIf(!isEmpty(input.userType), () =>
+        e.op(entity.user_type, '=', e.cast(e.UserType, input.userType)),
       )
-      .addIf(
-        !isEmpty(input.gender),
-        e.op(e.User.gender, '=', e.cast(e.Gender, input.gender)),
+      .addIf(!isEmpty(input.gender), () =>
+        e.op(entity.gender, '=', e.cast(e.Gender, input.gender)),
       )
-      .addIf(
-        !isEmpty(input.is_enabled),
-        e.op(e.User.is_enabled, '=', e.bool(input.is_enabled)),
+      .addIf(!isEmpty(input.is_enabled), () =>
+        e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
       )
       .all();
   }

@@ -1,26 +1,31 @@
-import e, { Cardinality } from 'dbschema/edgeql-js'; // auto-generated code
-import { $bool } from 'dbschema/edgeql-js/modules/std';
-import { TypeSet } from 'dbschema/edgeql-js/reflection';
+import e from 'dbschema/edgeql-js'; // auto-generated code
+// import { $bool } from 'dbschema/edgeql-js/modules/std';
+// import { Cardinality, TypeSet } from 'dbschema/edgeql-js/reflection';
+// import { $ } from 'edgedb';
 
 /**
  * 条件过滤器
  */
-export class Filters<T extends TypeSet<$bool, Cardinality>> {
-  private array: T[] = [];
+export class Filters /** <T extends TypeSet<$bool, Cardinality>> */ {
+  private array: any[] = [];
 
-  constructor(initialArray: T[] = []) {
+  constructor(initialArray: any[] = []) {
     this.array = [...initialArray];
   }
 
   /**
    * 条件添加
    * @param condition 条件 True
-   * @param value
+   * @param value  Fundtion | value
    */
 
-  addIf(condition: boolean, value: T): this {
+  addIf(condition: boolean, value: any): this {
     if (condition) {
-      this.array.push(value);
+      if (typeof value === 'function') {
+        this.array.push(value());
+      } else {
+        this.array.push(value);
+      }
     }
     return this;
   }
@@ -28,7 +33,7 @@ export class Filters<T extends TypeSet<$bool, Cardinality>> {
   /**
    * 返回数组的副本以保持不可变性
    */
-  toArray(): T[] {
+  toArray(): any[] {
     return [...this.array];
   }
 

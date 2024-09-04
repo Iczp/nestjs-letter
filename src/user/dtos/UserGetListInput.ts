@@ -2,12 +2,18 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsIn, IsOptional } from 'class-validator';
 import { Gender, UserType } from 'dbschema/interfaces';
 import { GetListInput } from 'src/bases/GetListInput';
-import { GenderEnums, GenderKeys } from 'src/enums/Gender';
-import { UserTypeEnums, UserTypeKeys } from 'src/enums/UserType';
+import { GenderKeys } from 'src/enums/Gender';
+import { UserTypeKeys } from 'src/enums/UserType';
 
 export class UserGetListInput extends GetListInput {
   @ApiProperty({
-    default: UserTypeEnums[UserTypeEnums.Unset],
+    required: false,
+  })
+  public role_id?: string;
+
+  @ApiProperty({
+    required: false,
+    // default: UserTypeEnums[UserTypeEnums.Unset],
     enum: UserTypeKeys,
   })
   @IsIn(UserTypeKeys)
@@ -15,7 +21,8 @@ export class UserGetListInput extends GetListInput {
 
   @IsIn(GenderKeys)
   @ApiProperty({
-    default: GenderEnums[GenderEnums.Unknown],
+    required: false,
+    // default: GenderEnums[GenderEnums.Unknown],
     enum: GenderKeys,
   })
   public gender?: Gender;
@@ -23,7 +30,7 @@ export class UserGetListInput extends GetListInput {
   @IsOptional()
   @IsBoolean()
   @ApiProperty({
-    default: true,
+    required: false,
   })
   public is_enabled?: boolean;
 }

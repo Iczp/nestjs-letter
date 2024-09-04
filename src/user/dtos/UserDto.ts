@@ -6,6 +6,9 @@ import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
 export class UserDto extends BaseEntityDto {
   @IsNotEmpty()
   @ApiProperty()
+  account: string;
+
+  @ApiProperty()
   name!: string;
 
   @ApiProperty()
