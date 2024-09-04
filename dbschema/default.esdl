@@ -66,6 +66,14 @@ module default {
     type User extending BaseEntity {
         annotation title := '用户表';
 
+        property account -> str {
+            annotation title := '账号';
+        };
+
+        property password -> str {
+            annotation title := '密码';
+        };
+
         property name -> str {
             annotation title := '姓名';
         };
@@ -130,6 +138,10 @@ module default {
         multi users := (.<role[is UserRole]);
 
         multi permissions := (.<role[is RolePermission]);
+
+        # multi rolePermissions -> Permission {
+        #     annotation title := '角色权限';
+        # }
     }
 
     type RolePermission extending BaseEntity {
@@ -159,6 +171,10 @@ module default {
         };
 
         multi roles := (.<permission[is RolePermission]);
+
+        # multi permissionRoles -> Role {
+        #     annotation title := '权限角色';
+        # }
     }
 
     # type Customer extending User {

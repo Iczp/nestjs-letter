@@ -167,6 +167,8 @@ export type $UserλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "user_type": $.PropertyDesc<$UserType, $.Cardinality.AtMostOne, false, false, false, true>;
   "erp_user_id": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "roles": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, true,  false, false>;
+  "account": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "password": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<customer[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<inviter[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is UserRole]": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
