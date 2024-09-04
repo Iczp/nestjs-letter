@@ -97,16 +97,17 @@ const $GiftLog = $.makeType<$GiftLog>(_.spec, "d30875ff-65aa-11ef-919c-e5685a18e
 const GiftLog: $.$expr_PathNode<$.TypeSet<$GiftLog, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GiftLog, $.Cardinality.Many), null);
 
 export type $PermissionλShape = $.typeutil.flatten<$BaseEntityλShape & {
-  "code": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "sorting": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
   "roles": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, true,  false, false>;
   "tag": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "code": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
   "<permission[is RolePermission]": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, false,  false, false>;
   "<permission": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Permission = $.ObjectType<"default::Permission", $PermissionλShape, null, [
   ...$BaseEntity['__exclusives__'],
+  {code: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $Permission = $.makeType<$Permission>(_.spec, "2a4d570a-6906-11ef-9153-c923c64e8301", _.syntax.literal);
 

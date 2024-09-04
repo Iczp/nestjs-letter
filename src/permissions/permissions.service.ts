@@ -17,12 +17,13 @@ export class PermissionsService {
           })
           .unlessConflict((entity) => ({
             on: entity.code,
-            else: e.update(e.Permission, () => ({
-              filter_single: e.op(entity.code, '=', e.cast(e.str, item.name)),
-              set: {
-                last_modification_time: e.datetime_current(),
-              },
-            })),
+            // else: e.update(e.Permission, () => ({
+            //   filter_single: { code: e.cast(e.str, item.code) },
+            //   set: {
+            //     // name: e.op(e.cast(e.str, item.name), '++', 'dd'),
+            //     last_modification_time: e.datetime_current(),
+            //   },
+            // })),
           }));
       });
     });
@@ -30,6 +31,9 @@ export class PermissionsService {
     const items = [
       { tag: '', name: 'admin', code: 'admin' },
       { tag: '', name: 'user', code: 'user' },
+      { tag: '', name: 'zhongpei', code: 'zhongpei' },
+      { tag: '', name: 'czp', code: 'czp' },
+      { tag: '', name: '536d97c0602e', code: '536d97c0602e' },
     ];
 
     const result = await query.run(this.client, {

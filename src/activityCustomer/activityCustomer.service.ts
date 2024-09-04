@@ -1,9 +1,9 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import e from 'dbschema/edgeql-js'; // auto-generated code
+import { CrudService } from 'src/bases/CrudService';
 import { ActivityCustomerCreateInput } from './dtos/ActivityCustomerCreateInput';
 import { ActivityCustomerUpdateInput } from './dtos/ActivityCustomerUpdateInput';
 import { ActivityCustomerDto } from './dtos/ActivityCustomerDto';
-import { CrudService } from 'src/bases/CrudService';
 import { ActivityCustomerDetailDto } from './dtos/ActivityCustomerDetailDto';
 import { ActivityCustomerGetListInput } from './dtos/ActivityCustomerGetListInput';
 import { Filters } from 'src/common/Filters';

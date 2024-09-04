@@ -39,6 +39,15 @@ export abstract class CrudController<
     return this.service.getItem(id);
   }
 
+  @Post('enabled/:id')
+  @ApiOperation({ summary: '启用/禁用', description: '启用/禁用' })
+  public async setIsEnabled(
+    @Param('id') id: string,
+    @Query('is_enabled') is_enabled: boolean,
+  ): Promise<any> {
+    return this.service.updateEntity(id, { is_enabled });
+  }
+
   @Post('')
   @ApiOperation({ summary: '新增', description: `` })
   public async create(@Body() input: TCreateInput): Promise<TDetailDto> {

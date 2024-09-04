@@ -13,6 +13,7 @@ export interface ICrudService<
   getList(input: TGetListInput): Promise<PagedResultDto<TDto>>;
   create(input: TCreateInput): Promise<TDetailDto>;
   update(id: string, input: TUpdateInput): Promise<TDetailDto>;
+  updateEntity(id: string, obj: { [x: string]: any }): Promise<any>;
   delete(id: string): Promise<void>;
 }
 
