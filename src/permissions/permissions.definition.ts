@@ -32,8 +32,8 @@ class PermissionDefinition {
 
 export const permissionDefinition = new PermissionDefinition();
 
-export const defintion = permissionDefinition
+export const definition = permissionDefinition
   .add('Activity', PermissionsConsts.Activity_Create, 'ddd')
   .toArray();
 
-console.log('555', defintion);
+console.log('555', definition);

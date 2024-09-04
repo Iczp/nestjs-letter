@@ -32,12 +32,21 @@ export class AuthController extends BaseController {
   //   @UseGuards(AuthGuard('jwt'))
   //   @UseGuards(AuthGuard)
   @UseGuards(JwtAuthGuard)
-  
   @Get('profile')
   getProfile(@Request() req) {
-    console.log('req', req);
+    // console.log('req', req);
     return {
-      ser: null,
+      user: req.user,
     };
+  }
+
+  @Post('refresh-token')
+  public async refreshToken(
+    @Body() refreshTokenDto: { userId: string; refreshToken: string },
+  ) {
+    return this.authService.refreshTokens(
+      refreshTokenDto.userId,
+      refreshTokenDto.refreshToken,
+    );
   }
 }
