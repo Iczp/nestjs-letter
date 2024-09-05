@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { client } from 'src/edgedb';
 import e from 'dbschema/edgeql-js'; // auto-generated code
-
 import * as permissionsConsts from '../permissions/permissionsConsts';
 
+type EntityType = { id: string };
 @Injectable()
 export class SeedService {
   public async seed() {
@@ -11,7 +11,10 @@ export class SeedService {
 
     const permissions = await this.seedPermissions();
 
-    const adminPermissions = await this.seedAdminPermissions();
+    const adminPermissions = await this.seedAdminPermissions(
+      roles,
+      permissions,
+    );
 
     return {
       message: `Seed Successfully`,
@@ -23,7 +26,7 @@ export class SeedService {
       date: new Date(),
     };
   }
-  private async seedPermissions() {
+  private async seedPermissions(): Promise<EntityType[]> {
     Logger.log('seedPermissions', 'SeedService');
 
     const rolePermisstion = e.params({ items: e.json }, (params) => {
@@ -36,6 +39,7 @@ export class SeedService {
           })
           .unlessConflict((entity) => ({
             on: entity.code,
+            else: entity,
             // else: e.update(e.Permission, () => ({
             //   filter_single: { code: e.cast(e.str, item.code) },
             //   set: {
@@ -61,7 +65,7 @@ export class SeedService {
     return result;
   }
 
-  private async seedRoles() {
+  private async seedRoles(): Promise<EntityType[]> {
     Logger.log('seedRoles', 'SeedService');
 
     const role = e.params({ items: e.json }, (params) => {
@@ -74,6 +78,7 @@ export class SeedService {
           })
           .unlessConflict((entity) => ({
             on: entity.code,
+            else: entity,
             // else: e.update(e.Permission, () => ({
             //   filter_single: { code: e.cast(e.str, item.code) },
             //   set: {
@@ -96,29 +101,32 @@ export class SeedService {
     return result;
   }
 
-  private async seedAdminPermissions() {
+  private async seedAdminPermissions(
+    roles: EntityType[],
+    permissions: EntityType[],
+  ) {
     Logger.log('seedAdminPermissions', 'SeedService');
 
-    // Fetch the 'admin' role
-    const adminRole = (await e
-      .select(e.Role, () => ({
-        id: true,
-        filter_single: { code: 'admin' },
-      }))
-      .run(client)) as unknown as { id: string };
+    // // Fetch the 'admin' role
+    // const adminRole = (await e
+    //   .select(e.Role, () => ({
+    //     id: true,
+    //     filter_single: { code: 'admin' },
+    //   }))
+    //   .run(client)) as unknown as { id: string };
 
-    Logger.log(adminRole, 'SeedService');
+    // Logger.log(adminRole, 'SeedService');
 
-    // Fetch all permissions
-    const permissions = await e
-      .select(e.Permission, () => ({
-        id: true,
-      }))
-      .run(client);
+    // // Fetch all permissions
+    // const permissions = await e
+    //   .select(e.Permission, () => ({
+    //     id: true,
+    //   }))
+    //   .run(client);
 
     // Prepare rolePermissions data
     const rolePermissions = permissions.map((permission) => ({
-      role: adminRole,
+      role: roles[0],
       permission: permission,
     }));
 
@@ -133,12 +141,16 @@ export class SeedService {
         return e.for(e.json_array_unpack(params.rolePermissions), (item) => {
           return e
             .insert(e.RolePermission, {
-              permission: e.cast(e.Permission, item.permission),
-              role: e.cast(e.Role, item.role),
+              permission: e.select(e.Permission, () => ({
+                filter_single: { id: e.cast(e.uuid, item.permission.id) },
+              })),
+              role: e.select(e.Role, () => ({
+                filter_single: { id: e.cast(e.uuid, item.role.id) },
+              })),
             } as never)
             .unlessConflict((rp) => ({
-              on: (rp.permission, rp.role),
-              //   else: rp,
+              on: e.tuple([rp.permission, rp.role]),
+              else: rp,
             }));
         });
       },
