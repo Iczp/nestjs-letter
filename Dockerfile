@@ -7,7 +7,7 @@ WORKDIR /app
 # 将package.json和package-lock.json复制到容器中
 COPY package.json ./
 COPY pnpm-lock.yaml ./
-
+COPY edgedb.toml ./
 # 安装生产环境依赖
 # 安装pnpm（如果官方Node.js镜像中不包含pnpm）
 # 注意：Node.js的官方Alpine镜像可能不包含pnpm，
@@ -44,6 +44,7 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
+COPY --from=builder /app/edgedb.toml ./
 
 RUN npm install -g pnpm
 
