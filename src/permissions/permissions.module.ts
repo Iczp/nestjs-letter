@@ -10,7 +10,6 @@ export class PermissionsModule implements OnModuleInit {
 
   async onModuleInit() {
     console.log('onModuleInit');
-
     await this.permissionsService.seed();
   }
 }

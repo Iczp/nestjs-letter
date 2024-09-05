@@ -36,4 +36,4 @@ export const definition = permissionDefinition
   .add('Activity', PermissionsConsts.Activity_Create, 'ddd')
   .toArray();
 
-console.log('555', definition);
+// console.log('555', definition);

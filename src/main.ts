@@ -6,8 +6,6 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/AllExceptionsFilter';
 
-import './permissions/permissions.definition';
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 

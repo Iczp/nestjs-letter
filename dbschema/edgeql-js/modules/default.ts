@@ -114,7 +114,6 @@ const $Permission = $.makeType<$Permission>(_.spec, "b26fb7fd-6b56-11ef-a88a-5fc
 const Permission: $.$expr_PathNode<$.TypeSet<$Permission, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Permission, $.Cardinality.Many), null);
 
 export type $RoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
-  "code": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "sorting": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
   "is_default": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
@@ -122,12 +121,14 @@ export type $RoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "is_static": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "users": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, true,  false, false>;
   "permissions": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, true,  false, false>;
+  "code": $.PropertyDesc<_std.$str, $.Cardinality.One, true, false, false, false>;
   "<role[is UserRole]": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
   "<role[is RolePermission]": $.LinkDesc<$RolePermission, $.Cardinality.Many, {}, false, false,  false, false>;
   "<role": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Role = $.ObjectType<"default::Role", $RoleλShape, null, [
   ...$BaseEntity['__exclusives__'],
+  {code: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $Role = $.makeType<$Role>(_.spec, "b273c8ba-6b56-11ef-b171-596bad950803", _.syntax.literal);
 
