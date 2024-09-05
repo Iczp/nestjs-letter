@@ -8,7 +8,7 @@ export type $Gender = {
   "Male": $.$expr_Literal<$Gender>;
   "Female": $.$expr_Literal<$Gender>;
 } & $.EnumType<"default::Gender", ["Unknown", "Male", "Female"]>;
-const Gender: $Gender = $.makeType<$Gender>(_.spec, "bf3e1501-6200-11ef-8bab-a7b4a26ba987", _.syntax.literal);
+const Gender: $Gender = $.makeType<$Gender>(_.spec, "accc44e0-6b56-11ef-a84b-e34f55dd9957", _.syntax.literal);
 
 export type $UserType = {
   "Unset": $.$expr_Literal<$UserType>;
@@ -16,7 +16,7 @@ export type $UserType = {
   "Customer": $.$expr_Literal<$UserType>;
   "ShopManager": $.$expr_Literal<$UserType>;
 } & $.EnumType<"default::UserType", ["Unset", "Employee", "Customer", "ShopManager"]>;
-const UserType: $UserType = $.makeType<$UserType>(_.spec, "4ec22418-6345-11ef-b566-49f1b6c96c45", _.syntax.literal);
+const UserType: $UserType = $.makeType<$UserType>(_.spec, "ad579a4f-6b56-11ef-b6c2-f52b0bae678e", _.syntax.literal);
 
 export type $BaseEntityλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
   "creation_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
@@ -29,7 +29,7 @@ export type $BaseEntityλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f7
 type $BaseEntity = $.ObjectType<"default::BaseEntity", $BaseEntityλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
 ]>;
-const $BaseEntity = $.makeType<$BaseEntity>(_.spec, "b0ef2498-61f8-11ef-be4c-43c8ad3aa7da", _.syntax.literal);
+const $BaseEntity = $.makeType<$BaseEntity>(_.spec, "ab1ab622-6b56-11ef-ac3e-b32b16646036", _.syntax.literal);
 
 const BaseEntity: $.$expr_PathNode<$.TypeSet<$BaseEntity, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($BaseEntity, $.Cardinality.Many), null);
 
@@ -53,7 +53,7 @@ export type $ActivityλShape = $.typeutil.flatten<$BaseEntityλShape & {
 type $Activity = $.ObjectType<"default::Activity", $ActivityλShape, null, [
   ...$BaseEntity['__exclusives__'],
 ]>;
-const $Activity = $.makeType<$Activity>(_.spec, "5c4e7ce5-61f9-11ef-96bc-3d7a45244bf1", _.syntax.literal);
+const $Activity = $.makeType<$Activity>(_.spec, "abc5b574-6b56-11ef-896c-1bb4455da1d5", _.syntax.literal);
 
 const Activity: $.$expr_PathNode<$.TypeSet<$Activity, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Activity, $.Cardinality.Many), null);
 
@@ -80,7 +80,7 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
 type $ActivityCustomer = $.ObjectType<"default::ActivityCustomer", $ActivityCustomerλShape, null, [
   ...$BaseEntity['__exclusives__'],
 ]>;
-const $ActivityCustomer = $.makeType<$ActivityCustomer>(_.spec, "8d5fdf89-61fa-11ef-9470-1dce793282d2", _.syntax.literal);
+const $ActivityCustomer = $.makeType<$ActivityCustomer>(_.spec, "ac781972-6b56-11ef-a5fd-9b2b3e3ef632", _.syntax.literal);
 
 const ActivityCustomer: $.$expr_PathNode<$.TypeSet<$ActivityCustomer, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($ActivityCustomer, $.Cardinality.Many), null);
 
@@ -92,7 +92,7 @@ export type $GiftLogλShape = $.typeutil.flatten<$BaseEntityλShape & {
 type $GiftLog = $.ObjectType<"default::GiftLog", $GiftLogλShape, null, [
   ...$BaseEntity['__exclusives__'],
 ]>;
-const $GiftLog = $.makeType<$GiftLog>(_.spec, "d30875ff-65aa-11ef-919c-e5685a18e76d", _.syntax.literal);
+const $GiftLog = $.makeType<$GiftLog>(_.spec, "b1586329-6b56-11ef-aef9-adeced62f00e", _.syntax.literal);
 
 const GiftLog: $.$expr_PathNode<$.TypeSet<$GiftLog, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GiftLog, $.Cardinality.Many), null);
 
@@ -109,7 +109,7 @@ type $Permission = $.ObjectType<"default::Permission", $PermissionλShape, null,
   ...$BaseEntity['__exclusives__'],
   {code: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $Permission = $.makeType<$Permission>(_.spec, "2a4d570a-6906-11ef-9153-c923c64e8301", _.syntax.literal);
+const $Permission = $.makeType<$Permission>(_.spec, "b26fb7fd-6b56-11ef-a88a-5fc1a1133e82", _.syntax.literal);
 
 const Permission: $.$expr_PathNode<$.TypeSet<$Permission, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Permission, $.Cardinality.Many), null);
 
@@ -129,7 +129,7 @@ export type $RoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
 type $Role = $.ObjectType<"default::Role", $RoleλShape, null, [
   ...$BaseEntity['__exclusives__'],
 ]>;
-const $Role = $.makeType<$Role>(_.spec, "2a526fbe-6906-11ef-8211-e1f29b017c6f", _.syntax.literal);
+const $Role = $.makeType<$Role>(_.spec, "b273c8ba-6b56-11ef-b171-596bad950803", _.syntax.literal);
 
 const Role: $.$expr_PathNode<$.TypeSet<$Role, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Role, $.Cardinality.Many), null);
 
@@ -143,8 +143,9 @@ export type $RolePermissionλShape = $.typeutil.flatten<$BaseEntityλShape & {
 }>;
 type $RolePermission = $.ObjectType<"default::RolePermission", $RolePermissionλShape, null, [
   ...$BaseEntity['__exclusives__'],
+  {permission: {__element__: $Permission, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },role: {__element__: $Role, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
-const $RolePermission = $.makeType<$RolePermission>(_.spec, "0e616040-690b-11ef-b11c-756b528def4d", _.syntax.literal);
+const $RolePermission = $.makeType<$RolePermission>(_.spec, "b3ca8faa-6b56-11ef-870f-c1c974b5e43c", _.syntax.literal);
 
 const RolePermission: $.$expr_PathNode<$.TypeSet<$RolePermission, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($RolePermission, $.Cardinality.Many), null);
 
@@ -156,7 +157,7 @@ export type $SignLogλShape = $.typeutil.flatten<$BaseEntityλShape & {
 type $SignLog = $.ObjectType<"default::SignLog", $SignLogλShape, null, [
   ...$BaseEntity['__exclusives__'],
 ]>;
-const $SignLog = $.makeType<$SignLog>(_.spec, "d30d70fb-65aa-11ef-864e-eb245ad97d11", _.syntax.literal);
+const $SignLog = $.makeType<$SignLog>(_.spec, "b15cb5e1-6b56-11ef-bfd9-51182fa2da1a", _.syntax.literal);
 
 const SignLog: $.$expr_PathNode<$.TypeSet<$SignLog, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($SignLog, $.Cardinality.Many), null);
 
@@ -179,7 +180,7 @@ export type $UserλShape = $.typeutil.flatten<$BaseEntityλShape & {
 type $User = $.ObjectType<"default::User", $UserλShape, null, [
   ...$BaseEntity['__exclusives__'],
 ]>;
-const $User = $.makeType<$User>(_.spec, "7b5c8768-6202-11ef-a03a-1f6d28d9fa6b", _.syntax.literal);
+const $User = $.makeType<$User>(_.spec, "ad06775d-6b56-11ef-b6a4-09127c794d84", _.syntax.literal);
 
 const User: $.$expr_PathNode<$.TypeSet<$User, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($User, $.Cardinality.Many), null);
 
@@ -195,7 +196,7 @@ export type $UserRoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
 type $UserRole = $.ObjectType<"default::UserRole", $UserRoleλShape, null, [
   ...$BaseEntity['__exclusives__'],
 ]>;
-const $UserRole = $.makeType<$UserRole>(_.spec, "00b71235-690a-11ef-b8cb-e38c09fe0702", _.syntax.literal);
+const $UserRole = $.makeType<$UserRole>(_.spec, "b34fd9a6-6b56-11ef-a472-23b785e169f8", _.syntax.literal);
 
 const UserRole: $.$expr_PathNode<$.TypeSet<$UserRole, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($UserRole, $.Cardinality.Many), null);
 
@@ -204,7 +205,7 @@ export type $current_userλShape = $.typeutil.flatten<$UserλShape & {
 type $current_user = $.ObjectType<"default::current_user", $current_userλShape, null, [
   ...$User['__exclusives__'],
 ]>;
-const $current_user = $.makeType<$current_user>(_.spec, "66b80734-6448-11ef-9873-cdacbcaf5ca6", _.syntax.literal);
+const $current_user = $.makeType<$current_user>(_.spec, "af1a4531-6b56-11ef-be7d-510f26dde7c8", _.syntax.literal);
 
 const current_user: $.$expr_PathNode<$.TypeSet<$current_user, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($current_user, $.Cardinality.Many), null);
 
@@ -222,7 +223,7 @@ const $default__globals: {  current_user: _.syntax.$expr_Global<
               $.Cardinality.One
               >} = {  current_user: _.syntax.makeGlobal(
               "default::current_user",
-              $.makeType(_.spec, "66b80734-6448-11ef-9873-cdacbcaf5ca6", _.syntax.literal),
+              $.makeType(_.spec, "af1a4531-6b56-11ef-be7d-510f26dde7c8", _.syntax.literal),
               $.Cardinality.AtMostOne) as any,  current_user_id: _.syntax.makeGlobal(
               "default::current_user_id",
               $.makeType(_.spec, "00000000-0000-0000-0000-000000000100", _.syntax.literal),

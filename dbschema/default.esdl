@@ -149,6 +149,8 @@ module default {
         annotation title := '角色权限';
         required permission: Permission;
         required role: Role;
+        # 唯一性约束
+        constraint exclusive on ((.permission, .role));
     }
 
     type Permission extending BaseEntity {
