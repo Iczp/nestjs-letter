@@ -15,6 +15,7 @@ import { GenderText } from 'src/enums/Gender';
 import { exampleColumns, exampleRows } from './activityCustomer.example.data';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { assert, checker } from 'src/common';
+import { client } from 'src/edgedb';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<
@@ -83,7 +84,7 @@ export class ActivityCustomerService extends CrudService<
     const q = e.select(e.Activity, () => ({
       filter_single: { id: e.uuid(input.activity_id) },
     }));
-    const activity = await q.run(this.client);
+    const activity = await q.run(client);
     console.log('mapToCreateEntity activity', activity);
 
     if (!activity) {
@@ -153,7 +154,7 @@ export class ActivityCustomerService extends CrudService<
       };
     });
 
-    const items = await list.run(this.client);
+    const items = await list.run(client);
 
     // console.log('items', items);
 
@@ -210,7 +211,7 @@ export class ActivityCustomerService extends CrudService<
         id: e.uuid(activity_id),
       },
     }));
-    const item = await activity.run(this.client);
+    const item = await activity.run(client);
     assert.If(!item, `不存在的活动,Id:${activity_id}`);
     const query = e.params({ items: e.json }, (params) => {
       return e.for(e.json_array_unpack(params.items), (item) => {
@@ -234,7 +235,7 @@ export class ActivityCustomerService extends CrudService<
       });
     });
 
-    const result = await query.run(this.client, {
+    const result = await query.run(client, {
       items,
     });
 

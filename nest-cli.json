@@ -4,6 +4,7 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "builder": "webpack",
+    "typeCheck": false,
     "deleteOutDir": true
   }
 }

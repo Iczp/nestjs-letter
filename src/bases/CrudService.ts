@@ -9,6 +9,7 @@ import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
+import { client } from 'src/edgedb';
 
 export abstract class CrudService<
     TDto,
@@ -83,7 +84,7 @@ export abstract class CrudService<
         ...this.itemSelect(id, this.entity),
       };
     });
-    const ret = await query.run(this.client);
+    const ret = await query.run(client);
 
     console.log('getItem result', ret);
 
@@ -111,8 +112,8 @@ export abstract class CrudService<
       const filter = this.listFilter(input, entity);
       console.log('filter toEdgeQL', filter.toEdgeQL());
       return {
-        offset: e.int64(input.skip),
-        limit: e.int64(input.maxResultCount),
+        offset: e.int64(input.skip || 0),
+        limit: e.int64(input.maxResultCount || 10),
         filter,
         order_by: [
           {
@@ -125,8 +126,8 @@ export abstract class CrudService<
       };
     });
 
-    // const entities = await query.run(this.client);
-    const ret = await e.select({ totalCount, list }).run(this.client);
+    // const entities = await query.run(client);
+    const ret = await e.select({ totalCount, list }).run(client);
 
     const _items = Array.isArray(ret.list) ? ret.list : [ret.list];
 
@@ -148,7 +149,7 @@ export abstract class CrudService<
     );
 
     const queryDisplay = e.select(queryCreate, () => this.createSelect(input));
-    const ret = await queryDisplay.run(this.client);
+    const ret = await queryDisplay.run(client);
     return await this.mapToDetailDto(ret);
   }
 
@@ -157,7 +158,7 @@ export abstract class CrudService<
       filter_single: e.op(entity['id'], '=', e.uuid(id)),
       set: obj,
     }));
-    return await q.run(this.client);
+    return await q.run(client);
   }
 
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
@@ -173,7 +174,7 @@ export abstract class CrudService<
         set: inputDto,
       };
     });
-    const u1 = await queryUpdate.run(this.client);
+    const u1 = await queryUpdate.run(client);
 
     console.log('update result:', u1);
 
@@ -188,7 +189,7 @@ export abstract class CrudService<
       ...this.updateSelect(id, input),
     }));
 
-    const item = await queryDisplay.run(this.client);
+    const item = await queryDisplay.run(client);
 
     if (!item) {
       throw new NotFoundException(`Item not found,id:${id}`);
@@ -210,7 +211,7 @@ export abstract class CrudService<
       },
     }));
 
-    const result = await queryUpdate.run(this.client);
+    const result = await queryUpdate.run(client);
     console.log(result);
   }
 }

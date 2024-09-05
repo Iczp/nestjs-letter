@@ -1,2 +1,9 @@
 [edgedb]
 server-version = "5.6"
+listen_addresses = ['10.0.5.20']
+
+# [tool.edgedb.credentials.letter]
+# user = "edgedb"
+# database = "main"
+# port = 10707
+# password = "edgedb"
