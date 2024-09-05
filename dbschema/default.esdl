@@ -68,6 +68,7 @@ module default {
 
         property account -> str {
             annotation title := '账号';
+            # constraint exclusive;
         };
 
         property password -> str {
