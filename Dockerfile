@@ -19,7 +19,9 @@ RUN npm install -g pnpm
 
 # 使用pnpm安装项目依赖
 # 注意：--frozen-lockfile 确保安装与pnpm-lock.yaml中完全相同的依赖版本
-RUN pnpm install --frozen-lockfile --production
+RUN pnpm install --frozen-lockfile 
+
+#--production
 
 
 
@@ -27,7 +29,7 @@ RUN pnpm install --frozen-lockfile --production
 COPY . .
 
 # 编译NestJS项目
-RUN npm run build
+RUN pnpm build
 
 # 第二阶段：运行环境
 FROM node:18-alpine
@@ -40,7 +42,14 @@ WORKDIR /app
 
 # 复制构建产物
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml ./
+
+RUN npm install -g pnpm
+
+RUN pnpm install --frozen-lockfile --production
+
+# COPY --from=builder /app/node_modules ./node_modules
 
 # 暴露端口
 EXPOSE 3000
