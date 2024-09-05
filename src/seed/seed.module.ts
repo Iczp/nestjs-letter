@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { SeedService } from './seed.service';
 import { SeedController } from './seed.controller';
 
@@ -9,7 +9,7 @@ import { SeedController } from './seed.controller';
 export class SeedModule implements OnModuleInit {
   constructor(private readonly seedService: SeedService) {}
   async onModuleInit() {
-    console.log('onModuleInit');
+    Logger.log('onModuleInit', 'SeedModule');
     await this.seedService.seed();
   }
 }

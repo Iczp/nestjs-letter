@@ -61,7 +61,7 @@ export class SeedService {
       items,
     });
 
-    console.log(result);
+    Logger.log(`seed [Permission] length:${result.length}`, 'SeedService');
     return result;
   }
 
@@ -96,7 +96,7 @@ export class SeedService {
       items,
     });
 
-    console.log(result);
+    Logger.log(`seed [Role] length:${result.length}`, 'SeedService');
 
     return result;
   }
@@ -130,7 +130,7 @@ export class SeedService {
       permission: permission,
     }));
 
-    Logger.log(rolePermissions, 'SeedService');
+    // Logger.log(rolePermissions, 'SeedService');
 
     // Perform bulk insert
     const query = e.params(
@@ -159,7 +159,7 @@ export class SeedService {
     // Run the query
     const result = await query.run(client, { rolePermissions });
 
-    console.log(result);
+    Logger.log(`seed [RolePermission] length:${result.length}`, 'SeedService');
 
     return result;
   }

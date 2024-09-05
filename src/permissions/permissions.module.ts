@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Logger, Module, OnModuleInit } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 
 @Module({
@@ -9,7 +9,7 @@ export class PermissionsModule implements OnModuleInit {
   providers: [PermissionsService];
 
   async onModuleInit() {
-    console.log('onModuleInit');
+    Logger.log('onModuleInit', 'PermissionsModule');
     await this.permissionsService.seed();
   }
 }
