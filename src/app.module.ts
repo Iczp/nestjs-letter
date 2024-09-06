@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SeedModule } from './seed/seed.module';
 import { RolesModule } from './roles/roles.module';
+import { AuditsModule } from './audits/audits.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { RolesModule } from './roles/roles.module';
     AuthModule,
     SeedModule,
     RolesModule,
+    AuditsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
