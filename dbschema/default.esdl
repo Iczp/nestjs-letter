@@ -134,7 +134,7 @@ module default {
         };
 
         property sorting -> int64 {
-            annotation title := '编码';
+            annotation title := '排序';
         };
 
         multi users := (.<role[is UserRole]);
