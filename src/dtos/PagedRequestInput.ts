@@ -14,8 +14,8 @@ export class PagedRequestInput {
   @ApiProperty({
     type: Number,
     description: '每页显示数量',
-    required: true,
-    default: 10,
+    required: false,
+    // default: 10,
   })
   @IsInt()
   public maxResultCount?: number;

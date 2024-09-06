@@ -16,6 +16,7 @@ import { CrudController } from 'src/bases/CrudController';
 import { RolesService } from './roles.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
+import { SetPermissionsInput } from './dtos/SetPermissionsInput';
 
 @Controller('roles')
 @ApiTags('Roles')
@@ -65,5 +66,14 @@ export class RolesController extends CrudController<
   @ApiOperation({ summary: '删除角色' })
   public override delete(id: string): Promise<void> {
     return super.delete(id);
+  }
+
+  @Put('permissions/:id')
+  @ApiOperation({ summary: '设置权限' })
+  public setPermissions(
+    @Param('id') id: string,
+    @Body() input: SetPermissionsInput,
+  ): Promise<RoleDetailDto> {
+    return this.rolesService.setPermissions(id, input);
   }
 }

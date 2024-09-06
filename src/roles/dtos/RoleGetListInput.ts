@@ -1,14 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 import { GetListInput } from 'src/bases/GetListInput';
 
 export class RoleGetListInput extends GetListInput {
   @ApiProperty({
     required: false,
+    description: '是否公开',
   })
-  public role_id?: string;
+  is_public?: boolean;
 
-  @IsOptional()
+  @ApiProperty({
+    required: false,
+    description: '是否固定',
+  })
+  is_static?: boolean;
+
+  @ApiProperty({
+    required: false,
+    description: '是否默认',
+  })
+  is_default?: boolean;
+
   @IsBoolean()
   @ApiProperty({
     required: false,

@@ -29,20 +29,15 @@ export class UserService extends CrudService<
     entity: any,
   ) {
     return {
-      id: true,
-      name: true,
+      ...entity['*'],
+      password: false,
       roles: {
         role: {
           id: true,
           name: true,
         },
+        creation_time: true,
       },
-      // filter: this.listFilter(input, entity),
-      // filter: e.op(entity.roles.role.id, '=', e.cast(e.uuid, input.role_id)),
-      // --------------------------------------
-      // filter: e.all(
-      //   e.set(e.op(entity.roles.role.id, '?=', e.cast(e.uuid, input.role_id))),
-      // ),
     };
   }
 
@@ -59,8 +54,11 @@ export class UserService extends CrudService<
       .addIf(!isEmpty(input.role) && !isGuidRole, () =>
         e.op(entity.roles.role.code, '?=', e.cast(e.str, input.role)),
       )
+      .addIf(!isEmpty(input.erp_user_id), () =>
+        e.op(entity.erp_user_id, '?=', e.cast(e.str, input.erp_user_id)),
+      )
       .addIf(!isEmpty(input.userType), () =>
-        e.op(entity.user_type, '=', e.cast(e.UserType, input.userType)),
+        e.op(entity.user_type, '?=', e.cast(e.UserType, input.userType)),
       )
       .addIf(!isEmpty(input.gender), () =>
         e.op(entity.gender, '=', e.cast(e.Gender, input.gender)),

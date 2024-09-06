@@ -14,6 +14,12 @@ export class UserGetListInput extends GetListInput {
 
   @ApiProperty({
     required: false,
+    description: 'ERP 用户ID',
+  })
+  public erp_user_id?: string;
+
+  @ApiProperty({
+    required: false,
     // default: UserTypeEnums[UserTypeEnums.Unset],
     enum: UserTypeKeys,
   })
