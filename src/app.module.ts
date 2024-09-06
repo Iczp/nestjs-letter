@@ -9,6 +9,7 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SeedModule } from './seed/seed.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SeedModule } from './seed/seed.module';
     PermissionsModule,
     AuthModule,
     SeedModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

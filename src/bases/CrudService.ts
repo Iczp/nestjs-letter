@@ -2,9 +2,8 @@
 import { ICrudService } from './ICrudService';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import e from 'dbschema/edgeql-js'; // auto-generated code
-import { ObjectTypeExpression } from 'dbschema/edgeql-js/typesystem';
 import { GetListInput } from './GetListInput';
-import { NotFoundException } from '@nestjs/common';
+import { Logger, NotFoundException } from '@nestjs/common';
 import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
@@ -43,7 +42,7 @@ export abstract class CrudService<
   }
 
   public listFilter(input: TGetListInput, entity: any) {
-    return e.op(this.entity['id'], '=', e.bool(false));
+    return e.op(this.entity['is_deleted'], '=', e.bool(false));
   }
 
   public mapToUpdateEntity(input: TUpdateInput): PromiseResult {
@@ -97,6 +96,7 @@ export abstract class CrudService<
   public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {
     // console.log('listFilter', filter);
     // console.log('toEdgeQL', filter.toEdgeQL());
+    Logger.log('getList input', 'getList');
     const totalCount = e.count(
       e.select(this.entity as any, (entity) => {
         const filter = this.listFilter(input, entity);

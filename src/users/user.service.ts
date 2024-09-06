@@ -26,6 +26,9 @@ export class UserService extends CrudService<
     entity: ExtractDBType<typeof e.User>,
   ): any {
     return new Filters([e.op(e.User.is_deleted, '=', e.bool(false))])
+      .addIf(!isEmpty(input.role_id), () =>
+        e.op(entity['roles'].role.id, '=', e.cast(e.uuid, input.role_id)),
+      )
       .addIf(!isEmpty(input.userType), () =>
         e.op(entity.user_type, '=', e.cast(e.UserType, input.userType)),
       )
