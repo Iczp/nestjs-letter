@@ -8,8 +8,9 @@ import { UserTypeKeys } from 'src/enums/UserType';
 export class UserGetListInput extends GetListInput {
   @ApiProperty({
     required: false,
+    description: '角色ID/角色名称/角色code',
   })
-  public role_id?: string;
+  public role?: string;
 
   @ApiProperty({
     required: false,

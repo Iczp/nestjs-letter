@@ -9,7 +9,7 @@ import { UserGetListInput } from './dtos/UserGetListInput';
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { isEmpty } from 'class-validator';
-import { ExtractDBType } from 'src/types/ExtractDBType';
+import { isGuid } from 'src/common/validator';
 
 @Injectable()
 export class UserService extends CrudService<
@@ -21,13 +21,43 @@ export class UserService extends CrudService<
 > {
   public readonly entity = e.User;
 
-  override listFilter(
+  override listSelect(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: UserGetListInput,
-    entity: ExtractDBType<typeof e.User>,
-  ): any {
-    return new Filters([e.op(e.User.is_deleted, '=', e.bool(false))])
-      .addIf(!isEmpty(input.role_id), () =>
-        e.op(entity['roles'].role.id, '=', e.cast(e.uuid, input.role_id)),
+    // entity: ExtractDBType<typeof e.User>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    entity: any,
+  ) {
+    return {
+      id: true,
+      name: true,
+      roles: {
+        role: {
+          id: true,
+          name: true,
+        },
+      },
+      // filter: this.listFilter(input, entity),
+      // filter: e.op(entity.roles.role.id, '=', e.cast(e.uuid, input.role_id)),
+      // --------------------------------------
+      // filter: e.all(
+      //   e.set(e.op(entity.roles.role.id, '?=', e.cast(e.uuid, input.role_id))),
+      // ),
+    };
+  }
+
+  public listFilter(
+    input: UserGetListInput,
+    // entity: ExtractDBType<typeof e.User>,
+    entity: any,
+  ) {
+    const isGuidRole = isGuid(input.role);
+    return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
+      .addIf(isGuidRole, () =>
+        e.op(entity.roles.role.id, '?=', e.cast(e.uuid, input.role)),
+      )
+      .addIf(!isEmpty(input.role) && !isGuidRole, () =>
+        e.op(entity.roles.role.code, '?=', e.cast(e.str, input.role)),
       )
       .addIf(!isEmpty(input.userType), () =>
         e.op(entity.user_type, '=', e.cast(e.UserType, input.userType)),
@@ -37,6 +67,9 @@ export class UserService extends CrudService<
       )
       .addIf(!isEmpty(input.is_enabled), () =>
         e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
+      )
+      .addIf(!isEmpty(input.keyword), () =>
+        e.op(entity.name, 'ilike', e.cast(e.str, `${input.keyword}`)),
       )
       .all();
   }

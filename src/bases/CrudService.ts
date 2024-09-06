@@ -41,7 +41,7 @@ export abstract class CrudService<
     return this.entity['*'];
   }
 
-  public listFilter(input: TGetListInput, entity: any) {
+  public listFilter(input: TGetListInput, entity: any): any {
     return e.op(this.entity['is_deleted'], '=', e.bool(false));
   }
 
@@ -99,7 +99,9 @@ export abstract class CrudService<
     Logger.log('getList input', 'getList');
     const totalCount = e.count(
       e.select(this.entity as any, (entity) => {
-        const filter = this.listFilter(input, entity);
+        const filter =
+          this.listSelect(input, entity)?.filter ??
+          this.listFilter(input, entity);
         return {
           filter,
         };
@@ -110,8 +112,8 @@ export abstract class CrudService<
 
     const list = e.select(this.entity, (entity) => {
       const filter = this.listFilter(input, entity);
-      console.log('filter toEdgeQL', filter.toEdgeQL());
-      return {
+
+      const ql = {
         offset: e.int64(input.skip || 0),
         limit: e.int64(input.maxResultCount || 10),
         filter,
@@ -124,6 +126,8 @@ export abstract class CrudService<
         ],
         ...this.listSelect(input, entity),
       };
+      console.log('filter QL', ql.filter.toEdgeQL());
+      return ql;
     });
 
     // const entities = await query.run(client);
