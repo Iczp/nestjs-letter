@@ -11,7 +11,7 @@ export class SeedController extends BaseController {
   }
 
   @Post()
-  @ApiOperation({ summary: '创建用户' })
+  @ApiOperation({ summary: '种子数据' })
   public seed() {
     return this.service.seed();
   }

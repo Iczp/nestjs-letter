@@ -10,6 +10,6 @@ export class SeedModule implements OnModuleInit {
   constructor(private readonly seedService: SeedService) {}
   async onModuleInit() {
     Logger.log('onModuleInit', 'SeedModule');
-    await this.seedService.seed();
+    // await this.seedService.seed();
   }
 }
