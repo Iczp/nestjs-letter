@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CrudService } from 'src/bases/CrudService';
 import { RoleDto } from './dtos/RoleDto';
 import { RoleDetailDto } from './dtos/RoleDetailDto';
@@ -8,8 +8,10 @@ import { RoleUpdateInput } from './dtos/RoleUpdateInput';
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { PromiseResult } from 'src/types/PromiseResult';
 import { Filters } from 'src/common/Filters';
-import { isEmpty } from 'src/common/validator';
+import { isEmpty, isGuid } from 'src/common/validator';
 import { SetPermissionsInput } from './dtos/SetPermissionsInput';
+import { client } from 'src/edgedb';
+import { assert } from 'src/common';
 @Injectable()
 export class RolesService extends CrudService<
   RoleDto,
@@ -79,15 +81,81 @@ export class RolesService extends CrudService<
       is_default: input.is_default,
       is_public: input.is_public,
       is_enabled: input.is_enabled,
+      //   is_static: input.is_static,
     });
   }
 
-  public setPermissions(
+  public async setPermissions(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     id: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: SetPermissionsInput,
-  ): Promise<RoleDetailDto> {
-    throw new Error('Method not implemented.');
+  ) {
+    assert.If(!isGuid(id), `必须为 uuid, id:${id}`);
+    const idlist = input.permisstions;
+    Logger.log(idlist, 'RoleSService.setPermissions');
+    const selPermisstions = e.params(
+      { idlist: e.array(e.uuid) },
+      ({ idlist }) =>
+        e.select(e.Permission, (permission) => ({
+          id: true,
+          filter: e.op(permission.id, 'in', e.array_unpack(idlist)),
+        })),
+    );
+    // Logger.log(
+    //   selPermisstions.toEdgeQL(),
+    //   'RoleSService.setPermissions query.toEdgeQL()',
+    // );
+
+    const delPermisstions = e.params(
+      { idlist: e.array(e.uuid) },
+      ({ idlist }) =>
+        e.delete(e.RolePermission, (entity) => ({
+          filter: new Filters([
+            e.op(entity.role.id, '=', e.cast(e.uuid, id)),
+            e.op(entity.permission.id, 'not in', e.array_unpack(idlist)),
+          ]).all(),
+        })),
+    );
+
+    const addRolePermisstions = e.params(
+      {
+        rolePermissions: e.json,
+      },
+      (params) => {
+        return e.for(e.json_array_unpack(params.rolePermissions), (item) => {
+          return e
+            .insert(e.RolePermission, {
+              permission: e.select(e.Permission, () => ({
+                filter_single: { id: e.cast(e.uuid, item.permission.id) },
+              })),
+              role: e.select(e.Role, () => ({
+                filter_single: { id: e.cast(e.uuid, item.role.id) },
+              })),
+            } as never)
+            .unlessConflict((rp) => ({
+              on: e.tuple([rp.permission, rp.role]),
+              else: rp,
+            }));
+        });
+      },
+    );
+
+    // 事务
+    const ret = await client.transaction(async (tx) => {
+      const deleteResult = await delPermisstions.run(tx, { idlist });
+      const permisstions = await selPermisstions.run(tx, { idlist });
+      const insertResult = await addRolePermisstions.run(tx, {
+        rolePermissions: permisstions.map((x) => ({
+          role: { id },
+          permission: { id: x.id },
+        })),
+      });
+      return { permisstions, deleteIds: deleteResult, insertResult };
+    });
+
+    Logger.log(ret.permisstions, 'RoleSService.setPermissions');
+
+    return ret;
   }
 }

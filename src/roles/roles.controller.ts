@@ -73,7 +73,7 @@ export class RolesController extends CrudController<
   public setPermissions(
     @Param('id') id: string,
     @Body() input: SetPermissionsInput,
-  ): Promise<RoleDetailDto> {
+  ) {
     return this.rolesService.setPermissions(id, input);
   }
 }

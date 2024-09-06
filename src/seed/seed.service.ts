@@ -133,7 +133,7 @@ export class SeedService {
     // Logger.log(rolePermissions, 'SeedService');
 
     // Perform bulk insert
-    const query = e.params(
+    const insert = e.params(
       {
         rolePermissions: e.json,
       },
@@ -157,7 +157,7 @@ export class SeedService {
     );
 
     // Run the query
-    const result = await query.run(client, { rolePermissions });
+    const result = await insert.run(client, { rolePermissions });
 
     Logger.log(`seed [RolePermission] length:${result.length}`, 'SeedService');
 
