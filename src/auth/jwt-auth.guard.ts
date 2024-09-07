@@ -60,9 +60,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       this.currentUser.user = user;
     }
 
-    if (err || !user) {
-      throw err || new UnauthorizedException('未登录或登录已过期');
-    }
+    // if (err || !user) {
+    //   throw err || new UnauthorizedException('未登录或登录已过期');
+    // }
     return user;
   }
 }
