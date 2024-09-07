@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/AllExceptionsFilter';
 import { AuditInterceptor } from './audits/AuditInterceptor';
-
+import { AuditsService } from './audits/audits.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -15,8 +15,9 @@ async function bootstrap() {
   corsConfigure(app);
   // app.enableCors({ origin: '*' });
 
+  const service = app.get(AuditsService);
   // 全局使用审计拦截器
-  app.useGlobalInterceptors(new AuditInterceptor());
+  app.useGlobalInterceptors(new AuditInterceptor(service));
 
   // 全局注册异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter());

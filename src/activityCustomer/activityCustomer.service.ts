@@ -1,4 +1,4 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { CrudService } from 'src/bases/CrudService';
 import { ActivityCustomerCreateInput } from './dtos/ActivityCustomerCreateInput';
@@ -16,6 +16,7 @@ import { exampleColumns, exampleRows } from './activityCustomer.example.data';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { assert, checker } from 'src/common';
 import { client } from 'src/edgedb';
+import { isGuid } from 'src/common/validator';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<
@@ -81,15 +82,18 @@ export class ActivityCustomerService extends CrudService<
   public override async mapToCreateEntity(
     input: ActivityCustomerCreateInput,
   ): PromiseResult {
+    assert.If(
+      !isGuid(input.activity_id),
+      ` 必需是Guid,activity_id:${input.activity_id}`,
+    );
     const q = e.select(e.Activity, () => ({
       filter_single: { id: e.uuid(input.activity_id) },
     }));
     const activity = await q.run(client);
+
     console.log('mapToCreateEntity activity', activity);
 
-    if (!activity) {
-      throw new NotAcceptableException(`activity_id:${input.activity_id}`);
-    }
+    assert.If(!activity, '不存在! activity_id:${input.activity_id}');
     // e.assert({message:"xxxx"},e.op())
     return {
       activity: q,
