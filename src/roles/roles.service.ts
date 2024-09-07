@@ -44,8 +44,6 @@ export class RolesService extends CrudService<
     // entity: ExtractDBType<typeof e.Role>,
     entity: any,
   ) {
-    Logger.log(this.requestContext?.user, 'requestContext');
-
     return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
 
       .addIf(!isEmpty(input.is_default), () =>

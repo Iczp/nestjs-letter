@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -11,9 +11,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { SeedModule } from './seed/seed.module';
 import { RolesModule } from './roles/roles.module';
 import { AuditsModule } from './audits/audits.module';
-import { RequestContextService } from './request-context/request-context.service';
-import { RequestContextMiddleware } from './request-context/request-context.middleware';
-import { RequestContext } from './request-context/request-context';
 import { CurrentUser } from './users/user.current';
 
 @Module({
@@ -35,11 +32,7 @@ import { CurrentUser } from './users/user.current';
     AuditsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, RequestContext, RequestContextService, CurrentUser],
-  exports: [RequestContext, CurrentUser],
+  providers: [AppService, CurrentUser],
+  exports: [CurrentUser],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestContextMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}

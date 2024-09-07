@@ -11,11 +11,8 @@ import {
 import { AuthService } from './auth.service';
 import { BaseController } from 'src/bases/BaseController';
 import { AuthInput } from './dots/AuthInput';
-// import { AuthGuard } from '@nestjs/passport';
-// import { AuthGuard } from 'src/guards/auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
-import { RequestContext } from 'src/request-context/request-context';
 import { CurrentUser } from 'src/users/user.current';
 
 @Controller('auth')
@@ -23,7 +20,6 @@ import { CurrentUser } from 'src/users/user.current';
 export class AuthController extends BaseController {
   constructor(
     private authService: AuthService,
-    protected requestContext: RequestContext,
     private readonly currentUser: CurrentUser,
   ) {
     super();

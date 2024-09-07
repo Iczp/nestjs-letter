@@ -6,6 +6,10 @@ import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
 export class UserDto extends BaseEntityDto {
   @IsNotEmpty()
   @ApiProperty()
+  id: string;
+
+  @IsNotEmpty()
+  @ApiProperty()
   account: string;
 
   @ApiProperty()
@@ -19,4 +23,7 @@ export class UserDto extends BaseEntityDto {
 
   @ApiProperty()
   is_enabled?: boolean;
+
+  @ApiProperty()
+  erp_user_id?: string;
 }

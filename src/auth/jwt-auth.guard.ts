@@ -6,7 +6,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { RequestContext } from 'src/request-context/request-context';
 import { CurrentUser } from 'src/users/user.current';
 import { UserService } from 'src/users/user.service';
 
@@ -14,7 +13,6 @@ import { UserService } from 'src/users/user.service';
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
     private readonly userService: UserService,
-    private readonly requestContext: RequestContext,
     private readonly currentUser: CurrentUser,
     // private readonly currentUser: UserService,
   ) {

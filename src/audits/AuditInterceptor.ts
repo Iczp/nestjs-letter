@@ -32,8 +32,9 @@ export class AuditInterceptor implements NestInterceptor {
       tap((data) => {
         const endTime = Date.now();
         const duration = endTime - startTime;
-        console.log(
+        Logger.log(
           `Response: ${method} ${url} - Status: ${response.statusCode} - Duration: ${duration}ms`,
+          AuditInterceptor.name,
         );
         // console.log(
         //   `query: ${JSON.stringify(query)} ${JSON.stringify(params)} - body: ${JSON.stringify(body)} - Duration: ${duration}ms`,
