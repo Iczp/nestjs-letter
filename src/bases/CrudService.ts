@@ -9,6 +9,7 @@ import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
 import { client } from 'src/edgedb';
+import { RequestContext } from 'src/request-context/request-context';
 
 export abstract class CrudService<
     TDto,
@@ -21,6 +22,10 @@ export abstract class CrudService<
   implements
     ICrudService<TDto, TDetailDto, TGetListInput, TCreateInput, TUpdateInput>
 {
+  constructor(protected readonly requestContext: RequestContext) {
+    super();
+    console.log('this.requestContext', this.requestContext);
+  }
   // constructor(private readonly entity: ObjectTypeExpression | $expr_PathNode) {}
   // public abstract entity: ObjectTypeExpression | $expr_PathNode;
   // public client = createClient();

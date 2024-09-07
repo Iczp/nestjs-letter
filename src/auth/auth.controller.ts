@@ -15,11 +15,17 @@ import { AuthInput } from './dots/AuthInput';
 // import { AuthGuard } from 'src/guards/auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { RequestContext } from 'src/request-context/request-context';
+import { CurrentUser } from 'src/users/user.current';
 
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController extends BaseController {
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    protected requestContext: RequestContext,
+    private readonly currentUser: CurrentUser,
+  ) {
     super();
   }
 
@@ -35,8 +41,10 @@ export class AuthController extends BaseController {
   @Get('profile')
   getProfile(@Request() req) {
     // console.log('req', req);
+    const reqUser = this.currentUser.user;
     return {
       user: req.user,
+      reqUser,
     };
   }
 

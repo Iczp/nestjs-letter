@@ -6,11 +6,18 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { RequestContext } from 'src/request-context/request-context';
+import { CurrentUser } from 'src/users/user.current';
 import { UserService } from 'src/users/user.service';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly requestContext: RequestContext,
+    private readonly currentUser: CurrentUser,
+    // private readonly currentUser: UserService,
+  ) {
     super();
   }
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -31,6 +38,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const request = context.switchToHttp().getRequest();
 
     Logger.log(request.headers.authorization, 'JwtAuthGuard request');
+
+    if (user) {
+      this.currentUser.user = user;
+    }
 
     if (err || !user) {
       throw err || new UnauthorizedException('Custom unauthorized message');

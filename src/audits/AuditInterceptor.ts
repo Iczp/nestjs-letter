@@ -13,6 +13,7 @@ export class AuditInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { method, url, headers, params, query, body } = request;
     const startTime = Date.now();
 

@@ -10,6 +10,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async signIn(username: string, password: string): Promise<TokenResult> {
     const payload = { username, sub: username };
     const accessToken = this.jwtService.sign(payload, {
