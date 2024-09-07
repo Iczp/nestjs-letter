@@ -38,7 +38,7 @@ module audit{
             annotation title := 'HTTP请求方式';
         };
 
-        property http_status -> str {
+        property http_status -> int64 {
             annotation title := 'HTTP状态码';
         };
 
@@ -46,15 +46,15 @@ module audit{
             annotation title := '服务名称';
         };
 
-        property headers -> str {
+        property headers -> json {
             annotation title := 'headers';
         };
 
-        property params -> str {
+        property params -> json {
             annotation title := 'params';
         };
 
-        property query -> str {
+        property query -> json {
             annotation title := 'query';
         };
 

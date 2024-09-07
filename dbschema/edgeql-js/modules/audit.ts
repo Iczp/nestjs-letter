@@ -9,18 +9,18 @@ export type $AuditLogλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f738
   "browser_info": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "client_id": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "client_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "duration": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
   "excution_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "handler_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "headers": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "http_method": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "http_status": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "ip": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "params": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "query": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "url": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "user_id": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "user_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "headers": $.PropertyDesc<_std.$json, $.Cardinality.AtMostOne, false, false, false, false>;
+  "params": $.PropertyDesc<_std.$json, $.Cardinality.AtMostOne, false, false, false, false>;
+  "query": $.PropertyDesc<_std.$json, $.Cardinality.AtMostOne, false, false, false, false>;
+  "duration": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
+  "http_status": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
 }>;
 type $AuditLog = $.ObjectType<"audit::AuditLog", $AuditLogλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],

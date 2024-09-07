@@ -2,13 +2,13 @@
 import { ICrudService } from './ICrudService';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import e from 'dbschema/edgeql-js'; // auto-generated code
+import { client } from 'src/edgedb';
 import { GetListInput } from './GetListInput';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
-import { client } from 'src/edgedb';
 
 export abstract class CrudService<
     TDto,
