@@ -37,7 +37,7 @@ export class AuditsService {
       error: e.json(
         isErr
           ? {
-              message: error['message'],
+              message: error.message,
               stack: error.stack,
               date: Date.now(),
             }
