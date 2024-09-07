@@ -4,7 +4,6 @@ import {
   Post,
   HttpCode,
   HttpStatus,
-  Request,
   Get,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +13,7 @@ import { AuthInput } from './dots/AuthInput';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/users/user.current';
+import { AllowAnonymous } from './allowAnonymousKey.decorator';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -27,6 +27,7 @@ export class AuthController extends BaseController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @AllowAnonymous()
   public signIn(@Body() input: AuthInput) {
     return this.authService.signIn(input.username, input.password);
   }
@@ -35,13 +36,10 @@ export class AuthController extends BaseController {
   //   @UseGuards(AuthGuard)
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile() {
     // console.log('req', req);
-    const reqUser = this.currentUser.user;
-    return {
-      user: req.user,
-      reqUser,
-    };
+    const user = this.currentUser.user;
+    return user;
   }
 
   @Post('refresh-token')

@@ -5,14 +5,18 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { Observable } from 'rxjs';
 import { CurrentUser } from 'src/users/user.current';
-import { UserService } from 'src/users/user.service';
+import { AllowAnonymousKey } from './allowAnonymousKey.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
-    private readonly userService: UserService,
+    private readonly configService: ConfigService,
+    private readonly reflector: Reflector,
     private readonly currentUser: CurrentUser,
     // private readonly currentUser: UserService,
   ) {
@@ -25,6 +29,21 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     Logger.log('JwtAuthGuard', 'logIn');
 
     return super.logIn(request);
+  }
+
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const hasAllowAnonymous = this.reflector.get<boolean>(
+      AllowAnonymousKey,
+      context.getHandler(),
+    );
+    console.log('hasAllowAnonymous', hasAllowAnonymous);
+
+    if (hasAllowAnonymous) {
+      return true;
+    }
+    return super.canActivate(context);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -42,7 +61,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     if (err || !user) {
-      throw err || new UnauthorizedException('Custom unauthorized message');
+      throw err || new UnauthorizedException('未登录或登录已过期');
     }
     return user;
   }
