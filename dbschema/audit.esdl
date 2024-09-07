@@ -30,6 +30,10 @@ module audit{
             annotation title := '浏览器信息';
         };
 
+        property host -> str {
+            annotation title := 'HOST';
+        };
+
         property url -> str {
             annotation title := 'URL';
         };
@@ -47,19 +51,27 @@ module audit{
         };
 
         property headers -> json {
-            annotation title := 'headers';
+            annotation title := 'Headers';
         };
 
-        property params -> json {
-            annotation title := 'params';
+        # property params -> json {
+        #     annotation title := 'Params';
+        # };
+
+        # property query -> json {
+        #     annotation title := 'Query';
+        # };
+
+        # property body -> str {
+        #     annotation title := 'Body';
+        # };
+
+        property data -> json {
+            annotation title := 'Data';
         };
 
-        property query -> json {
-            annotation title := 'query';
-        };
-
-        property body -> str {
-            annotation title := 'body';
+        property error -> json {
+            annotation title := 'Error';
         };
 
         property duration -> int64 {
@@ -68,6 +80,7 @@ module audit{
 
         property excution_time -> datetime {
             annotation title := '执行时间';
+            default := (std::datetime_current());
         };
     }
 }
