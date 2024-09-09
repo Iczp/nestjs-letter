@@ -1,4 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
+import { ForbiddenException, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiSecurity } from '@nestjs/swagger';
 import { isEmpty } from 'src/common/validator';
 
@@ -18,7 +18,7 @@ export class BaseController {
     // 2. 权限校验
   }
 
-  public checkPolicy(prolicyName: string): Promise<void> {
+  public checkPolicy(@Req() req, prolicyName: string): Promise<void> {
     if (isEmpty(prolicyName)) {
       return;
     }

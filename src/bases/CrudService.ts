@@ -22,6 +22,7 @@ export abstract class CrudService<
     ICrudService<TDto, TDetailDto, TGetListInput, TCreateInput, TUpdateInput>
 {
   constructor() {
+    // protected readonly currentUser: CurrentUser
     super();
   }
   // constructor(private readonly entity: ObjectTypeExpression | $expr_PathNode) {}
@@ -108,6 +109,7 @@ export abstract class CrudService<
     // console.log('toEdgeQL', filter.toEdgeQL());
     Logger.log('getList input', 'getList');
     await this.checkPolicy(this.GetList_PolicyName);
+
     const totalCount = e.count(
       e.select(this.entity as any, (entity) => {
         const filter =

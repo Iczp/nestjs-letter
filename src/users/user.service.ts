@@ -61,17 +61,31 @@ export class UsersService extends CrudService<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     entity: any,
   ) {
+    // const tup = e.tuple({
+    //   name: entity.roles.role.name,
+    //   id: entity.roles.role.id,
+    //   is_static: entity.roles.role.is_static,
+    // });
     return {
       ...entity['*'],
       password: false,
-      roles_names: entity.roles.role.name,
       roles: {
+        // id: true,
+        creation_time: true,
         role: {
           id: true,
           name: true,
+          // creation_time: true,
         },
-        creation_time: true,
       },
+      // roles: (r) => ({
+      //   id: true,
+      //   creation_time: true,
+      //   role_id: r.role.id,
+      //   name: r.role.name,
+      //   role_creation_time: r.role.creation_time,
+      //   filter: e.op(r.role.is_static, '=', true),
+      // }),
     };
   }
 
