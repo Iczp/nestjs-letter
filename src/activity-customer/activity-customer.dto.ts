@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 import { Gender } from 'dbschema/interfaces';
-import { ActivityDto } from 'src/activity/activities.dto';
+import { ActivityDto } from 'src/activities/activities.dto';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';

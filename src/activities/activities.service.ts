@@ -14,7 +14,7 @@ import {
 } from './activities.dto';
 
 @Injectable()
-export class ActivityService extends CrudService<
+export class ActivitiesService extends CrudService<
   ActivityDto,
   ActivityDetailDto,
   ActivityGetListInput,

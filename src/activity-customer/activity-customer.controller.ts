@@ -10,7 +10,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ActivityCustomerService } from './activityCustomer.service';
+import { ActivityCustomerService } from './activity-customer.service';
 
 import { CrudController } from 'src/bases/CrudController';
 import {

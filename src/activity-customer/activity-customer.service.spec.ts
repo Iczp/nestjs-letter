@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ActivityCustomerService } from './activityCustomer.service';
+import { ActivityCustomerService } from './activity-customer.service';
 
 describe('ActivityCustomerService', () => {
   let service: ActivityCustomerService;

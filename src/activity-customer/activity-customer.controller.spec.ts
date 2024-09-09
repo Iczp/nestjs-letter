@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ActivityCustomerController } from './activityCustomer.controller';
+import { ActivityCustomerController } from './activity-customer.controller';
 
 describe('ActivityCustomerController', () => {
   let controller: ActivityCustomerController;

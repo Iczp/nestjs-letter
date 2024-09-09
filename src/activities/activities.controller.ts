@@ -8,7 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { ActivityService } from './activity.service';
+import { ActivitiesService } from './activities.service';
 
 import { CrudController } from 'src/bases/CrudController';
 
@@ -22,16 +22,16 @@ import {
   ActivityUpdateInput,
 } from './activities.dto';
 
-@Controller('activity')
-@ApiTags('Activity')
-export class ActivityController extends CrudController<
+@Controller('activities')
+@ApiTags('Activities')
+export class ActivitiesController extends CrudController<
   ActivityDto,
   ActivityDetailDto,
   ActivityGetListInput,
   ActivityCreateInput,
   ActivityUpdateInput
 > {
-  constructor(private readonly userService: ActivityService) {
+  constructor(private readonly userService: ActivitiesService) {
     super(userService);
   }
   @Get()

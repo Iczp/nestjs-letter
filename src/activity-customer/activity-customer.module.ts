@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ActivityCustomerService } from './activityCustomer.service';
-import { ActivityCustomerController } from './activityCustomer.controller';
+import { ActivityCustomerService } from './activity-customer.service';
+import { ActivityCustomerController } from './activity-customer.controller';
 
 @Module({
   providers: [ActivityCustomerService],

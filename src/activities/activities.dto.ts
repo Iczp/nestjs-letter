@@ -67,7 +67,8 @@ export class ActivityGetListInput extends GetListInput {
   @IsOptional()
   @IsBoolean()
   @ApiProperty({
-    default: true,
+    required: false,
+    // default: null,
   })
   public is_enabled?: boolean;
 }

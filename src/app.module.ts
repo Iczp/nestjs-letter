@@ -3,8 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { ActivityModule } from './activity/activity.module';
-import { ActivityCustomerModule } from './activityCustomer/activityCustomer.module';
+import { ActivityCustomerModule } from './activity-customer/activity-customer.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -13,6 +12,7 @@ import { RolesModule } from './roles/roles.module';
 import { AuditsModule } from './audits/audits.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { ActivitiesModule } from './activities/activities.module';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
       isGlobal: true, // 使 ConfigModule 在整个应用程序中全局可用
     }),
     UsersModule,
-    ActivityModule,
+    ActivitiesModule,
     ActivityCustomerModule,
     PermissionsModule,
     AuthModule,

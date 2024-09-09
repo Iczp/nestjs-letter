@@ -8,7 +8,7 @@ import { ExtractDBType } from 'src/types/ExtractDBType';
 import { Column, Workbook } from 'exceljs';
 import { SchemaType } from 'src/types/SchemaType';
 import { GenderText } from 'src/enums/Gender';
-import { exampleColumns, exampleRows } from './activityCustomer.example.data';
+import { exampleColumns, exampleRows } from './activity-customer.example.data';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { assert, checker } from 'src/common';
 import { client } from 'src/edgedb';
