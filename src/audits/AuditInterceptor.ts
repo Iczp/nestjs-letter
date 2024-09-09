@@ -82,6 +82,20 @@ export class AuditInterceptor implements NestInterceptor {
         ? error.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR
       : response.statusCode;
+    const ignoreHeaders = [
+      'host',
+      'referer',
+      'user-agent',
+      'accept-language',
+      'accept-encoding',
+      'authorization',
+    ];
+    const headerObject = {};
+    Object.keys(headers)
+      .filter((x) => !ignoreHeaders.includes(x))
+      .forEach((x) => {
+        headerObject[x] = headers[x];
+      });
 
     const insert = e.insert(e.logs.AuditLog, {
       app_name: e.str('NestJS'),
@@ -107,7 +121,7 @@ export class AuditInterceptor implements NestInterceptor {
             }
           : {},
       ),
-      headers: e.json(headers || {}),
+      headers: e.json(headerObject || {}),
     });
 
     await client.transaction(async (tx) => {

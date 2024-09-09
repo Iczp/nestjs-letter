@@ -13,7 +13,10 @@ import { isEmpty } from 'src/common/validator';
 @ApiSecurity('api-key') // 将 API Key 鉴权配置到 Swagger 文档中
 @ApiBearerAuth('bearer')
 export class BaseController {
-  constructor() {}
+  constructor() {
+    // 1. 当前用户注入
+    // 2. 权限校验
+  }
 
   public checkPolicy(prolicyName: string): Promise<void> {
     if (isEmpty(prolicyName)) {

@@ -28,6 +28,12 @@ export abstract class CrudService<
   // public abstract entity: ObjectTypeExpression | $expr_PathNode;
   // public client = createClient();
 
+  protected Create_PolicyName?: string;
+  protected Update_PolicyName?: string;
+  protected Delete_PolicyName?: string;
+  protected GetItem_PolicyName?: string;
+  protected GetList_PolicyName?: string;
+
   public itemSelect(id: string, entity: any): object {
     return entity['*'];
   }
@@ -74,6 +80,7 @@ export abstract class CrudService<
 
   public async getItem(id: string): Promise<TDetailDto> {
     Logger.log(`getItem id:${id}`, CrudService.name);
+    await this.checkPolicy(this.GetItem_PolicyName);
     const query = e.select(this.entity, (entity) => {
       const filter = new Filters([e.op(entity['id'], '=', e.uuid(id))])
         .addIf(
@@ -100,6 +107,7 @@ export abstract class CrudService<
     // console.log('listFilter', filter);
     // console.log('toEdgeQL', filter.toEdgeQL());
     Logger.log('getList input', 'getList');
+    await this.checkPolicy(this.GetList_PolicyName);
     const totalCount = e.count(
       e.select(this.entity as any, (entity) => {
         const filter =
@@ -148,6 +156,7 @@ export abstract class CrudService<
   }
 
   public async create(input: TCreateInput): Promise<TDetailDto> {
+    await this.checkPolicy(this.Create_PolicyName);
     const inputDto = await this.mapToCreateEntity(input);
     console.log('create inputDto', inputDto);
     const queryCreate = e.insert(
@@ -169,6 +178,7 @@ export abstract class CrudService<
   }
 
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
+    await this.checkPolicy(this.Update_PolicyName);
     const queryUpdate = e.update(this.entity, (entity) => {
       const inputDto = {
         last_modification_time: e.datetime_current(),
@@ -209,7 +219,7 @@ export abstract class CrudService<
     // const queryDelete = e.delete(this.entity, (entity) => ({
     //   filter_single: e.op(entity[id], '=', e.uuid(id)),
     // }));
-
+    await this.checkPolicy(this.Update_PolicyName);
     const queryUpdate = e.update(this.entity, (entity) => ({
       filter_single: e.op(entity['id'], '=', e.uuid(id)),
       set: {
