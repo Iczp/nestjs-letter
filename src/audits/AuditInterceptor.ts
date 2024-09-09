@@ -67,7 +67,7 @@ export class AuditInterceptor implements NestInterceptor {
         : HttpStatus.INTERNAL_SERVER_ERROR
       : response.statusCode;
 
-    const insert = e.insert(e.audit.AuditLog, {
+    const insert = e.insert(e.logs.AuditLog, {
       app_name: e.str('NestJS'),
       user_id: e.str('admin'),
       duration,

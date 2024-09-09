@@ -22,7 +22,7 @@ export type $AuditLogλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f738
   "headers": $.PropertyDesc<_std.$json, $.Cardinality.AtMostOne, false, false, false, false>;
   "host": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
 }>;
-type $AuditLog = $.ObjectType<"audit::AuditLog", $AuditLogλShape, null, [
+type $AuditLog = $.ObjectType<"logs::AuditLog", $AuditLogλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
 ]>;
 const $AuditLog = $.makeType<$AuditLog>(_.spec, "a5bd4ae2-6ce0-11ef-bbbe-d3da332b6cd4", _.syntax.literal);

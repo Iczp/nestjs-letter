@@ -12,7 +12,7 @@ import _default from "./modules/default";
 import _fts from "./modules/fts";
 import _schema from "./modules/schema";
 import _sys from "./modules/sys";
-import _audit from "./modules/audit";
+import _logs from "./modules/logs";
 import _math from "./modules/math";
 
 const ExportDefault: typeof _std & 
@@ -26,7 +26,7 @@ const ExportDefault: typeof _std &
   "fts": typeof _fts;
   "schema": typeof _schema;
   "sys": typeof _sys;
-  "audit": typeof _audit;
+  "logs": typeof _logs;
   "math": typeof _math;
 } = {
   ..._std,
@@ -40,7 +40,7 @@ const ExportDefault: typeof _std &
   "fts": _fts,
   "schema": _schema,
   "sys": _sys,
-  "audit": _audit,
+  "logs": _logs,
   "math": _math,
 };
 const Cardinality = $.Cardinality;

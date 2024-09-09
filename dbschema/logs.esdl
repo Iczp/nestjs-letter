@@ -1,4 +1,4 @@
-module audit{
+module logs{
     type AuditLog{
         annotation title := '审计日志';
 

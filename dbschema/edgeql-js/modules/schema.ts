@@ -6,7 +6,7 @@ import type * as _std from "./std";
 import type * as _sys from "./sys";
 import type * as _cfg from "./cfg";
 import type * as _default from "./default";
-import type * as _audit from "./audit";
+import type * as _logs from "./logs";
 export type $AccessKind = {
   "Select": $.$expr_Literal<$AccessKind>;
   "UpdateRead": $.$expr_Literal<$AccessKind>;
@@ -703,7 +703,7 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is Role]": $.LinkDesc<_default.$Role, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is UserRole]": $.LinkDesc<_default.$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is RolePermission]": $.LinkDesc<_default.$RolePermission, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<__type__[is audit::AuditLog]": $.LinkDesc<_audit.$AuditLog, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is logs::AuditLog]": $.LinkDesc<_logs.$AuditLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<intersection_of": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<subject": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
