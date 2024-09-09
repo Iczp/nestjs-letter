@@ -6,9 +6,15 @@ import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { AllExceptionsFilter } from './common/AllExceptionsFilter';
 import { AuditInterceptor } from './audits/AuditInterceptor';
+// import { logger } from './logger/logger.config';
+// import { LoggerService } from './logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // app.useLogger(app.get(LoggerService));
+
+  // logger.info('info', 'dd');
 
   swaggerConfigure(app, { path: '/' });
 

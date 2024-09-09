@@ -13,6 +13,7 @@ import { AuditsModule } from './audits/audits.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ActivitiesModule } from './activities/activities.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ActivitiesModule } from './activities/activities.module';
     SeedModule,
     RolesModule,
     AuditsModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [

@@ -64,6 +64,7 @@ export class UsersService extends CrudService<
     return {
       ...entity['*'],
       password: false,
+      roles_names: entity.roles.role.name,
       roles: {
         role: {
           id: true,
