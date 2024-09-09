@@ -16,6 +16,8 @@ import { Request, Response } from 'express';
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { client } from 'src/edgedb';
 import { UserDto } from 'src/users/dtos/UserDto';
+import { Reflector } from '@nestjs/core';
+import { AuditingKey } from './audits.decorator';
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
   constructor(private readonly app: INestApplication<any>) {}
@@ -25,6 +27,16 @@ export class AuditInterceptor implements NestInterceptor {
     const response = ctx.getResponse<Response>();
     const startTime = Date.now();
     const handler = context.getHandler();
+    const reflector = this.app.get(Reflector);
+    const isAuditing = reflector.get<boolean>(
+      AuditingKey,
+      context.getHandler(),
+    );
+
+    if (!isAuditing) {
+      console.log('auditing', context.getHandler(), isAuditing);
+      next.handle();
+    }
 
     // console.log(`Request: ${method} ${url}`);
     return next.handle().pipe(

@@ -17,6 +17,7 @@ import { ActivityCreateInput } from './dtos/ActivityCreateInput';
 import { ActivityUpdateInput } from './dtos/ActivityUpdateInput';
 import { ActivityGetListInput } from './dtos/ActivityGetListInput';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
+import { Auditing } from 'src/audits/audits.decorator';
 
 @Controller('activity')
 @ApiTags('Activity')
@@ -32,6 +33,7 @@ export class ActivityController extends CrudController<
   }
   @Get()
   @ApiOperation({ summary: '活动列表' })
+  @Auditing(false)
   public override getList(
     input: ActivityGetListInput,
   ): Promise<PagedResultDto<ActivityDto>> {
