@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { CrudService } from 'src/bases/CrudService';
 
@@ -9,6 +9,7 @@ import { isGuid } from 'src/common/validator';
 import * as security from 'src/common/security';
 import { client, e } from 'src/edgedb';
 import { assert } from 'src/common';
+import { Cache } from '@nestjs/cache-manager';
 import {
   UserCreateInput,
   UserDetailDto,
@@ -16,6 +17,7 @@ import {
   UserGetListInput,
   UserUpdateInput,
 } from './users.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 @Injectable()
 export class UsersService extends CrudService<
@@ -25,6 +27,12 @@ export class UsersService extends CrudService<
   UserCreateInput,
   UserUpdateInput
 > {
+  constructor(
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache,
+  ) {
+    super();
+  }
   public readonly entity = e.User;
 
   override mapToDetailDto(item: any): Promise<UserDetailDto> {

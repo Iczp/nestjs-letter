@@ -14,11 +14,19 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ActivitiesModule } from './activities/activities.module';
 import { LoggerModule } from './logger/logger.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { CurrentUser } from './users/users.current';
+import { jwtConstants } from './auth/jwtConstants';
 
 @Module({
   imports: [
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 5, // seconds
+      max: 10, // maximum number of items in cache
+    }),
     JwtModule.register({
-      secret: 'your_secret_key',
+      secret: jwtConstants.secret,
       signOptions: { expiresIn: '1h' }, // 设置token的过期时间
     }),
     ConfigModule.forRoot({
@@ -41,6 +49,7 @@ import { LoggerModule } from './logger/logger.module';
       useClass: JwtAuthGuard, // 默认应用 API Key 守卫
     },
     AppService,
+    CurrentUser,
   ],
   exports: [],
 })

@@ -1,6 +1,7 @@
 // src/jwt-auth.guard.ts
 import {
   ExecutionContext,
+  Inject,
   Injectable,
   Logger,
   UnauthorizedException,
@@ -10,12 +11,18 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { AllowAnonymousKey } from './allowAnonymousKey.decorator';
-
+import { CurrentUser } from 'src/users/users.current';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from '@nestjs/cache-manager';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
+    @Inject(CACHE_MANAGER)
+    private cacheManager: Cache,
+    // @Inject(CurrentUser.name)
+    private currentUser: CurrentUser,
   ) {
     super();
   }
@@ -55,6 +62,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     if (user) {
       request.body['user'] = user;
+      this.currentUser.user = user;
     }
 
     if (err || (!user && process.env.NODE_ENV === 'production')) {
