@@ -16,7 +16,7 @@ async function bootstrap() {
   // app.enableCors({ origin: '*' });
 
   // 全局使用审计拦截器
-  app.useGlobalInterceptors(new AuditInterceptor());
+  app.useGlobalInterceptors(new AuditInterceptor(app));
 
   // 全局注册异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter());

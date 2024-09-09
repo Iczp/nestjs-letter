@@ -1,4 +1,5 @@
 import createClient from 'edgedb';
+import edb from 'dbschema/edgeql-js'; // auto-generated code
 
 // C:\Users\ZP\AppData\Local\EdgeDB\config\credentials
 // edgedb --host=10.0.5.20 --port=10707 --database=main --user=edgedb --password
@@ -14,3 +15,5 @@ export const client = createClient({
   database: 'main',
   tlsSecurity: 'insecure',
 });
+
+export const e = edb;

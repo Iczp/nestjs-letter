@@ -6,8 +6,22 @@ import { UserTypeEnums, UserTypeKeys } from 'src/enums/UserType';
 
 export class UserCreateInput {
   @IsNotEmpty()
+  @ApiProperty({
+    required: true,
+    description: 'password',
+  })
+  public account!: string;
+
+  @IsNotEmpty()
+  @ApiProperty({
+    required: true,
+    description: 'password',
+  })
+  public passoword!: string;
+
+  @IsNotEmpty()
   @ApiProperty()
-  public name!: string;
+  public name: string;
 
   @ApiProperty({
     default: UserTypeEnums[UserTypeEnums.Unset],

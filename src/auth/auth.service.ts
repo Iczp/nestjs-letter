@@ -3,6 +3,10 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../users/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenResult } from './dots/TokenResult';
+import * as security from 'src/common/security';
+import { AuthInput } from './dots/AuthInput';
+import { assert } from 'src/common';
+import { isEmpty } from 'src/common/validator';
 @Injectable()
 export class AuthService {
   constructor(
@@ -11,20 +15,31 @@ export class AuthService {
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async signIn(username: string, password: string): Promise<TokenResult> {
-    const payload = { username, sub: username };
+  async signIn(input: AuthInput): Promise<TokenResult> {
+    const { account, password, validate_code } = input;
+    assert.If(isEmpty(validate_code), `验证码不能为空`);
+    const user = await this.userService.validatePassword(account, password);
+    const username = user.name;
+    const payload = { sub: user.id, username };
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: '3600s', // 访问令牌的有效期
     });
-    const refreshToken = this.jwtService.sign(payload, {
-      expiresIn: '7d', // 刷新令牌的有效期
-    });
+    const refreshToken = this.jwtService.sign(
+      {
+        sub: user.id,
+        access_token: accessToken,
+      },
+      {
+        expiresIn: '7d', // 刷新令牌的有效期
+      },
+    );
 
-    // await this.usersService.updateRefreshToken(username, refreshToken);
+    const passwordEncrypted = await security.encrypt(password);
+    const isTrue = await security.compare(password, passwordEncrypted);
+    console.log('passwordEncrypted', isTrue, password, passwordEncrypted);
 
     return {
-      //   username,
-      //   password,
+      // username,
       access_token: accessToken,
       token_type: 'bearer',
       expires_in: 3600,

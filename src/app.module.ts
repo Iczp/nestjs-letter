@@ -11,7 +11,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { SeedModule } from './seed/seed.module';
 import { RolesModule } from './roles/roles.module';
 import { AuditsModule } from './audits/audits.module';
-import { CurrentUser } from './users/user.current';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
@@ -40,8 +39,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
       useClass: JwtAuthGuard, // 默认应用 API Key 守卫
     },
     AppService,
-    CurrentUser,
   ],
-  exports: [CurrentUser],
+  exports: [],
 })
 export class AppModule {}

@@ -1,10 +1,14 @@
 // src/jwt-auth.guard.ts
-import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
-import { CurrentUser } from 'src/users/user.current';
 import { AllowAnonymousKey } from './allowAnonymousKey.decorator';
 
 @Injectable()
@@ -12,7 +16,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
-    private readonly currentUser: CurrentUser,
     // private readonly currentUser: UserService,
   ) {
     super();
@@ -43,21 +46,21 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleRequest(err, user, info, context: ExecutionContext) {
-    Logger.log(user, 'JwtAuthGuard handleRequest user');
+    // Logger.log(user, 'JwtAuthGuard handleRequest user');
 
-    Logger.log(context.getHandler().name, 'JwtAuthGuard getHandler');
+    // Logger.log(context.getHandler().name, 'JwtAuthGuard getHandler');
 
     const request = context.switchToHttp().getRequest();
 
-    Logger.log(request.headers.authorization, 'JwtAuthGuard request');
+    // Logger.log(request.headers.authorization, 'JwtAuthGuard request');
 
     if (user) {
-      this.currentUser.user = user;
+      request.body['user'] = user;
     }
 
-    // if (err || !user) {
-    //   throw err || new UnauthorizedException('未登录或登录已过期');
-    // }
+    if (err || (!user && process.env.NODE_ENV === 'production')) {
+      throw err || new UnauthorizedException('未登录或登录已过期');
+    }
     return user;
   }
 }

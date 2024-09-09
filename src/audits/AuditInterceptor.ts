@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   HttpException,
   HttpStatus,
+  INestApplication,
   Injectable,
   Logger,
   NestInterceptor,
@@ -14,9 +15,10 @@ import { catchError, tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { client } from 'src/edgedb';
+import { UserDto } from 'src/users/dtos/UserDto';
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
-  constructor() {}
+  constructor(private readonly app: INestApplication<any>) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest<Request>();
@@ -58,7 +60,8 @@ export class AuditInterceptor implements NestInterceptor {
       `[END] [${method}] ${url} [${duration}ms]`,
       AuditInterceptor.name,
     );
-    Logger.log(error.statusCode, 'error.statusCode');
+    const user = request.body['user'] as UserDto | undefined;
+    // Logger.log(user, 'user');
 
     const isErr = !!error.message;
     const http_status = isErr
@@ -69,15 +72,16 @@ export class AuditInterceptor implements NestInterceptor {
 
     const insert = e.insert(e.logs.AuditLog, {
       app_name: e.str('NestJS'),
-      user_id: e.str('admin'),
+      user_id: e.str(user?.id ?? ''),
+      user_name: e.str(user?.name ?? ''),
       duration,
-      host: e.str(headers['host']),
-      browser_info: e.str(headers['user-agent']),
-      handler_name: e.str(handler_name),
+      host: e.str(headers['host'] ?? ''),
+      browser_info: e.str(headers['user-agent'] ?? ''),
+      handler_name: e.str(handler_name ?? ''),
       http_method: e.str(method),
       http_status: e.int64(http_status),
       url: e.str(url),
-      data: e.json(data || {}),
+      data: e.json(data ?? {}),
       error: e.json(
         isErr
           ? {

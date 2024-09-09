@@ -86,14 +86,14 @@ export abstract class CrudService<
         ...this.itemSelect(id, this.entity),
       };
     });
-    const ret = await query.run(client);
+    const entity = await query.run(client);
 
-    console.log('getItem result', ret);
+    // console.log('getItem result', user);
 
-    if (!ret) {
+    if (!entity) {
       throw new NotFoundException(`Item not found,id:${id}`);
     }
-    return await this.mapToDetailDto(ret);
+    return await this.mapToDetailDto(entity);
   }
 
   public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import e from 'dbschema/edgeql-js'; // auto-generated code
 import { UserCreateInput } from './dtos/UserCreateInput';
 import { UserUpdateInput } from './dtos/UserUpdateInput';
 import { UserDto } from './dtos/UserDto';
@@ -10,6 +9,9 @@ import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { isEmpty } from 'class-validator';
 import { isGuid } from 'src/common/validator';
+import * as security from 'src/common/security';
+import { client, e } from 'src/edgedb';
+import { assert } from 'src/common';
 
 @Injectable()
 export class UserService extends CrudService<
@@ -20,6 +22,33 @@ export class UserService extends CrudService<
   UserUpdateInput
 > {
   public readonly entity = e.User;
+
+  override mapToDetailDto(item: any): Promise<UserDetailDto> {
+    delete item.password;
+    return super.mapToDetailDto(item);
+  }
+
+  public async validatePassword(account: string, password: string) {
+    const users = await e
+      .select(e.User, (user) => ({
+        ...user['*'],
+        limit: 1,
+        filter: e.op(user.account, '?=', e.cast(e.str, account)),
+      }))
+      .run(client);
+
+    assert.If(users.length === 0, `账号不存在:${account}`);
+
+    const user = users[0];
+
+    assert.If(user.is_deleted, `用户不存在: ${account}`);
+
+    assert.If(!(await security.compare(password, user.password)), `密码错误`);
+
+    assert.If(!user.is_enabled, `用户被禁用: ${account}`);
+
+    return user;
+  }
 
   override listSelect(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,22 +101,29 @@ export class UserService extends CrudService<
       .all();
   }
 
-  public override mapToUpdateEntity(input: UserUpdateInput): PromiseResult {
+  public override async mapToUpdateEntity(
+    input: UserUpdateInput,
+  ): Promise<PromiseResult> {
     const entity = e.User;
-    return Promise.resolve({
+    return await Promise.resolve({
       name: input.name ?? entity.name,
       phone: input.phone ?? entity.phone,
       gender: input.gender ?? entity.gender,
     });
   }
 
-  public override mapToCreateEntity(input: UserCreateInput): PromiseResult {
-    return Promise.resolve({
+  public override async mapToCreateEntity(
+    input: UserCreateInput,
+  ): Promise<PromiseResult> {
+    const password = await security.encrypt(input.passoword);
+    return {
+      account: input.account,
+      password,
       name: input.name,
       gender: input.gender,
       user_type: input.userType,
       phone: input.phone,
       is_enabled: input.is_enabled,
-    });
+    };
   }
 }
