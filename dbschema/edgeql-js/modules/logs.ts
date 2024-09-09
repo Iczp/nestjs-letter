@@ -21,6 +21,9 @@ export type $AuditLogλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f738
   "error": $.PropertyDesc<_std.$json, $.Cardinality.AtMostOne, false, false, false, false>;
   "headers": $.PropertyDesc<_std.$json, $.Cardinality.AtMostOne, false, false, false, false>;
   "host": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "accept_encoding": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "accept_language": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "referer": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
 }>;
 type $AuditLog = $.ObjectType<"logs::AuditLog", $AuditLogλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],

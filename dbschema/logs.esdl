@@ -54,6 +54,18 @@ module logs{
             annotation title := 'Headers';
         };
 
+        property referer -> str {
+            annotation title := 'Referer';
+        };
+
+        property accept_language -> str {
+            annotation title := 'Accept Language';
+        };
+
+        property accept_encoding -> str {
+            annotation title := 'Accept Encoding';
+        };
+
         # property params -> json {
         #     annotation title := 'Params';
         # };
