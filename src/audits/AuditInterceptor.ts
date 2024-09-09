@@ -1,6 +1,8 @@
 import {
   CallHandler,
   ExecutionContext,
+  HttpException,
+  HttpStatus,
   Injectable,
   Logger,
   NestInterceptor,
@@ -10,10 +12,11 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
-import { AuditsService } from './audits.service';
+import e from 'dbschema/edgeql-js'; // auto-generated code
+import { client } from 'src/edgedb';
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
-  constructor(protected readonly auditService: AuditsService) {}
+  constructor() {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const request = ctx.getRequest<Request>();
@@ -28,31 +31,68 @@ export class AuditInterceptor implements NestInterceptor {
         const duration = endTime - startTime;
         Logger.log(`[${handler.name}]`, AuditInterceptor.name);
         // Logger.log(data, 'Auditing data');
-        this.auditService.logAudit(
-          handler.name,
-          request,
-          response,
-          duration,
-          data,
-          {},
-        );
+        this.logAudit(handler.name, request, response, duration, data, {});
       }),
       catchError((error) => {
         // Logger.error(error, 'err');
         // Logger.error(JSON.stringify(err), 'err44');
         const endTime = Date.now();
         const duration = endTime - startTime;
-        this.auditService.logAudit(
-          handler.name,
-          request,
-          response,
-          duration,
-          {},
-          error,
-        );
+        this.logAudit(handler.name, request, response, duration, {}, error);
         // 继续抛出异常
         return throwError(() => error);
       }),
     );
+  }
+
+  async logAudit(
+    handler_name: string,
+    request: Request,
+    response: Response,
+    duration: number,
+    data: any,
+    error: any,
+  ) {
+    const { method, url, headers } = request;
+    Logger.log(
+      `[END] [${method}] ${url} [${duration}ms]`,
+      AuditInterceptor.name,
+    );
+    Logger.log(error.statusCode, 'error.statusCode');
+
+    const isErr = !!error.message;
+    const http_status = isErr
+      ? error instanceof HttpException
+        ? error.getStatus()
+        : HttpStatus.INTERNAL_SERVER_ERROR
+      : response.statusCode;
+
+    const insert = e.insert(e.audit.AuditLog, {
+      app_name: e.str('NestJS'),
+      user_id: e.str('admin'),
+      duration,
+      host: e.str(headers['host']),
+      browser_info: e.str(headers['user-agent']),
+      handler_name: e.str(handler_name),
+      http_method: e.str(method),
+      http_status: e.int64(http_status),
+      url: e.str(url),
+      data: e.json(data || {}),
+      error: e.json(
+        isErr
+          ? {
+              message: error.message,
+              stack: error.stack,
+              date: Date.now(),
+            }
+          : {},
+      ),
+      headers: e.json(headers || {}),
+    });
+
+    await client.transaction(async (tx) => {
+      const insertResult = await insert.run(tx);
+      Logger.log(`[AuditsService] Inserted ${insertResult.id}`, 'Auditing');
+    });
   }
 }
