@@ -8,14 +8,15 @@ import { ExcelWorkbook } from 'src/dtos/ExcelWorkbook';
 import { SchemaType } from 'src/types/SchemaType';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { client } from 'src/edgedb';
+import { BaseService } from './BaseService';
 
 export abstract class ExcelService<TGetListInput>
+  extends BaseService
   implements IExcelService<TGetListInput>
 {
   // constructor(private readonly entity: ObjectTypeExpression | $expr_PathNode) {}
   constructor() {
-    // this.generateExcel = this.generateExcel.bind(this);
-    // this.generateExampleExcel = this.generateExampleExcel.bind(this);
+    super();
   }
 
   public abstract entity: ObjectTypeExpression | $expr_PathNode;

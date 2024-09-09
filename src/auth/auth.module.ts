@@ -7,7 +7,6 @@ import { UserService } from 'src/users/user.service';
 import { PassportModule } from '@nestjs/passport';
 // import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
-import { CurrentUser } from 'src/users/user.current';
 @Module({
   imports: [
     PassportModule,
@@ -22,7 +21,6 @@ import { CurrentUser } from 'src/users/user.current';
     UserService,
     // LocalStrategy,
     JwtStrategy,
-    CurrentUser,
   ],
   controllers: [AuthController],
   exports: [AuthService],

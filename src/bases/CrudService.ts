@@ -73,7 +73,7 @@ export abstract class CrudService<
   }
 
   public async getItem(id: string): Promise<TDetailDto> {
-    console.log('getItem id', id);
+    Logger.log(`getItem id:${id}`, CrudService.name);
     const query = e.select(this.entity, (entity) => {
       const filter = new Filters([e.op(entity['id'], '=', e.uuid(id))])
         .addIf(

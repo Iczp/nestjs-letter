@@ -26,6 +26,9 @@ export class ActivityCustomerService extends CrudService<
   ActivityCustomerCreateInput,
   ActivityCustomerUpdateInput
 > {
+  constructor() {
+    super();
+  }
   // constructor() {
   //   super(e.ActivityCustomer);
   // }
