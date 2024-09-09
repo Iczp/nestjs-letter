@@ -7,16 +7,18 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { RoleCreateInput } from './dtos/RoleCreateInput';
-import { RoleUpdateInput } from './dtos/RoleUpdateInput';
-import { RoleDto } from './dtos/RoleDto';
-import { RoleDetailDto } from './dtos/RoleDetailDto';
-import { RoleGetListInput } from './dtos/RoleGetListInput';
+import {
+  RoleCreateInput,
+  RoleDetailDto,
+  RoleDto,
+  RoleGetListInput,
+  RoleUpdateInput,
+  SetPermissionsInput,
+} from './roles.dto';
 import { CrudController } from 'src/bases/CrudController';
 import { RolesService } from './roles.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
-import { SetPermissionsInput } from './dtos/SetPermissionsInput';
 
 @Controller('roles')
 @ApiTags('Roles')

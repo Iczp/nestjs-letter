@@ -8,26 +8,28 @@ import {
   Put,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { UserService } from './user.service';
+import { UsersService } from './user.service';
 
 import { CrudController } from 'src/bases/CrudController';
-import { UserDto } from './dtos/UserDto';
-import { UserDetailDto } from './dtos/UserDetailDto';
-import { UserCreateInput } from './dtos/UserCreateInput';
-import { UserUpdateInput } from './dtos/UserUpdateInput';
-import { UserGetListInput } from './dtos/UserGetListInput';
+import {
+  UserCreateInput,
+  UserDetailDto,
+  UserDto,
+  UserGetListInput,
+  UserUpdateInput,
+} from './users.dto';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
 @Controller('user')
 @ApiTags('User')
-export class UserController extends CrudController<
+export class UsersController extends CrudController<
   UserDto,
   UserDetailDto,
   UserGetListInput,
   UserCreateInput,
   UserUpdateInput
 > {
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly userService: UsersService) {
     super(userService);
   }
   @Get()

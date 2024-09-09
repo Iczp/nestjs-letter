@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { CrudService } from 'src/bases/CrudService';
-import { ActivityCustomerCreateInput } from './dtos/ActivityCustomerCreateInput';
-import { ActivityCustomerUpdateInput } from './dtos/ActivityCustomerUpdateInput';
-import { ActivityCustomerDto } from './dtos/ActivityCustomerDto';
-import { ActivityCustomerDetailDto } from './dtos/ActivityCustomerDetailDto';
-import { ActivityCustomerGetListInput } from './dtos/ActivityCustomerGetListInput';
+
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExtractDBType } from 'src/types/ExtractDBType';
@@ -17,6 +13,13 @@ import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { assert, checker } from 'src/common';
 import { client } from 'src/edgedb';
 import { isGuid } from 'src/common/validator';
+import {
+  ActivityCustomerCreateInput,
+  ActivityCustomerDetailDto,
+  ActivityCustomerDto,
+  ActivityCustomerGetListInput,
+  ActivityCustomerUpdateInput,
+} from './activity-customer.dto';
 
 @Injectable()
 export class ActivityCustomerService extends CrudService<

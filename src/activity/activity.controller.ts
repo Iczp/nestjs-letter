@@ -11,13 +11,16 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivityService } from './activity.service';
 
 import { CrudController } from 'src/bases/CrudController';
-import { ActivityDto } from './dtos/ActivityDto';
-import { ActivityDetailDto } from './dtos/ActivityDetailDto';
-import { ActivityCreateInput } from './dtos/ActivityCreateInput';
-import { ActivityUpdateInput } from './dtos/ActivityUpdateInput';
-import { ActivityGetListInput } from './dtos/ActivityGetListInput';
+
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { Auditing } from 'src/audits/audits.decorator';
+import {
+  ActivityCreateInput,
+  ActivityDetailDto,
+  ActivityDto,
+  ActivityGetListInput,
+  ActivityUpdateInput,
+} from './activities.dto';
 
 @Controller('activity')
 @ApiTags('Activity')

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './users/user.module';
+import { UsersModule } from './users/users.module';
 import { ActivityModule } from './activity/activity.module';
 import { ActivityCustomerModule } from './activityCustomer/activityCustomer.module';
 import { PermissionsModule } from './permissions/permissions.module';
@@ -23,7 +23,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     ConfigModule.forRoot({
       isGlobal: true, // 使 ConfigModule 在整个应用程序中全局可用
     }),
-    UserModule,
+    UsersModule,
     ActivityModule,
     ActivityCustomerModule,
     PermissionsModule,

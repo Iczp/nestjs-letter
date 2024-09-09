@@ -13,11 +13,13 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivityCustomerService } from './activityCustomer.service';
 
 import { CrudController } from 'src/bases/CrudController';
-import { ActivityCustomerDto } from './dtos/ActivityCustomerDto';
-import { ActivityCustomerDetailDto } from './dtos/ActivityCustomerDetailDto';
-import { ActivityCustomerCreateInput } from './dtos/ActivityCustomerCreateInput';
-import { ActivityCustomerUpdateInput } from './dtos/ActivityCustomerUpdateInput';
-import { ActivityCustomerGetListInput } from './dtos/ActivityCustomerGetListInput';
+import {
+  ActivityCustomerCreateInput,
+  ActivityCustomerDetailDto,
+  ActivityCustomerDto,
+  ActivityCustomerGetListInput,
+  ActivityCustomerUpdateInput,
+} from './activity-customer.dto';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { Response } from 'express';
 

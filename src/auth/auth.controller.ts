@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { BaseController } from 'src/bases/BaseController';
-import { AuthInput } from './dots/AuthInput';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { AllowAnonymous } from './allowAnonymousKey.decorator';
+import { AuthInput } from './auth.dto';
 
 @Controller('auth')
 @ApiTags('Auth')

@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { UserCreateInput } from './dtos/UserCreateInput';
-import { UserUpdateInput } from './dtos/UserUpdateInput';
-import { UserDto } from './dtos/UserDto';
+
 import { CrudService } from 'src/bases/CrudService';
-import { UserDetailDto } from './dtos/UserDetailDto';
-import { UserGetListInput } from './dtos/UserGetListInput';
+
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { isEmpty } from 'class-validator';
@@ -12,9 +9,16 @@ import { isGuid } from 'src/common/validator';
 import * as security from 'src/common/security';
 import { client, e } from 'src/edgedb';
 import { assert } from 'src/common';
+import {
+  UserCreateInput,
+  UserDetailDto,
+  UserDto,
+  UserGetListInput,
+  UserUpdateInput,
+} from './users.dto';
 
 @Injectable()
-export class UserService extends CrudService<
+export class UsersService extends CrudService<
   UserDto,
   UserDetailDto,
   UserGetListInput,

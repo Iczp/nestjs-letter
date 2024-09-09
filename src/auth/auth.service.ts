@@ -1,16 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserService } from '../users/user.service';
+import { UsersService } from '../users/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { TokenResult } from './dots/TokenResult';
 import * as security from 'src/common/security';
-import { AuthInput } from './dots/AuthInput';
 import { assert } from 'src/common';
 import { isEmpty } from 'src/common/validator';
+import { AuthInput, TokenResult } from './auth.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private userService: UsersService,
     private jwtService: JwtService,
   ) {}
 

@@ -1,17 +1,21 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CrudService } from 'src/bases/CrudService';
-import { RoleDto } from './dtos/RoleDto';
-import { RoleDetailDto } from './dtos/RoleDetailDto';
-import { RoleGetListInput } from './dtos/RoleGetListInput';
-import { RoleCreateInput } from './dtos/RoleCreateInput';
-import { RoleUpdateInput } from './dtos/RoleUpdateInput';
+
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { PromiseResult } from 'src/types/PromiseResult';
 import { Filters } from 'src/common/Filters';
 import { isEmpty, isGuid } from 'src/common/validator';
-import { SetPermissionsInput } from './dtos/SetPermissionsInput';
+
 import { client } from 'src/edgedb';
 import { assert } from 'src/common';
+import {
+  RoleCreateInput,
+  RoleDetailDto,
+  RoleDto,
+  RoleGetListInput,
+  RoleUpdateInput,
+  SetPermissionsInput,
+} from './roles.dto';
 @Injectable()
 export class RolesService extends CrudService<
   RoleDto,

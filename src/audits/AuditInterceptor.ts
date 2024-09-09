@@ -15,9 +15,10 @@ import { catchError, tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { client } from 'src/edgedb';
-import { UserDto } from 'src/users/dtos/UserDto';
+
 import { Reflector } from '@nestjs/core';
 import { AuditingKey } from './audits.decorator';
+import { UserDto } from 'src/users/users.dto';
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
   constructor(private readonly app: INestApplication<any>) {}

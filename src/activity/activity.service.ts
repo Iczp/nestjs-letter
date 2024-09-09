@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import e from 'dbschema/edgeql-js'; // auto-generated code
-import { ActivityCreateInput } from './dtos/ActivityCreateInput';
-import { ActivityUpdateInput } from './dtos/ActivityUpdateInput';
-import { ActivityDto } from './dtos/ActivityDto';
+
 import { CrudService } from 'src/bases/CrudService';
-import { ActivityDetailDto } from './dtos/ActivityDetailDto';
-import { ActivityGetListInput } from './dtos/ActivityGetListInput';
+
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
+import {
+  ActivityCreateInput,
+  ActivityDetailDto,
+  ActivityDto,
+  ActivityGetListInput,
+  ActivityUpdateInput,
+} from './activities.dto';
 
 @Injectable()
 export class ActivityService extends CrudService<
