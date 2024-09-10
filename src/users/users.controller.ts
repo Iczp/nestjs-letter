@@ -29,7 +29,6 @@ import {
   Users_GetList,
   Users_Update,
 } from 'src/permissions/permissionsConsts';
-import { input } from 'edgedb/dist/adapter.node';
 
 @Controller({
   path: 'user',

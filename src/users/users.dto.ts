@@ -1,4 +1,3 @@
-import { Body, Req } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsIn, IsOptional, IsBoolean } from 'class-validator';
 import { Gender, UserType } from 'dbschema/interfaces';
