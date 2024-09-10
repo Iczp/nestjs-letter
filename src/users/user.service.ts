@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import { Inject, Injectable, Req, Scope } from '@nestjs/common';
 
 import { CrudService } from 'src/bases/CrudService';
 
@@ -21,6 +21,8 @@ import {
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
+import { CurrentUser } from './users.current';
+import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
 @Injectable({
   // scope: Scope.REQUEST
@@ -38,6 +40,7 @@ export class UsersService extends CrudService<
     // @Inject(REQUEST)
     // private request: Request,
     // @Inject(CONTEXT) private context
+    private currentUser: CurrentUser,
   ) {
     super();
   }
@@ -68,6 +71,15 @@ export class UsersService extends CrudService<
     assert.If(!user.is_enabled, `用户被禁用: ${account}`);
 
     return user;
+  }
+
+  override async getList(
+    input: UserGetListInput,
+  ): Promise<PagedResultDto<UserDto>> {
+    return {
+      user: this.currentUser.user,
+      ...(await super.getList(input)),
+    } as PagedResultDto<UserDto>;
   }
 
   override listSelect(

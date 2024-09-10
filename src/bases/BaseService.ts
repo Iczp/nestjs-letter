@@ -4,7 +4,7 @@ import { UserDto } from 'src/users/users.dto';
 export class BaseService {
   constructor() {}
 
-  public currentUser: UserDto = {
+  protected loginUser: UserDto = {
     id: '59a660ee-6e7e-11ef-84f2-6b70bce8103f',
     name: 'admin',
     account: 'admin',

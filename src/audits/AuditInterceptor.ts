@@ -107,7 +107,10 @@ export class AuditInterceptor implements NestInterceptor {
 
     const user = request.body['user'] as UserDto | undefined;
 
-    Logger.log(`user:${user}`, AuditInterceptor.name);
+    Logger.log(
+      `request.body['user']:${JSON.stringify(user)}`,
+      AuditInterceptor.name,
+    );
 
     const isErr = !!error.message;
     const http_status = isErr
