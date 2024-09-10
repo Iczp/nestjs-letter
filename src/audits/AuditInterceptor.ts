@@ -97,6 +97,10 @@ export class AuditInterceptor implements NestInterceptor {
       `[END] [${method}] ${url} [${duration}ms]`,
       AuditInterceptor.name,
     );
+
+    const ip = (headers['x-forwarded-for'] ||
+      request.connection.remoteAddress) as string;
+
     const user = request.body['user'] as UserDto | undefined;
     // Logger.log(user, 'user');
 
@@ -128,6 +132,7 @@ export class AuditInterceptor implements NestInterceptor {
       handler_name: e.str(handler.name ?? ''),
       http_method: e.str(method),
       http_status: e.int64(http_status),
+      ip: e.str(ip || ''),
       url: e.str(url),
       data: e.json(data ?? {}),
       error: e.json(
