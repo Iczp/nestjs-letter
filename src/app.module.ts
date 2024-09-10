@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ActivitiesModule } from './activities/activities.module';
 import { LoggerModule } from './logger/logger.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { CurrentUser } from './users/users.current';
 // import { LocalAuthGuard } from './auth/local-auth.guard';
 // import { LocalStrategy } from './auth/local.strategy';
 // import { JwtStrategy } from './auth/jwt.strategy';
@@ -53,6 +54,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     // JwtStrategy,
     // UsersService,
     // AuthService,
+    CurrentUser,
   ],
   exports: [],
 })

@@ -10,7 +10,7 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 import { AllowAnonymousKey } from './allowAnonymousKey.decorator';
-// import { CurrentUser } from 'src/users/users.current';
+import { CurrentUser } from 'src/users/users.current';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from '@nestjs/cache-manager';
 
@@ -24,7 +24,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
     // @Inject(CurrentUser.name)
-    // private currentUser: CurrentUser,
+    private currentUser: CurrentUser,
   ) {
     super();
   }
@@ -57,7 +57,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     const request = context.switchToHttp().getRequest();
     if (user) {
       request.body['user'] = user;
-      // this.currentUser.user = user;
+      this.currentUser.user = user;
     }
 
     if (err || (!user && process.env.NODE_ENV === 'production')) {
