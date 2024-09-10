@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable, Req, Scope } from '@nestjs/common';
-
 import { CrudService } from 'src/bases/CrudService';
-
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { isEmpty } from 'class-validator';
@@ -25,7 +23,7 @@ import { CurrentUser } from './users.current';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
 @Injectable({
-  // scope: Scope.REQUEST
+  // scope: Scope.REQUEST,
 })
 export class UsersService extends CrudService<
   UserDto,

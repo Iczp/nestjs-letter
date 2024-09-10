@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
   Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -40,24 +41,27 @@ export class ActivityCustomerController extends CrudController<
   @ApiOperation({ summary: '[活动客户]列表' })
   public override getList(
     input: ActivityCustomerGetListInput,
+    @Req() req: any,
   ): Promise<PagedResultDto<ActivityCustomerDto>> {
-    return super.getList(input);
+    return super.getList(input, req);
   }
 
   @Get(':id')
   @ApiOperation({ summary: '[活动客户]详情' })
   public override getItem(
     @Param('id') id: string,
+    @Req() req: any,
   ): Promise<ActivityCustomerDetailDto> {
-    return super.getItem(id);
+    return super.getItem(id, req);
   }
 
   @Post()
   @ApiOperation({ summary: '创建[活动客户]' })
   public override create(
     @Body() input: ActivityCustomerCreateInput,
+    @Req() req: any,
   ): Promise<ActivityCustomerDetailDto> {
-    return super.create(input);
+    return super.create(input, req);
   }
 
   @Put(':id')
@@ -65,8 +69,9 @@ export class ActivityCustomerController extends CrudController<
   public override update(
     @Param('id') id: string,
     input: ActivityCustomerUpdateInput,
+    @Req() req: any,
   ): Promise<ActivityCustomerDetailDto> {
-    return super.update(id, input);
+    return super.update(id, input, req);
   }
 
   @Post('checked/:id')
@@ -83,14 +88,16 @@ export class ActivityCustomerController extends CrudController<
   public setIsActived(
     @Param('id') id: string,
     @Query('is_invited') is_invited: boolean,
+    @Req() req: any,
   ) {
+    this.setServiceRequest(req);
     return this.service.updateEntity(id, { is_invited: is_invited });
   }
 
   @Delete(':id')
   @ApiOperation({ summary: '删除[活动客户]' })
-  public override delete(id: string): Promise<void> {
-    return super.delete(id);
+  public override delete(id: string, @Req() req: any): Promise<void> {
+    return super.delete(id, req);
   }
 
   @Get('excel/output')
@@ -101,8 +108,9 @@ export class ActivityCustomerController extends CrudController<
   public override exportExcel(
     @Res() res: Response,
     @Query() input: ActivityCustomerGetListInput,
+    @Req() req: any,
   ): Promise<void> {
-    return super.exportExcel(res, input);
+    return super.exportExcel(res, input, req);
   }
 
   // @Post('excel/import')

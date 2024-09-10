@@ -9,6 +9,7 @@ import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
+import { IService } from './IService';
 
 export abstract class CrudService<
     TDto,

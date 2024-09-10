@@ -1,6 +1,5 @@
-import { ForbiddenException, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiSecurity } from '@nestjs/swagger';
-import { isEmpty } from 'src/common/validator';
+import { IService } from './IService';
 
 // import { UseGuards } from '@nestjs/common';
 // import { ApiKeyGuard } from '../api-key/api-key.guard';
@@ -13,15 +12,12 @@ import { isEmpty } from 'src/common/validator';
 @ApiSecurity('api-key') // 将 API Key 鉴权配置到 Swagger 文档中
 @ApiBearerAuth('bearer')
 export class BaseController {
-  constructor() {
+  constructor(protected service?: IService) {
     // 1. 当前用户注入
     // 2. 权限校验
   }
 
-  public checkPolicy(@Req() req, prolicyName: string): Promise<void> {
-    if (isEmpty(prolicyName)) {
-      return;
-    }
-    throw new ForbiddenException();
+  protected setServiceRequest(req: any): void {
+    this.service.setRequest(req);
   }
 }

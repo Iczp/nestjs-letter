@@ -1,3 +1,4 @@
+import { Body, Req } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsIn, IsOptional, IsBoolean } from 'class-validator';
 import { Gender, UserType } from 'dbschema/interfaces';
@@ -115,3 +116,8 @@ export class UserGetListInput extends GetListInput {
   })
   public is_enabled?: boolean;
 }
+
+// export class ArgsInput {
+//   @Req() req: any;
+//   @Body() body: any;
+// }

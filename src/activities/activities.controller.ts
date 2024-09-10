@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivitiesService } from './activities.service';
@@ -38,22 +39,27 @@ export class ActivitiesController extends CrudController<
   // @Auditing(false)
   public override getList(
     input: ActivityGetListInput,
+    @Req() req: any,
   ): Promise<PagedResultDto<ActivityDto>> {
-    return super.getList(input);
+    return super.getList(input, req);
   }
 
   @Get(':id')
   @ApiOperation({ summary: '活动详情' })
-  public override getItem(@Param('id') id: string): Promise<ActivityDetailDto> {
-    return super.getItem(id);
+  public override getItem(
+    @Param('id') id: string,
+    @Req() req: any,
+  ): Promise<ActivityDetailDto> {
+    return super.getItem(id, req);
   }
 
   @Post()
   @ApiOperation({ summary: '创建活动' })
   public override create(
     @Body() input: ActivityCreateInput,
+    @Req() req: any,
   ): Promise<ActivityDetailDto> {
-    return super.create(input);
+    return super.create(input, req);
   }
 
   @Put(':id')
@@ -61,13 +67,14 @@ export class ActivitiesController extends CrudController<
   public override update(
     @Param('id') id: string,
     input: ActivityUpdateInput,
+    @Req() req: any,
   ): Promise<ActivityDetailDto> {
-    return super.update(id, input);
+    return super.update(id, input, req);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: '删除活动' })
-  public override delete(id: string): Promise<void> {
-    return super.delete(id);
+  public override delete(id: string, @Req() req: any): Promise<void> {
+    return super.delete(id, req);
   }
 }

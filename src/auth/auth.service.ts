@@ -8,13 +8,16 @@ import { isEmpty } from 'src/common/validator';
 import { AuthInput, TokenResult } from './auth.dto';
 import { ConfigService } from '@nestjs/config';
 import { JWT_SECRET } from './jwtConstants';
+import { BaseService } from 'src/bases/BaseService';
 @Injectable()
-export class AuthService {
+export class AuthService extends BaseService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+  ) {
+    super();
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async signIn(input: AuthInput): Promise<TokenResult> {
