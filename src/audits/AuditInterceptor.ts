@@ -19,6 +19,7 @@ import { client } from 'src/edgedb';
 import { Reflector } from '@nestjs/core';
 import { AuditingKey } from './audits.decorator';
 import { UserDto } from 'src/users/users.dto';
+import { IncomingHttpHeaders } from 'http';
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
   constructor(private readonly app: INestApplication<any>) {}
@@ -71,6 +72,10 @@ export class AuditInterceptor implements NestInterceptor {
       'authorization',
     ];
   }
+  async getIpAddress(headers: IncomingHttpHeaders, request: Request) {
+    return (headers['x-forwarded-for'] ||
+      request.connection.remoteAddress) as string;
+  }
 
   async logAudit(
     context: ExecutionContext,
@@ -98,8 +103,7 @@ export class AuditInterceptor implements NestInterceptor {
       AuditInterceptor.name,
     );
 
-    const ip = (headers['x-forwarded-for'] ||
-      request.connection.remoteAddress) as string;
+    const ip = await this.getIpAddress(headers, request);
 
     const user = request.body['user'] as UserDto | undefined;
     // Logger.log(user, 'user');
