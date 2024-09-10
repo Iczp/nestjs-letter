@@ -6,11 +6,14 @@ import * as security from 'src/common/security';
 import { assert } from 'src/common';
 import { isEmpty } from 'src/common/validator';
 import { AuthInput, TokenResult } from './auth.dto';
+import { ConfigService } from '@nestjs/config';
+import { JWT_SECRET } from './jwtConstants';
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,15 +23,19 @@ export class AuthService {
     const user = await this.userService.validatePassword(account, password);
     const username = user.name;
     const payload = { sub: user.id, username };
+    const privateKey = this.configService.get<string>(JWT_SECRET);
     const accessToken = this.jwtService.sign(payload, {
+      privateKey,
       expiresIn: '3600s', // 访问令牌的有效期
     });
+    // this.jwtService.verify(accessToken, { secret: privateKey });
     const refreshToken = this.jwtService.sign(
       {
         sub: user.id,
         access_token: accessToken,
       },
       {
+        privateKey,
         expiresIn: '7d', // 刷新令牌的有效期
       },
     );

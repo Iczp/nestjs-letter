@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Scope,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './user.service';
@@ -20,9 +21,11 @@ import {
 } from './users.dto';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
-@Controller('user')
+@Controller({
+  path: 'user',
+  scope: Scope.REQUEST,
+})
 @ApiTags('Users')
-
 export class UsersController extends CrudController<
   UserDto,
   UserDetailDto,

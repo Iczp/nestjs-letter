@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class CurrentUser {
@@ -10,5 +10,6 @@ export class CurrentUser {
 
   public set user(user: any) {
     this.currentUser = user;
+    Logger.log(user, CurrentUser.name);
   }
 }

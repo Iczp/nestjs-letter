@@ -14,6 +14,11 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ActivitiesModule } from './activities/activities.module';
 import { LoggerModule } from './logger/logger.module';
 import { CacheModule } from '@nestjs/cache-manager';
+// import { LocalAuthGuard } from './auth/local-auth.guard';
+// import { LocalStrategy } from './auth/local.strategy';
+// import { JwtStrategy } from './auth/jwt.strategy';
+// import { UsersService } from './users/user.service';
+// import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
@@ -38,10 +43,16 @@ import { CacheModule } from '@nestjs/cache-manager';
   controllers: [AppController],
   providers: [
     {
+      // 默认应用 API Key 守卫
       provide: APP_GUARD,
-      useClass: JwtAuthGuard, // 默认应用 API Key 守卫
+      // useClass: LocalAuthGuard,
+      useClass: JwtAuthGuard,
     },
     AppService,
+    // LocalStrategy,
+    // JwtStrategy,
+    // UsersService,
+    // AuthService,
   ],
   exports: [],
 })

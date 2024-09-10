@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppInfo } from './dtos/AppInfo';
@@ -8,6 +8,21 @@ import { AllowAnonymous } from './auth/allowAnonymousKey.decorator';
 @ApiTags('App')
 export class AppController {
   constructor(private readonly appService: AppService) {}
+
+  @Get('info')
+  @ApiOperation({
+    summary: '关于 App info',
+  })
+  // @AllowAnonymous()
+  getInfo(@Req() req) {
+    const user = req.user;
+    const body = req.body;
+    console.log('req', req);
+    return {
+      user,
+      body,
+    };
+  }
 
   @Get('about')
   @ApiOperation({
@@ -20,7 +35,11 @@ export class AppController {
     type: AppInfo,
   })
   @AllowAnonymous()
-  getAbout() {
-    return this.appService.getAppInfo();
+  getAbout(@Req() req) {
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    return {
+      ip,
+      ...this.appService.getAppInfo(),
+    };
   }
 }

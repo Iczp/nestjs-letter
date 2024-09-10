@@ -5,11 +5,13 @@ import {
   HttpStatus,
   HttpException,
   Logger,
+  INestApplication,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch() // 捕获所有异常
 export class AllExceptionsFilter implements ExceptionFilter {
+  constructor(private readonly app: INestApplication<any>) {}
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -20,7 +22,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
     // 输出异常信息到控制台
-    Logger.error(`Error: ${exception.message}\nStack: ${exception.stack}`);
+    Logger.error(`${exception.message}`, AllExceptionsFilter.name);
+    Logger.error(` ${exception.stack}`, AllExceptionsFilter.name);
 
     // 可以根据需要调整响应内容
     response.status(status).json({

@@ -25,7 +25,7 @@ export class AuditInterceptor implements NestInterceptor {
   constructor(private readonly app: INestApplication<any>) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const startTime = Date.now();
-    // console.log(`Request: ${method} ${url}`);
+    Logger.log(`startTime:  ${startTime}`, AuditInterceptor.name);
     return next.handle().pipe(
       tap((data) => {
         this.logAudit(context, startTime, data, {});
@@ -106,7 +106,8 @@ export class AuditInterceptor implements NestInterceptor {
     const ip = await this.getIpAddress(headers, request);
 
     const user = request.body['user'] as UserDto | undefined;
-    // Logger.log(user, 'user');
+
+    Logger.log(`user:${user}`, AuditInterceptor.name);
 
     const isErr = !!error.message;
     const http_status = isErr

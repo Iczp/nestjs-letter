@@ -25,7 +25,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new AuditInterceptor(app));
 
   // 全局注册异常过滤器
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new AllExceptionsFilter(app));
 
   // 假设你已经通过 ConfigModule 设置了配置
   const configService = app.get(ConfigService); // 通过依赖注入获取 ConfigService

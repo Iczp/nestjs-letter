@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Inject, Injectable, Scope } from '@nestjs/common';
 
 import { CrudService } from 'src/bases/CrudService';
 
@@ -18,8 +19,12 @@ import {
   UserUpdateInput,
 } from './users.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
 
-@Injectable()
+@Injectable({
+  // scope: Scope.REQUEST
+})
 export class UsersService extends CrudService<
   UserDto,
   UserDetailDto,
@@ -30,6 +35,9 @@ export class UsersService extends CrudService<
   constructor(
     @Inject(CACHE_MANAGER)
     private cacheManager: Cache,
+    // @Inject(REQUEST)
+    // private request: Request,
+    // @Inject(CONTEXT) private context
   ) {
     super();
   }
