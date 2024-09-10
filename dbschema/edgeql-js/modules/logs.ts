@@ -8,7 +8,6 @@ export type $AuditLogλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f738
   "browser_info": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "client_id": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "client_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "handler_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "http_method": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "ip": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "url": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
@@ -24,6 +23,8 @@ export type $AuditLogλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f738
   "accept_encoding": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "accept_language": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "referer": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "class_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "handler_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
 }>;
 type $AuditLog = $.ObjectType<"logs::AuditLog", $AuditLogλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],

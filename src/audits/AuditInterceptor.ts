@@ -23,11 +23,21 @@ import { UserDto } from 'src/users/users.dto';
 export class AuditInterceptor implements NestInterceptor {
   constructor(private readonly app: INestApplication<any>) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const ctx = context.switchToHttp();
-    const request = ctx.getRequest<Request>();
-    const response = ctx.getResponse<Response>();
     const startTime = Date.now();
-    const handler = context.getHandler();
+    // console.log(`Request: ${method} ${url}`);
+    return next.handle().pipe(
+      tap((data) => {
+        this.logAudit(context, startTime, data, {});
+      }),
+      catchError((error) => {
+        this.logAudit(context, startTime, {}, error);
+        // 继续抛出异常
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  async shouldBeLog(context: ExecutionContext) {
     const reflector = this.app.get(Reflector);
 
     const isAuditingInClass = reflector.get<boolean>(
@@ -47,38 +57,41 @@ export class AuditInterceptor implements NestInterceptor {
         context.getClass().name,
         isAuditingInClass,
       );
-      return next.handle();
+      return false;
     }
-
-    // console.log(`Request: ${method} ${url}`);
-    return next.handle().pipe(
-      tap((data) => {
-        const endTime = Date.now();
-        const duration = endTime - startTime;
-        Logger.log(`[${handler.name}]`, AuditInterceptor.name);
-        // Logger.log(data, 'Auditing data');
-        this.logAudit(handler.name, request, response, duration, data, {});
-      }),
-      catchError((error) => {
-        // Logger.error(error, 'err');
-        // Logger.error(JSON.stringify(err), 'err44');
-        const endTime = Date.now();
-        const duration = endTime - startTime;
-        this.logAudit(handler.name, request, response, duration, {}, error);
-        // 继续抛出异常
-        return throwError(() => error);
-      }),
-    );
+    return true;
+  }
+  async ignoreHeaders() {
+    return [
+      'host',
+      'referer',
+      'user-agent',
+      'accept-language',
+      'accept-encoding',
+      'authorization',
+    ];
   }
 
   async logAudit(
-    handler_name: string,
-    request: Request,
-    response: Response,
-    duration: number,
+    context: ExecutionContext,
+    startTime: number,
     data: any,
     error: any,
   ) {
+    if (!(await this.shouldBeLog(context))) {
+      return;
+    }
+
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    const ctx = context.switchToHttp();
+    const request = ctx.getRequest<Request>();
+    const response = ctx.getResponse<Response>();
+    const handler = context.getHandler();
+    const service = context.getClass();
+
+    Logger.log(`[${service.name}] ${handler.name} `, AuditInterceptor.name);
+
     const { method, url, headers } = request;
     Logger.log(
       `[END] [${method}] ${url} [${duration}ms]`,
@@ -93,14 +106,7 @@ export class AuditInterceptor implements NestInterceptor {
         ? error.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR
       : response.statusCode;
-    const ignoreHeaders = [
-      'host',
-      'referer',
-      'user-agent',
-      'accept-language',
-      'accept-encoding',
-      'authorization',
-    ];
+    const ignoreHeaders = await this.ignoreHeaders();
     const headerObject = {};
     Object.keys(headers)
       .filter((x) => !ignoreHeaders.includes(x))
@@ -118,7 +124,8 @@ export class AuditInterceptor implements NestInterceptor {
       referer: e.str(headers['referer'] ?? ''),
       accept_language: e.str(headers['accept-language'] ?? ''),
       accept_encoding: e.str((headers['accept-encoding'] as string) ?? ''),
-      handler_name: e.str(handler_name ?? ''),
+      class_name: e.str(service.name ?? ''),
+      handler_name: e.str(handler.name ?? ''),
       http_method: e.str(method),
       http_status: e.int64(http_status),
       url: e.str(url),
@@ -137,7 +144,7 @@ export class AuditInterceptor implements NestInterceptor {
 
     await client.transaction(async (tx) => {
       const insertResult = await insert.run(tx);
-      Logger.log(`[AuditsService] Inserted ${insertResult.id}`, 'Auditing');
+      Logger.log(`Inserted ${insertResult.id}`, AuditInterceptor.name);
     });
   }
 }

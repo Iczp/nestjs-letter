@@ -46,8 +46,12 @@ module logs{
             annotation title := 'HTTP状态码';
         };
 
-        property handler_name -> str {
+        property class_name -> str {
             annotation title := '服务名称';
+        };
+
+        property handler_name -> str {
+            annotation title := '方法名称';
         };
 
         property headers -> json {
