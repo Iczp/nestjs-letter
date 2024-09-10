@@ -29,14 +29,25 @@ export class AuditInterceptor implements NestInterceptor {
     const startTime = Date.now();
     const handler = context.getHandler();
     const reflector = this.app.get(Reflector);
-    const isAuditing = reflector.get<boolean>(
+
+    const isAuditingInClass = reflector.get<boolean>(
+      AuditingKey,
+      context.getClass(),
+    );
+
+    const isAuditingInMethod = reflector.get<boolean>(
       AuditingKey,
       context.getHandler(),
     );
 
-    if (!isAuditing) {
-      console.log('auditing', context.getHandler(), isAuditing);
-      next.handle();
+    if (isAuditingInMethod === false || isAuditingInClass === false) {
+      console.log('auditing', context.getHandler(), isAuditingInMethod);
+      console.log(
+        'isAuditingInClass',
+        context.getClass().name,
+        isAuditingInClass,
+      );
+      return next.handle();
     }
 
     // console.log(`Request: ${method} ${url}`);

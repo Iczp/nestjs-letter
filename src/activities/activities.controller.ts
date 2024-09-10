@@ -9,11 +9,9 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivitiesService } from './activities.service';
-
 import { CrudController } from 'src/bases/CrudController';
-
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
-import { Auditing } from 'src/audits/audits.decorator';
+// import { Auditing } from 'src/audits/audits.decorator';
 import {
   ActivityCreateInput,
   ActivityDetailDto,
@@ -24,6 +22,7 @@ import {
 
 @Controller('activities')
 @ApiTags('Activities')
+// @Auditing(false)
 export class ActivitiesController extends CrudController<
   ActivityDto,
   ActivityDetailDto,
@@ -36,7 +35,7 @@ export class ActivitiesController extends CrudController<
   }
   @Get()
   @ApiOperation({ summary: '活动列表' })
-  @Auditing(false)
+  // @Auditing(false)
   public override getList(
     input: ActivityGetListInput,
   ): Promise<PagedResultDto<ActivityDto>> {

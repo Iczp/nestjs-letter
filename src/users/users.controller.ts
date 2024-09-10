@@ -22,6 +22,7 @@ import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
 @Controller('user')
 @ApiTags('Users')
+
 export class UsersController extends CrudController<
   UserDto,
   UserDetailDto,
