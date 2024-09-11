@@ -7,7 +7,7 @@ import { SeedService } from './seed.service';
 @ApiTags('Seed')
 export class SeedController extends BaseController {
   constructor(readonly service: SeedService) {
-    super();
+    super(service);
   }
 
   @Post()

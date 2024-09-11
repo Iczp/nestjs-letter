@@ -5,11 +5,11 @@ export class CurrentUser {
   private currentUser: any;
 
   public get user(): any {
-    return this.currentUser;
+    return this.currentUser || { id: 'undefined' };
   }
 
   public set user(user: any) {
     this.currentUser = user;
-    Logger.log(user, CurrentUser.name);
+    Logger.log(`set user:${JSON.stringify(user)}`, CurrentUser.name);
   }
 }

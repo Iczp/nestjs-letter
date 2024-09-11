@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -58,6 +59,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (user) {
       request.body['user'] = user;
       this.currentUser.user = user;
+      Logger.log(`set user ${JSON.stringify(user)}`, JwtAuthGuard.name);
     }
 
     if (err || (!user && process.env.NODE_ENV === 'production')) {

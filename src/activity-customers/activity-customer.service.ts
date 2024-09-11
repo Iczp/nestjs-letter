@@ -10,7 +10,7 @@ import { SchemaType } from 'src/types/SchemaType';
 import { GenderText } from 'src/enums/Gender';
 import { exampleColumns, exampleRows } from './activity-customer.example.data';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
-import { assert, checker } from 'src/common';
+import { Assert, Checker } from 'src/common';
 import { client } from 'src/edgedb';
 import { isGuid } from 'src/common/validator';
 import {
@@ -56,19 +56,19 @@ export class ActivityCustomerService extends CrudService<
   ): any {
     return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
       .addIf(
-        !checker.isEmpty(input.activity_id),
+        !Checker.isEmpty(input.activity_id),
         e.op(entity.activity['id'], '=', e.uuid(input.activity_id)),
       )
       .addIf(
-        !checker.isEmpty(input.is_checked),
+        !Checker.isEmpty(input.is_checked),
         e.op(entity.is_checked, '=', e.bool(input.is_checked)),
       )
       .addIf(
-        !checker.isEmpty(input.is_invited),
+        !Checker.isEmpty(input.is_invited),
         e.op(entity.is_invited, '=', e.bool(input.is_invited)),
       )
       .addIf(
-        !checker.isEmpty(input.is_enabled),
+        !Checker.isEmpty(input.is_enabled),
         e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
       )
       .all();
@@ -88,7 +88,7 @@ export class ActivityCustomerService extends CrudService<
   public override async mapToCreateEntity(
     input: ActivityCustomerCreateInput,
   ): PromiseResult {
-    assert.If(
+    Assert.If(
       !isGuid(input.activity_id),
       ` 必需是Guid,activity_id:${input.activity_id}`,
     );
@@ -99,7 +99,7 @@ export class ActivityCustomerService extends CrudService<
 
     console.log('mapToCreateEntity activity', activity);
 
-    assert.If(!activity, '不存在! activity_id:${input.activity_id}');
+    Assert.If(!activity, '不存在! activity_id:${input.activity_id}');
     // e.assert({message:"xxxx"},e.op())
     return {
       activity: q,
@@ -196,8 +196,8 @@ export class ActivityCustomerService extends CrudService<
   ): Promise<ExcelImportResult> {
     console.log('body', request.body);
     const activity_id = request.body.body;
-    assert.If(
-      !checker.isGuid(activity_id),
+    Assert.If(
+      !Checker.isGuid(activity_id),
       `请输入正确的活动ID,${activity_id}`,
     );
 
@@ -222,7 +222,7 @@ export class ActivityCustomerService extends CrudService<
       },
     }));
     const item = await activity.run(client);
-    assert.If(!item, `不存在的活动,Id:${activity_id}`);
+    Assert.If(!item, `不存在的活动,Id:${activity_id}`);
     const query = e.params({ items: e.json }, (params) => {
       return e.for(e.json_array_unpack(params.items), (item) => {
         return e.insert(e.ActivityCustomer, {

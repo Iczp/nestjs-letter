@@ -9,12 +9,15 @@ import { AuthModule } from './auth/auth.module';
 import { SeedModule } from './seed/seed.module';
 import { RolesModule } from './roles/roles.module';
 import { AuditsModule } from './audits/audits.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ActivitiesModule } from './activities/activities.module';
 import { LoggerModule } from './logger/logger.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { CurrentUser } from './users/users.current';
+import { AuditInterceptor } from './audits/AuditInterceptor';
+import { AllExceptionsFilter } from './common/AllExceptionsFilter';
+import { AuditsService } from './audits/audits.service';
 // import { LocalAuthGuard } from './auth/local-auth.guard';
 // import { LocalStrategy } from './auth/local.strategy';
 // import { JwtStrategy } from './auth/jwt.strategy';
@@ -44,12 +47,21 @@ import { CurrentUser } from './users/users.current';
   controllers: [AppController],
   providers: [
     {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+    {
       // 默认应用 API Key 守卫
       provide: APP_GUARD,
       // useClass: LocalAuthGuard,
       useClass: JwtAuthGuard,
     },
     AppService,
+    AuditsService,
     // LocalStrategy,
     // JwtStrategy,
     // UsersService,

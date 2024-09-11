@@ -8,10 +8,15 @@ import {
   INestApplication,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { AuditsService } from 'src/audits/audits.service';
 
 @Catch() // 捕获所有异常
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private readonly app: INestApplication<any>) {}
+  private app: INestApplication<any>;
+  constructor(private readonly auditsService: AuditsService) {}
+  setApp(app: INestApplication<any>) {
+    this.app = app;
+  }
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -24,6 +29,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
     // 输出异常信息到控制台
     Logger.error(`${exception.message}`, AllExceptionsFilter.name);
     Logger.error(` ${exception.stack}`, AllExceptionsFilter.name);
+
+    // this.auditsService
+    //   .errAudit(ctx as any, Date.now(), exception)
+    //   .finally(() => {});
 
     // 可以根据需要调整响应内容
     response.status(status).json({

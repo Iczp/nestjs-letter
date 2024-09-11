@@ -28,6 +28,9 @@ RUN pnpm install --frozen-lockfile
 # 将项目文件复制到容器中
 COPY . .
 
+# 这里我们增加了NODE_OPTIONS环境变量
+ENV NODE_OPTIONS=--max_old_space_size=8192
+
 # 编译NestJS项目
 RUN pnpm build
 

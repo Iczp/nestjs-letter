@@ -5,6 +5,7 @@ import {
   Get,
   Post,
   Query,
+  Req,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -16,10 +17,15 @@ import { ExcelUploadInput } from 'src/dtos/ExcelUploadInput';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { Response } from 'express';
 import { IExcelService } from './IExcelService';
+
 export abstract class ExcelController<TGetListInput> extends BaseController {
+  protected Policy_Excel_Tpl?: string;
+  protected Policy_Excel_Import?: string;
+  protected Policy_Excel_Ouput?: string;
+
   // public readonly excelService: IExcelService;
   constructor(readonly service: IExcelService<TGetListInput>) {
-    super();
+    super(service);
     // this.excelService = excelService;
   }
 
@@ -42,7 +48,9 @@ export abstract class ExcelController<TGetListInput> extends BaseController {
 
   @Get('excel/tpl')
   @ApiOperation({ summary: 'excel 模板', description: `excel 模板` })
-  public async getExcelTemplate(@Res() res: Response) {
+  public async getExcelTemplate(@Res() res: Response, @Req() req: any) {
+    this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Excel_Tpl);
     const { filename, workbook } = await this.service.generateExampleExcel();
     this.resExcelFile({ res, filename });
     await workbook.xlsx.write(res);
@@ -51,7 +59,13 @@ export abstract class ExcelController<TGetListInput> extends BaseController {
 
   @Get('excel/output')
   @ApiOperation({ summary: '导出数据到 Excel', description: `Excel 数据` })
-  public async exportExcel(@Res() res: Response, input: TGetListInput) {
+  public async exportExcel(
+    @Res() res: Response,
+    input: TGetListInput,
+    @Req() req: any,
+  ) {
+    this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Excel_Ouput);
     // try {
     const { filename, workbook } = await this.service.generateExcel(input);
     this.resExcelFile({ res, filename });
@@ -90,7 +104,10 @@ export abstract class ExcelController<TGetListInput> extends BaseController {
     @UploadedFile() file: Express.Multer.File,
     @Query() query: any,
     @Body() body: any,
+    @Req() req: any,
   ): Promise<ExcelImportResult> {
+    this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Excel_Import);
     console.log(body, query);
     const workbook = new Workbook();
     await workbook.xlsx.load(file.buffer);

@@ -17,7 +17,7 @@ import { AuthInput } from './auth.dto';
 @ApiTags('Auth')
 export class AuthController extends BaseController {
   constructor(private authService: AuthService) {
-    super();
+    super(authService);
   }
 
   @HttpCode(HttpStatus.OK)

@@ -9,6 +9,7 @@ import { SchemaType } from 'src/types/SchemaType';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
 import { client } from 'src/edgedb';
 import { BaseService } from './BaseService';
+import { Req } from '@nestjs/common';
 
 export abstract class ExcelService<TGetListInput>
   extends BaseService
@@ -24,10 +25,10 @@ export abstract class ExcelService<TGetListInput>
   public async importExcel(
     workbook: Workbook,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    request?: any,
+    @Req() req: any,
   ): Promise<ExcelImportResult> {
     // throw new Error('Method [importExcel] not implemented.');
-
+    this.setRequest(req);
     const sheets = workbook.worksheets.map((x) => ({
       name: x.name,
       state: x.state,

@@ -1,3 +1,45 @@
+export const Roles_Create = 'Roles_Create';
+
+export const Roles_Update = 'Roles_Update';
+
+export const Roles_GetItem = 'Roles_GetItem';
+
+export const Roles_GetList = 'Roles_GetList';
+
+export const Roles_Delete = 'Roles_Delete';
+
+export const Roles_Excel_Tpl = 'Roles_Excel_Tpl';
+
+export const Roles_Excel_Import = 'Roles_Excel_Import';
+
+export const Roles_Excel_Ouput = 'Roles_Excel_Ouput';
+
+export const Roles_Set_IsEnabled = 'Roles_Set_IsEnabled';
+
+export const Roles_Set_Permisstions = 'Roles_Set_Permisstions';
+
+// ------------------------------------------------------------------------------
+
+export const Users_Create = 'Users_Create';
+
+export const Users_Update = 'Users_Update';
+
+export const Users_GetItem = 'Users_GetItem';
+
+export const Users_GetList = 'Users_GetList';
+
+export const Users_Delete = 'Users_Delete';
+
+export const Users_Excel_Tpl = 'Users_Excel_Tpl';
+
+export const Users_Excel_Import = 'Users_Excel_Import';
+
+export const Users_Excel_Ouput = 'Users_Excel_Ouput';
+
+export const Users_Set_IsEnabled = 'Users_Set_IsEnabled';
+
+// ------------------------------------------------------------------------------
+
 export const Activity_Create = 'Activity_Create';
 
 export const Activity_Update = 'Activity_Update';

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivitiesService } from './activities.service';
@@ -19,6 +20,7 @@ import {
   ActivityGetListInput,
   ActivityUpdateInput,
 } from './activities.dto';
+import { PermissionsConsts } from 'src/permissions';
 
 @Controller('activities')
 @ApiTags('Activities')
@@ -30,6 +32,15 @@ export class ActivitiesController extends CrudController<
   ActivityCreateInput,
   ActivityUpdateInput
 > {
+  override Policy_GetItem = PermissionsConsts.Activity_GetItem;
+  override Policy_GetList = PermissionsConsts.Activity_GetList;
+  override Policy_Create = PermissionsConsts.Activity_Create;
+  override Policy_Update = PermissionsConsts.Activity_Update;
+  override Policy_Delete = PermissionsConsts.Activity_Delete;
+  override Policy_Set_IsEnabled = PermissionsConsts.Activity_Set_IsEnabled;
+  override Policy_Excel_Import = PermissionsConsts.Activity_Excel_Import;
+  override Policy_Excel_Ouput = PermissionsConsts.Activity_Excel_Ouput;
+  override Policy_Excel_Tpl = PermissionsConsts.Activity_Excel_Tpl;
   constructor(private readonly userService: ActivitiesService) {
     super(userService);
   }
@@ -38,22 +49,27 @@ export class ActivitiesController extends CrudController<
   // @Auditing(false)
   public override getList(
     input: ActivityGetListInput,
+    @Req() req: any,
   ): Promise<PagedResultDto<ActivityDto>> {
-    return super.getList(input);
+    return super.getList(input, req);
   }
 
   @Get(':id')
   @ApiOperation({ summary: '活动详情' })
-  public override getItem(@Param('id') id: string): Promise<ActivityDetailDto> {
-    return super.getItem(id);
+  public override getItem(
+    @Param('id') id: string,
+    @Req() req: any,
+  ): Promise<ActivityDetailDto> {
+    return super.getItem(id, req);
   }
 
   @Post()
   @ApiOperation({ summary: '创建活动' })
   public override create(
     @Body() input: ActivityCreateInput,
+    @Req() req: any,
   ): Promise<ActivityDetailDto> {
-    return super.create(input);
+    return super.create(input, req);
   }
 
   @Put(':id')
@@ -61,13 +77,14 @@ export class ActivitiesController extends CrudController<
   public override update(
     @Param('id') id: string,
     input: ActivityUpdateInput,
+    @Req() req: any,
   ): Promise<ActivityDetailDto> {
-    return super.update(id, input);
+    return super.update(id, input, req);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: '删除活动' })
-  public override delete(id: string): Promise<void> {
-    return super.delete(id);
+  public override delete(id: string, @Req() req: any): Promise<void> {
+    return super.delete(id, req);
   }
 }

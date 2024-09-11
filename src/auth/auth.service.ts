@@ -3,23 +3,26 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as security from 'src/common/security';
-import { assert } from 'src/common';
+import { Assert } from 'src/common';
 import { isEmpty } from 'src/common/validator';
 import { AuthInput, TokenResult } from './auth.dto';
 import { ConfigService } from '@nestjs/config';
 import { JWT_SECRET } from './jwtConstants';
+import { BaseService } from 'src/bases/BaseService';
 @Injectable()
-export class AuthService {
+export class AuthService extends BaseService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+  ) {
+    super();
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async signIn(input: AuthInput): Promise<TokenResult> {
     const { account, password, validate_code } = input;
-    assert.If(isEmpty(validate_code), `验证码不能为空`);
+    Assert.If(isEmpty(validate_code), `验证码不能为空`);
     const user = await this.userService.validatePassword(account, password);
     const username = user.name;
     const payload = { sub: user.id, username };

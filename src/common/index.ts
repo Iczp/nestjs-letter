@@ -1,7 +1,7 @@
-export * as assert from './assert';
+export * as Assert from './assert';
 
-export * as checker from './validator';
+export * as Checker from './validator';
 
-export * as convertor from './convertor';
+export * as Convertor from './convertor';
 
-export * as mapper from './mapper';
+export * as Mapper from './mapper';

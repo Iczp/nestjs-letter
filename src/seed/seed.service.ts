@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { client } from 'src/edgedb';
 import e from 'dbschema/edgeql-js'; // auto-generated code
-import * as permissionsConsts from '../permissions/permissionsConsts';
+import { BaseService } from 'src/bases/BaseService';
+import { PermissionsConsts } from 'src/permissions';
 
 type EntityType = { id: string };
 @Injectable()
-export class SeedService {
+export class SeedService extends BaseService {
   public async seed() {
     const roles = await this.seedRoles();
 
@@ -51,7 +52,7 @@ export class SeedService {
       });
     });
 
-    const items = Object.entries(permissionsConsts).map(([key, value]) => ({
+    const items = Object.entries(PermissionsConsts).map(([key, value]) => ({
       tag: '',
       name: key,
       code: value,

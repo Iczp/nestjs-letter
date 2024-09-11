@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Inject, Injectable, Scope } from '@nestjs/common';
-
+import { Inject, Injectable, Req, Scope } from '@nestjs/common';
 import { CrudService } from 'src/bases/CrudService';
-
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { isEmpty } from 'class-validator';
 import { isGuid } from 'src/common/validator';
 import * as security from 'src/common/security';
 import { client, e } from 'src/edgedb';
-import { assert } from 'src/common';
+import { Assert } from 'src/common';
 import { Cache } from '@nestjs/cache-manager';
 import {
   UserCreateInput,
@@ -21,9 +19,11 @@ import {
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
+import { CurrentUser } from './users.current';
+import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
 @Injectable({
-  // scope: Scope.REQUEST
+  // scope: Scope.REQUEST,
 })
 export class UsersService extends CrudService<
   UserDto,
@@ -38,6 +38,7 @@ export class UsersService extends CrudService<
     // @Inject(REQUEST)
     // private request: Request,
     // @Inject(CONTEXT) private context
+    private currentUser: CurrentUser,
   ) {
     super();
   }
@@ -57,17 +58,26 @@ export class UsersService extends CrudService<
       }))
       .run(client);
 
-    assert.If(users.length === 0, `账号不存在:${account}`);
+    Assert.If(users.length === 0, `账号不存在:${account}`);
 
     const user = users[0];
 
-    assert.If(user.is_deleted, `用户不存在: ${account}`);
+    Assert.If(user.is_deleted, `用户不存在: ${account}`);
 
-    assert.If(!(await security.compare(password, user.password)), `密码错误`);
+    Assert.If(!(await security.compare(password, user.password)), `密码错误`);
 
-    assert.If(!user.is_enabled, `用户被禁用: ${account}`);
+    Assert.If(!user.is_enabled, `用户被禁用: ${account}`);
 
     return user;
+  }
+
+  override async getList(
+    input: UserGetListInput,
+  ): Promise<PagedResultDto<UserDto>> {
+    return {
+      user: this.currentUser.user,
+      ...(await super.getList(input)),
+    } as PagedResultDto<UserDto>;
   }
 
   override listSelect(

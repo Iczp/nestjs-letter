@@ -7,7 +7,7 @@ import { Filters } from 'src/common/Filters';
 import { isEmpty, isGuid } from 'src/common/validator';
 
 import { client } from 'src/edgedb';
-import { assert } from 'src/common';
+import { Assert } from 'src/common';
 import {
   RoleCreateInput,
   RoleDetailDto,
@@ -95,7 +95,7 @@ export class RolesService extends CrudService<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: SetPermissionsInput,
   ) {
-    assert.If(!isGuid(id), `必须为 uuid, id:${id}`);
+    Assert.If(!isGuid(id), `必须为 uuid, id:${id}`);
     const idlist = input.permisstions;
     Logger.log(idlist, 'RoleSService.setPermissions');
     const selPermisstions = e.params(

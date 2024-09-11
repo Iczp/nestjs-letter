@@ -115,3 +115,8 @@ export class UserGetListInput extends GetListInput {
   })
   public is_enabled?: boolean;
 }
+
+// export class ArgsInput {
+//   @Req() req: any;
+//   @Body() body: any;
+// }
