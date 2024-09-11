@@ -49,7 +49,7 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/edgedb.toml ./
 
-# RUN npm install -g pnpm
+RUN npm install -g pnpm
 
 RUN pnpm install --frozen-lockfile --production
 
