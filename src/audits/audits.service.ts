@@ -12,6 +12,7 @@ import { AuditingKey } from './audits.decorator';
 import { UserDto } from 'src/users/users.dto';
 import { IncomingHttpHeaders } from 'http';
 import { BaseService } from 'src/bases/BaseService';
+import { logger } from 'src/logger/logger.config';
 @Injectable()
 export class AuditsService extends BaseService {
   constructor(private readonly reflector: Reflector) {
@@ -19,27 +20,32 @@ export class AuditsService extends BaseService {
   }
 
   async shouldBeLog(context: ExecutionContext) {
-    const reflector = this.reflector; // this.app.get(Reflector);
+    try {
+      const reflector = this.reflector; // this.app.get(Reflector);
 
-    const isAuditingInClass = reflector.get<boolean>(
-      AuditingKey,
-      context.getClass(),
-    );
-
-    const isAuditingInMethod = reflector.get<boolean>(
-      AuditingKey,
-      context.getHandler(),
-    );
-
-    if (isAuditingInMethod === false || isAuditingInClass === false) {
-      console.log('auditing', context.getHandler(), isAuditingInMethod);
-      console.log(
-        'isAuditingInClass',
-        context.getClass().name,
-        isAuditingInClass,
+      const isAuditingInClass = reflector.get<boolean>(
+        AuditingKey,
+        context.getClass(),
       );
-      return false;
+
+      const isAuditingInMethod = reflector.get<boolean>(
+        AuditingKey,
+        context.getHandler(),
+      );
+
+      if (isAuditingInMethod === false || isAuditingInClass === false) {
+        console.log('auditing', context.getHandler(), isAuditingInMethod);
+        console.log(
+          'isAuditingInClass',
+          context.getClass().name,
+          isAuditingInClass,
+        );
+        return false;
+      }
+    } catch (error) {
+      logger.warn(error, 'AAA');
     }
+
     return true;
   }
   async ignoreHeaders() {
@@ -55,6 +61,13 @@ export class AuditsService extends BaseService {
   async getIpAddress(headers: IncomingHttpHeaders, request: Request) {
     return (headers['x-forwarded-for'] ||
       request.connection.remoteAddress) as string;
+  }
+
+  async errAudit(context: ExecutionContext, startTime: number, error: any) {
+    return await this.logAudit(context, startTime, {}, error);
+  }
+  async infoAudit(context: ExecutionContext, startTime: number, data: any) {
+    return await this.logAudit(context, startTime, data, {});
   }
 
   async logAudit(
@@ -75,7 +88,7 @@ export class AuditsService extends BaseService {
     const handler = context.getHandler();
     const service = context.getClass();
 
-    Logger.log(`[${service.name}] ${handler.name} `, AuditsService.name);
+    Logger.log(`[${service?.name}] ${handler?.name} `, AuditsService.name);
 
     const { method, url, headers } = request;
     Logger.log(`[END] [${method}] ${url} [${duration}ms]`, AuditsService.name);
@@ -113,8 +126,8 @@ export class AuditsService extends BaseService {
       referer: e.str(headers['referer'] ?? ''),
       accept_language: e.str(headers['accept-language'] ?? ''),
       accept_encoding: e.str((headers['accept-encoding'] as string) ?? ''),
-      class_name: e.str(service.name ?? ''),
-      handler_name: e.str(handler.name ?? ''),
+      class_name: e.str(service?.name ?? ''),
+      handler_name: e.str(handler?.name ?? ''),
       http_method: e.str(method),
       http_status: e.int64(http_status),
       ip: e.str(ip || ''),
