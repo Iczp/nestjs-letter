@@ -22,7 +22,13 @@ import { UserDto } from 'src/users/users.dto';
 import { IncomingHttpHeaders } from 'http';
 @Injectable()
 export class AuditInterceptor implements NestInterceptor {
-  constructor(private readonly app: INestApplication<any>) {}
+  private app: INestApplication<any>;
+  constructor(private readonly reflector: Reflector) {}
+  setApp(app: INestApplication<any>) {
+    this.app = app;
+    return this;
+  }
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const startTime = Date.now();
     Logger.log(`startTime:  ${startTime}`, AuditInterceptor.name);
@@ -39,7 +45,7 @@ export class AuditInterceptor implements NestInterceptor {
   }
 
   async shouldBeLog(context: ExecutionContext) {
-    const reflector = this.app.get(Reflector);
+    const reflector = this.reflector; // this.app.get(Reflector);
 
     const isAuditingInClass = reflector.get<boolean>(
       AuditingKey,

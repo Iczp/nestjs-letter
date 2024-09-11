@@ -88,10 +88,10 @@ export class ActivityCustomerService extends CrudService<
   public override async mapToCreateEntity(
     input: ActivityCustomerCreateInput,
   ): PromiseResult {
-    assert.If(
-      !isGuid(input.activity_id),
-      ` 必需是Guid,activity_id:${input.activity_id}`,
-    );
+    // assert.If(
+    //   !isGuid(input.activity_id),
+    //   ` 必需是Guid,activity_id:${input.activity_id}`,
+    // );
     const q = e.select(e.Activity, () => ({
       filter_single: { id: e.uuid(input.activity_id) },
     }));

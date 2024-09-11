@@ -11,7 +11,11 @@ import { Request, Response } from 'express';
 
 @Catch() // 捕获所有异常
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private readonly app: INestApplication<any>) {}
+  private app: INestApplication<any>;
+  constructor() {}
+  setApp(app: INestApplication<any>) {
+    this.app = app;
+  }
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
