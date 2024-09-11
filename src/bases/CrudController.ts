@@ -20,6 +20,13 @@ export abstract class CrudController<
   TCreateInput,
   TUpdateInput,
 > extends ExcelController<TGetListInput> {
+  protected Policy_GetItem?: string;
+  protected Policy_GetList?: string;
+  protected Policy_Create?: string;
+  protected Policy_Update?: string;
+  protected Policy_Delete?: string;
+  protected Policy_Set_IsEnabled?: string;
+
   // implements ICrudService<TDto, TDetailDto, TCteateInput, TUpdateInput>
   // public readonly service: IService;
   constructor(
@@ -43,6 +50,7 @@ export abstract class CrudController<
   ): Promise<PagedResultDto<TDto>> {
     console.log(input);
     this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_GetList);
     return this.service.getList(input);
   }
 
@@ -53,6 +61,7 @@ export abstract class CrudController<
     @Req() req: any,
   ): Promise<TDetailDto> {
     this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_GetItem);
     return this.service.getItem(id);
   }
 
@@ -64,6 +73,7 @@ export abstract class CrudController<
     @Req() req: any,
   ): Promise<any> {
     this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Set_IsEnabled);
     return this.service.updateEntity(id, { is_enabled });
   }
 
@@ -75,6 +85,7 @@ export abstract class CrudController<
   ): Promise<TDetailDto> {
     console.log(input);
     this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Create);
     return this.service.create(input);
   }
 
@@ -86,6 +97,7 @@ export abstract class CrudController<
     @Req() req: any,
   ): Promise<TDetailDto> {
     this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Update);
     console.log(id, input);
     return this.service.update(id, input);
   }
@@ -95,6 +107,7 @@ export abstract class CrudController<
   public async delete(@Query('id') id: string, @Req() req: any) {
     console.log(id);
     this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Delete);
     await this.service.delete(id);
   }
 }

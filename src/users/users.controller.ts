@@ -35,6 +35,16 @@ export class UsersController extends CrudController<
   UserCreateInput,
   UserUpdateInput
 > {
+  override Policy_GetItem = PermissionsConsts.Users_GetItem;
+  override Policy_GetList = PermissionsConsts.Users_GetList;
+  override Policy_Create = PermissionsConsts.Users_Create;
+  override Policy_Update = PermissionsConsts.Users_Update;
+  override Policy_Delete = PermissionsConsts.Users_Delete;
+  override Policy_Set_IsEnabled = PermissionsConsts.Users_Set_IsEnabled;
+  override Policy_Excel_Import = PermissionsConsts.Users_Excel_Import;
+  override Policy_Excel_Ouput = PermissionsConsts.Users_Excel_Ouput;
+  override Policy_Excel_Tpl = PermissionsConsts.Users_Excel_Tpl;
+
   constructor(private readonly userService: UsersService) {
     super(userService);
   }
@@ -45,15 +55,7 @@ export class UsersController extends CrudController<
     input: UserGetListInput,
     @Req() req: any,
   ): Promise<PagedResultDto<UserDto>> {
-    await this.checkPolicyName(req, PermissionsConsts.Users_GetList);
     return super.getList(input, req);
-  }
-
-  @Get('list')
-  @ApiOperation({ summary: '用户列表' })
-  public getList1(input: UserGetListInput, @Req() req) {
-    console.log(req);
-    return { user: req.user };
   }
 
   @Get(':id')

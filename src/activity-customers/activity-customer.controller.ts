@@ -23,6 +23,7 @@ import {
 } from './activity-customer.dto';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { Response } from 'express';
+import { PermissionsConsts } from 'src/permissions';
 
 @Controller('activity-customer')
 @ApiTags('ActivityCustomer')
@@ -33,6 +34,17 @@ export class ActivityCustomerController extends CrudController<
   ActivityCustomerCreateInput,
   ActivityCustomerUpdateInput
 > {
+  override Policy_GetItem = PermissionsConsts.ActivityCustomer_GetItem;
+  override Policy_GetList = PermissionsConsts.ActivityCustomer_GetList;
+  override Policy_Create = PermissionsConsts.ActivityCustomer_Create;
+  override Policy_Update = PermissionsConsts.ActivityCustomer_Update;
+  override Policy_Delete = PermissionsConsts.ActivityCustomer_Delete;
+  override Policy_Set_IsEnabled =
+    PermissionsConsts.ActivityCustomer_Set_IsEnabled;
+  override Policy_Excel_Import =
+    PermissionsConsts.ActivityCustomer_Excel_Import;
+  override Policy_Excel_Ouput = PermissionsConsts.ActivityCustomer_Excel_Ouput;
+  override Policy_Excel_Tpl = PermissionsConsts.ActivityCustomer_Excel_Tpl;
   constructor(readonly service: ActivityCustomerService) {
     super(service);
   }

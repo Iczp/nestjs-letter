@@ -53,21 +53,30 @@ export class BaseController {
       role: {
         name: true,
       },
-      permission: {
-        id: true,
-        name: true,
-        code: true,
-      },
+      // permission: {
+      //   id: true,
+      //   name: true,
+      //   code: true,
+      // },
       // filter: e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))),
       filter: new Filters()
-        .add(e.op(rp.role.users.id, '=', e.uuid(userId)))
+        .add(e.op(rp.role.users.user.id, '?=', e.uuid(userId)))
         .add(e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))))
         .all(),
     }));
 
+    // Logger.log(`query:${query.toEdgeQL()}`, BaseController.name);
+
     const granted = await query.run(client);
 
-    Logger.log(granted, BaseController.name);
+    const grantedRoles = granted.map((x) => x.role.name);
+
+    // Logger.log(granted, BaseController.name);
+
+    Logger.log(
+      `Authorized roles:[${grantedRoles.join(',')}]`,
+      BaseController.name,
+    );
 
     Assert.If(granted.length === 0, `未授权:[${policyNames.join(',')}]`);
   }

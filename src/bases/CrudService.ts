@@ -10,6 +10,7 @@ import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
 import { IService } from './IService';
+import { Assert, Checker } from 'src/common';
 
 export abstract class CrudService<
     TDto,
@@ -82,6 +83,7 @@ export abstract class CrudService<
 
   public async getItem(id: string): Promise<TDetailDto> {
     Logger.log(`getItem id:${id}`, CrudService.name);
+    Assert.IfNotGuid(id);
     await this.checkPolicy(this.GetItem_PolicyName);
     const query = e.select(this.entity, (entity) => {
       const filter = new Filters([e.op(entity['id'], '=', e.uuid(id))])
