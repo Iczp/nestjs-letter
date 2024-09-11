@@ -17,6 +17,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { CurrentUser } from './users/users.current';
 import { AuditInterceptor } from './audits/AuditInterceptor';
 import { AllExceptionsFilter } from './common/AllExceptionsFilter';
+import { AuditsService } from './audits/audits.service';
 // import { LocalAuthGuard } from './auth/local-auth.guard';
 // import { LocalStrategy } from './auth/local.strategy';
 // import { JwtStrategy } from './auth/jwt.strategy';
@@ -60,6 +61,7 @@ import { AllExceptionsFilter } from './common/AllExceptionsFilter';
       useClass: JwtAuthGuard,
     },
     AppService,
+    AuditsService,
     // LocalStrategy,
     // JwtStrategy,
     // UsersService,
