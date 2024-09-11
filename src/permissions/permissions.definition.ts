@@ -1,4 +1,4 @@
-import * as PermissionsConsts from './permissionsConsts';
+import { PermissionsConsts } from '.';
 
 export type PermissionType = {
   group: string;

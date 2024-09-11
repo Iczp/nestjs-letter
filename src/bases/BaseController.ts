@@ -1,6 +1,8 @@
 import { ApiBearerAuth, ApiSecurity } from '@nestjs/swagger';
 import { IService } from './IService';
-
+import { isEmpty } from 'src/common/validator';
+import { assert } from 'src/common';
+import { PermissionsConsts } from 'src/permissions';
 // import { UseGuards } from '@nestjs/common';
 // import { ApiKeyGuard } from '../api-key/api-key.guard';
 
@@ -19,5 +21,20 @@ export class BaseController {
 
   protected setServiceRequest(req: any): void {
     this.service.setRequest(req);
+  }
+
+  protected checkPolicyName(req: any, policyName: string | string[]) {
+    if (isEmpty(policyName)) {
+      return;
+    }
+
+    const policyNames = Array.isArray(policyName) ? policyName : [policyName];
+    const undefinition = Object.keys(PermissionsConsts).filter(
+      (x) => !policyNames.includes(x),
+    );
+    assert.If(
+      undefinition.length > 0,
+      `未定义权限(${undefinition.length}): ${undefinition.join(',')} `,
+    );
   }
 }
