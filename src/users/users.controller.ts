@@ -41,10 +41,11 @@ export class UsersController extends CrudController<
   @Get()
   @ApiOperation({ summary: '用户列表' })
   @Authorize({ policy: PermissionsConsts.Users_GetList })
-  public override getList(
+  public override async getList(
     input: UserGetListInput,
     @Req() req: any,
   ): Promise<PagedResultDto<UserDto>> {
+    await this.checkPolicyName(req, PermissionsConsts.Users_GetList);
     return super.getList(input, req);
   }
 

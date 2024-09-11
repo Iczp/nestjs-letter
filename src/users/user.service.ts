@@ -7,7 +7,7 @@ import { isEmpty } from 'class-validator';
 import { isGuid } from 'src/common/validator';
 import * as security from 'src/common/security';
 import { client, e } from 'src/edgedb';
-import { assert } from 'src/common';
+import { Assert } from 'src/common';
 import { Cache } from '@nestjs/cache-manager';
 import {
   UserCreateInput,
@@ -58,15 +58,15 @@ export class UsersService extends CrudService<
       }))
       .run(client);
 
-    assert.If(users.length === 0, `账号不存在:${account}`);
+    Assert.If(users.length === 0, `账号不存在:${account}`);
 
     const user = users[0];
 
-    assert.If(user.is_deleted, `用户不存在: ${account}`);
+    Assert.If(user.is_deleted, `用户不存在: ${account}`);
 
-    assert.If(!(await security.compare(password, user.password)), `密码错误`);
+    Assert.If(!(await security.compare(password, user.password)), `密码错误`);
 
-    assert.If(!user.is_enabled, `用户被禁用: ${account}`);
+    Assert.If(!user.is_enabled, `用户被禁用: ${account}`);
 
     return user;
   }

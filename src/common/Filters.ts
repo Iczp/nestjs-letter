@@ -13,6 +13,11 @@ export class Filters /** <T extends TypeSet<$bool, Cardinality>> */ {
     this.array = [...initialArray];
   }
 
+  add(value: any): this {
+    this.array.push(value);
+    return this;
+  }
+
   /**
    * 条件添加
    * @param condition 条件 True

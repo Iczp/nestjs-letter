@@ -1,8 +1,10 @@
 import { ApiBearerAuth, ApiSecurity } from '@nestjs/swagger';
 import { IService } from './IService';
-import { isEmpty } from 'src/common/validator';
-import { assert } from 'src/common';
+import { Assert, Checker } from 'src/common';
 import { PermissionsConsts } from 'src/permissions';
+import { client, e } from 'src/edgedb';
+import { Filters } from 'src/common/Filters';
+import { Logger } from '@nestjs/common';
 // import { UseGuards } from '@nestjs/common';
 // import { ApiKeyGuard } from '../api-key/api-key.guard';
 
@@ -23,18 +25,50 @@ export class BaseController {
     this.service.setRequest(req);
   }
 
-  protected checkPolicyName(req: any, policyName: string | string[]) {
-    if (isEmpty(policyName)) {
+  protected async checkPolicyName(req: any, policyName: string | string[]) {
+    if (Checker.isEmpty(policyName)) {
       return;
     }
 
     const policyNames = Array.isArray(policyName) ? policyName : [policyName];
-    const undefinition = Object.keys(PermissionsConsts).filter(
-      (x) => !policyNames.includes(x),
-    );
-    assert.If(
+    const permissions = Object.keys(PermissionsConsts);
+    const undefinition = policyNames.filter((x) => !permissions.includes(x));
+    Assert.If(
       undefinition.length > 0,
       `未定义权限(${undefinition.length}): ${undefinition.join(',')} `,
     );
+
+    const userId = req.user?.id;
+
+    console.log('req.user:', req.user);
+
+    console.log('policyNames:', policyNames);
+
+    Assert.If(!Checker.isGuid(userId), '当前用户未登录，请先登录');
+
+    Logger.log(`userId:${userId}`, BaseController.name);
+
+    const query = e.select(e.RolePermission, (rp) => ({
+      id: true,
+      role: {
+        name: true,
+      },
+      permission: {
+        id: true,
+        name: true,
+        code: true,
+      },
+      // filter: e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))),
+      filter: new Filters()
+        .add(e.op(rp.role.users.id, '=', e.uuid(userId)))
+        .add(e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))))
+        .all(),
+    }));
+
+    const granted = await query.run(client);
+
+    Logger.log(granted, BaseController.name);
+
+    Assert.If(granted.length === 0, `未授权:[${policyNames.join(',')}]`);
   }
 }
