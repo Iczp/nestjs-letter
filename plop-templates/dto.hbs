@@ -1,0 +1,104 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsNotEmpty } from 'class-validator';
+import { GetListInput } from 'src/bases/GetListInput';
+import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+
+export class {{pascalCase name}}UpdateInput {
+  @IsNotEmpty()
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty({
+    description: '是否公开',
+    default: true,
+  })
+  is_public?: boolean;
+
+  @ApiProperty({
+    description: '是否默认',
+    default: false,
+  })
+  is_default?: boolean;
+
+  @ApiProperty({
+    description: '是否启用',
+    default: true,
+  })
+  is_enabled?: boolean;
+}
+
+export class {{pascalCase name}}CreateInput extends {{pascalCase name}}UpdateInput {
+  @IsNotEmpty()
+  @ApiProperty()
+  code!: string;
+
+  @ApiProperty({
+    description: '是否固定',
+    default: false,
+    required: false,
+  })
+  is_static?: boolean;
+}
+
+export class {{pascalCase name}}Dto extends BaseEntityDto {
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  code!: string;
+
+  @ApiProperty({
+    description: '是否公开',
+  })
+  is_public?: boolean;
+
+  @ApiProperty({
+    description: '是否固定',
+  })
+  is_static?: boolean;
+
+  @ApiProperty({
+    description: '是否默认',
+  })
+  is_default?: boolean;
+
+  @ApiProperty({
+    description: '是否启用',
+  })
+  is_enabled?: boolean;
+}
+
+export class {{pascalCase name}}DetailDto extends {{pascalCase name}}Dto {}
+
+export class {{pascalCase name}}GetListInput extends GetListInput {
+  @ApiProperty({
+    required: false,
+    description: '是否公开',
+  })
+  is_public?: boolean;
+
+  @ApiProperty({
+    required: false,
+    description: '是否固定',
+  })
+  is_static?: boolean;
+
+  @ApiProperty({
+    required: false,
+    description: '是否默认',
+  })
+  is_default?: boolean;
+
+  @IsBoolean()
+  @ApiProperty({
+    required: false,
+  })
+  public is_enabled?: boolean;
+}
+
+export class SetPermissionsInput {
+  @ApiProperty({
+    description: '权限列表',
+  })
+  permisstions: string[];
+}

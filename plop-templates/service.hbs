@@ -1,0 +1,86 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { CrudService } from 'src/bases/CrudService';
+import { PromiseResult } from 'src/types/PromiseResult';
+import { Filters } from 'src/common/Filters';
+import { e, client } from 'src/edgedb';
+import { Assert, Checker } from 'src/common';
+import {
+  {{pascalCase name}}CreateInput,
+  {{pascalCase name}}DetailDto,
+  {{pascalCase name}}Dto,
+  {{pascalCase name}}GetListInput,
+  {{pascalCase name}}UpdateInput,
+} from './{{kebabCase name}}.dto';
+@Injectable()
+export class {{pascalCase name}}Service extends CrudService<
+  {{pascalCase name}}Dto,
+  {{pascalCase name}}DetailDto,
+  {{pascalCase name}}GetListInput,
+  {{pascalCase name}}CreateInput,
+  {{pascalCase name}}UpdateInput
+> {
+  public readonly entity = e.{{pascalCase name}};
+
+  public override itemSelect(id: string, entity: any): object {
+    return {
+      ...entity['*'],
+      permissions: {
+        id: true,
+        creation_time: true,
+        is_deleted: true,
+        permission: {
+          id: true,
+          name: true,
+          code: true,
+          is_enabled: true,
+        },
+      },
+    };
+  }
+
+  public override listFilter(
+    input: {{pascalCase name}}GetListInput,
+    // entity: ExtractDBType<typeof e.{{pascalCase name}}>,
+    entity: any,
+  ) {
+    return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
+
+      .addIf(!Checker.isEmpty(input.is_default), () =>
+        e.op(entity.is_default, '?=', e.bool(input.is_default)),
+      )
+      .addIf(!Checker.isEmpty(input.is_public), () =>
+        e.op(entity.is_public, '?=', e.bool(input.is_public)),
+      )
+      .addIf(!Checker.isEmpty(input.is_static), () =>
+        e.op(entity.is_static, '?=', e.bool(input.is_static)),
+      )
+      .addIf(!Checker.isEmpty(input.is_enabled), () =>
+        e.op(entity.is_enabled, '?=', e.bool(input.is_enabled)),
+      )
+      .addIf(!Checker.isEmpty(input.keyword), () =>
+        e.op(entity.name, 'ilike', e.cast(e.str, `${input.keyword}`)),
+      )
+      .all();
+  }
+
+  public override mapToUpdateEntity(input: {{pascalCase name}}UpdateInput): PromiseResult {
+    const entity = e.{{pascalCase name}};
+    return Promise.resolve({
+      name: input.name ?? entity.name,
+      is_default: input.is_default ?? entity.is_default,
+      is_public: input.is_public ?? entity.is_public,
+      is_enabled: input.is_enabled ?? entity.is_enabled,
+    });
+  }
+
+  public override mapToCreateEntity(input: {{pascalCase name}}CreateInput): PromiseResult {
+    return Promise.resolve({
+      name: input.name,
+      code: input.code,
+      is_default: input.is_default,
+      is_public: input.is_public,
+      is_enabled: input.is_enabled,
+      //   is_static: input.is_static,
+    });
+  }
+}

@@ -1,0 +1,89 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+} from '@nestjs/common';
+import {
+  {{pascalCase name}}CreateInput,
+  {{pascalCase name}}DetailDto,
+  {{pascalCase name}}Dto,
+  {{pascalCase name}}GetListInput,
+  {{pascalCase name}}UpdateInput,
+} from './{{kebabCase name}}.dto';
+import { CrudController } from 'src/bases/CrudController';
+import { {{pascalCase name}}Service } from './{{kebabCase name}}.service';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { PagedResultDto } from 'src/dtos/PagedResultDto';
+import * as {{pascalCase name}}Permissions from './tests.permisstion';
+
+@Controller('{{kebabCase name}}')
+@ApiTags('{{pascalCase name}}')
+export class {{pascalCase name}}Controller extends CrudController<
+  {{pascalCase name}}Dto,
+  {{pascalCase name}}DetailDto,
+  {{pascalCase name}}GetListInput,
+  {{pascalCase name}}CreateInput,
+  {{pascalCase name}}UpdateInput
+> {
+  override Policy_GetItem = {{pascalCase name}}Permissions.{{pascalCase name}}_GetItem;
+  override Policy_GetList = {{pascalCase name}}Permissions.{{pascalCase name}}_GetList;
+  override Policy_Create = {{pascalCase name}}Permissions.{{pascalCase name}}_Create;
+  override Policy_Update = {{pascalCase name}}Permissions.{{pascalCase name}}_Update;
+  override Policy_Delete = {{pascalCase name}}Permissions.{{pascalCase name}}_Delete;
+  override Policy_Set_IsEnabled = {{pascalCase name}}Permissions.{{pascalCase name}}_Set_IsEnabled;
+  override Policy_Excel_Import = {{pascalCase name}}Permissions.{{pascalCase name}}_Excel_Import;
+  override Policy_Excel_Ouput = {{pascalCase name}}Permissions.{{pascalCase name}}_Excel_Ouput;
+  override Policy_Excel_Tpl = {{pascalCase name}}Permissions.{{pascalCase name}}_Excel_Tpl;
+
+  constructor(private readonly {{camelCase name}}Service: {{pascalCase name}}Service) {
+    super({{camelCase name}}Service);
+  }
+
+  @Get()
+  @ApiOperation({ summary: '角色列表' })
+  public override async getList(
+    input: {{pascalCase name}}GetListInput,
+    @Req() req: any,
+  ): Promise<PagedResultDto<{{pascalCase name}}Dto>> {
+    return await super.getList(input, req);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: '角色详情' })
+  public override async getItem(
+    @Param('id') id: string,
+    @Req() req: any,
+  ): Promise<{{pascalCase name}}DetailDto> {
+    return await super.getItem(id, req);
+  }
+
+  @Post()
+  @ApiOperation({ summary: '创建角色' })
+  public override async create(
+    @Body() input: {{pascalCase name}}CreateInput,
+    @Req() req: any,
+  ): Promise<{{pascalCase name}}DetailDto> {
+    return await super.create(input, req);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: '修改角色' })
+  public override async update(
+    @Param('id') id: string,
+    input: {{pascalCase name}}UpdateInput,
+    @Req() req: any,
+  ): Promise<{{pascalCase name}}DetailDto> {
+    return await super.update(id, input, req);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: '删除角色' })
+  public override async delete(id: string, @Req() req: any): Promise<void> {
+    return await super.delete(id, req);
+  }
+}
