@@ -81,10 +81,10 @@ export class AuditsService extends CrudService<
         e.op(entity.handler_name, '?=', e.str(input.handler_name)),
       )
       .addIf(!Checker.isEmpty(input.ip), () =>
-        e.op(entity.ip, '?=', e.str(input.ip)),
+        e.op(entity.ip, 'ilike', e.str(`%${input.ip}%`)),
       )
       .addIf(!Checker.isEmpty(input.keyword), () =>
-        e.op(entity.handler_name, 'ilike', e.cast(e.str, `${input.keyword}`)),
+        e.op(entity.handler_name, 'ilike', e.cast(e.str, `%${input.keyword}%`)),
       )
       .all();
   }
