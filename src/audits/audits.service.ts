@@ -11,12 +11,82 @@ import { Reflector } from '@nestjs/core';
 import { AuditingKey } from './audits.decorator';
 import { UserDto } from 'src/users/users.dto';
 import { IncomingHttpHeaders } from 'http';
-import { BaseService } from 'src/bases/BaseService';
+import { CrudService } from 'src/bases/CrudService';
 import { logger } from 'src/logger/logger.config';
+import { Filters } from 'src/common/Filters';
+import { Checker } from 'src/common';
+import {
+  AuditLogCreateInput,
+  AuditLogDetailDto,
+  AuditLogDto,
+  AuditLogGetListInput,
+  AuditLogUpdateInput,
+} from './audits.dto';
+
 @Injectable()
-export class AuditsService extends BaseService {
+export class AuditsService extends CrudService<
+  AuditLogDto,
+  AuditLogDetailDto,
+  AuditLogGetListInput,
+  AuditLogCreateInput,
+  AuditLogUpdateInput
+> {
+  public readonly entity = e.logs.AuditLog;
   constructor(private readonly reflector: Reflector) {
     super();
+  }
+
+  override listSelect(
+    input: AuditLogGetListInput,
+    // entity: ExtractDBType<typeof e.logs.AuditLog>,
+    entity: any,
+  ) {
+    return {
+      ...super.listSelect(input, entity),
+      error: false,
+      headers: false,
+      data: false,
+      browser_info: false,
+    };
+  }
+
+  public override listFilter(
+    input: AuditLogGetListInput,
+    // entity: ExtractDBType<typeof e.AuditLog>,
+    entity: any,
+  ) {
+    return new Filters([e.op(entity.app_name, '!=', e.str(''))])
+      .addIf(!Checker.isEmpty(input.http_status), () =>
+        e.op(entity.http_status, '?=', e.int64(input.http_status)),
+      )
+      .addIf(!Checker.isEmpty(input.start_http_status), () =>
+        e.op(entity.start_http_status, '>=', e.int64(input.start_http_status)),
+      )
+      .addIf(!Checker.isEmpty(input.end_http_status), () =>
+        e.op(entity.end_http_status, '<', e.int64(input.end_http_status)),
+      )
+      .addIf(!Checker.isEmpty(input.http_method), () =>
+        e.op(entity.http_method, '?=', e.str(input.http_method)),
+      )
+      .addIf(!Checker.isEmpty(input.client_id), () =>
+        e.op(entity.client_id, '?=', e.str(input.client_id)),
+      )
+      .addIf(!Checker.isEmpty(input.user_id), () =>
+        e.op(entity.user_id, '?=', e.str(input.user_id)),
+      )
+      .addIf(!Checker.isEmpty(input.class_name), () =>
+        e.op(entity.class_name, '?=', e.str(input.class_name)),
+      )
+      .addIf(!Checker.isEmpty(input.handler_name), () =>
+        e.op(entity.handler_name, '?=', e.str(input.handler_name)),
+      )
+      .addIf(!Checker.isEmpty(input.ip), () =>
+        e.op(entity.ip, '?=', e.str(input.ip)),
+      )
+      .addIf(!Checker.isEmpty(input.keyword), () =>
+        e.op(entity.handler_name, 'ilike', e.cast(e.str, `${input.keyword}`)),
+      )
+      .all();
   }
 
   async shouldBeLog(context: ExecutionContext) {

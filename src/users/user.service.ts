@@ -87,11 +87,6 @@ export class UsersService extends CrudService<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     entity: any,
   ) {
-    // const tup = e.tuple({
-    //   name: entity.roles.role.name,
-    //   id: entity.roles.role.id,
-    //   is_static: entity.roles.role.is_static,
-    // });
     return {
       ...entity['*'],
       password: false,

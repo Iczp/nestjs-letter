@@ -11,7 +11,7 @@ module logs{
         };
 
         property user_name -> str {
-            annotation title := '用户Id';
+            annotation title := '用户名称';
         };
 
         property client_id -> str {

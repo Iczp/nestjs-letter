@@ -1,13 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CrudService } from 'src/bases/CrudService';
-
-import e from 'dbschema/edgeql-js'; // auto-generated code
 import { PromiseResult } from 'src/types/PromiseResult';
 import { Filters } from 'src/common/Filters';
-import { isEmpty, isGuid } from 'src/common/validator';
-
-import { client } from 'src/edgedb';
-import { Assert } from 'src/common';
+import { e, client } from 'src/edgedb';
+import { Assert, Checker } from 'src/common';
 import {
   RoleCreateInput,
   RoleDetailDto,
@@ -50,19 +46,19 @@ export class RolesService extends CrudService<
   ) {
     return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
 
-      .addIf(!isEmpty(input.is_default), () =>
+      .addIf(!Checker.isEmpty(input.is_default), () =>
         e.op(entity.is_default, '?=', e.bool(input.is_default)),
       )
-      .addIf(!isEmpty(input.is_public), () =>
+      .addIf(!Checker.isEmpty(input.is_public), () =>
         e.op(entity.is_public, '?=', e.bool(input.is_public)),
       )
-      .addIf(!isEmpty(input.is_static), () =>
+      .addIf(!Checker.isEmpty(input.is_static), () =>
         e.op(entity.is_static, '?=', e.bool(input.is_static)),
       )
-      .addIf(!isEmpty(input.is_enabled), () =>
+      .addIf(!Checker.isEmpty(input.is_enabled), () =>
         e.op(entity.is_enabled, '?=', e.bool(input.is_enabled)),
       )
-      .addIf(!isEmpty(input.keyword), () =>
+      .addIf(!Checker.isEmpty(input.keyword), () =>
         e.op(entity.name, 'ilike', e.cast(e.str, `${input.keyword}`)),
       )
       .all();
@@ -95,7 +91,8 @@ export class RolesService extends CrudService<
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: SetPermissionsInput,
   ) {
-    Assert.If(!isGuid(id), `必须为 uuid, id:${id}`);
+    // Assert.If(!isGuid(id), `必须为 uuid, id:${id}`);
+    Assert.IfNotGuid(id);
     const idlist = input.permisstions;
     Logger.log(idlist, 'RoleSService.setPermissions');
     const selPermisstions = e.params(

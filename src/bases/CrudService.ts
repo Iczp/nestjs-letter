@@ -127,22 +127,25 @@ export abstract class CrudService<
     // console.log('totalCount', totalCount);
 
     const list = e.select(this.entity, (entity) => {
-      const filter = this.listFilter(input, entity);
+      const filter = this.listFilter(input, entity) || {};
+
+      const order_by = [];
+      if (entity['creation_time']) {
+        order_by.push({
+          expression: entity['creation_time'],
+          direction: e.ASC,
+          empty: e.EMPTY_LAST,
+        });
+      }
 
       const ql = {
         offset: e.int64(input.skip || 0),
         limit: e.int64(input.maxResultCount || 10),
         filter,
-        order_by: [
-          {
-            expression: entity['creation_time'],
-            direction: e.ASC,
-            empty: e.EMPTY_LAST,
-          },
-        ],
+        order_by,
         ...this.listSelect(input, entity),
       };
-      console.log('filter QL', ql.filter.toEdgeQL());
+      console.log('filter QL', ql.filter?.toEdgeQL());
       return ql;
     });
 

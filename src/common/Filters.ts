@@ -10,7 +10,9 @@ export class Filters /** <T extends TypeSet<$bool, Cardinality>> */ {
   private array: any[] = [];
 
   constructor(initialArray: any[] = []) {
-    this.array = [...initialArray];
+    if (initialArray) {
+      this.array = [...initialArray];
+    }
   }
 
   add(value: any): this {
@@ -46,6 +48,9 @@ export class Filters /** <T extends TypeSet<$bool, Cardinality>> */ {
    * e.all(e.set(...this.array));
    */
   all() {
+    if (this.array.length === 0) {
+      return undefined;
+    }
     return e.all(e.set(...this.array));
   }
 
