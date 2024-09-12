@@ -44,7 +44,7 @@ export class BaseController {
 
     console.log('policyNames:', policyNames);
 
-    Assert.If(!Checker.isGuid(userId), '当前用户未登录，请先登录');
+    Assert.If(!Checker.isGuid(userId), '当前用户未登录，请先登录', 401);
 
     Logger.log(`userId:${userId}`, BaseController.name);
 
