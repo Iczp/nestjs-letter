@@ -7,7 +7,7 @@ import { Column, Workbook } from 'exceljs';
 import { ExcelWorkbook } from 'src/dtos/ExcelWorkbook';
 import { SchemaType } from 'src/types/SchemaType';
 import { ExcelImportResult } from 'src/dtos/ExcelImportResult';
-import { client } from 'src/edgedb';
+import { getFieldsFromEdgeDB } from 'src/edgedb';
 import { BaseService } from './BaseService';
 import { Req } from '@nestjs/common';
 
@@ -43,47 +43,8 @@ export abstract class ExcelService<TGetListInput>
     });
   }
 
-  public getTitle(annotations: any): string | null {
-    const arr = annotations ?? [];
-    if (Array.isArray(arr) && arr.length > 0) {
-      return arr[0]['@value'];
-    }
-    return null;
-  }
-
   public async getSchemaInfo(schema?: string): Promise<SchemaType> {
-    const schemaName = schema || this.entity['__element__']['__name__'];
-    const queryJson = `
-WITH MODULE schema
-SELECT ObjectType {
-  name,
-   annotations: {
-    @value,
-  },
-  properties: {
-    name,
-    annotations: {
-      name,
-      @value
-    }
-  }
-}   FILTER .name = '${schemaName}';
-    `;
-
-    const ret = await client.queryJSON(queryJson);
-    // console.log('ret', ret);
-
-    const items = (JSON.parse(ret) as any[]).map((x) => ({
-      name: x.name as string,
-      title: this.getTitle(x.annotations),
-      properties: x.properties.map((p) => ({
-        name: p.name,
-        title: this.getTitle(p.annotations),
-      })),
-    }));
-
-    // console.log('items', JSON.stringify(items, null, 2));
-
+    const items = await getFieldsFromEdgeDB(schema);
     return items[0];
   }
 
