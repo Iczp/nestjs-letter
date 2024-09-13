@@ -1,12 +1,10 @@
-import { PermissionsConsts } from '.';
-
 export type PermissionType = {
   group: string;
   code: string;
   name: string;
 };
 
-class PermissionDefinition {
+export class PermissionDefinition {
   private array: PermissionType[] = [];
 
   constructor(initialArray: PermissionType[] = []) {
@@ -29,11 +27,3 @@ class PermissionDefinition {
     return this.array;
   }
 }
-
-export const permissionDefinition = new PermissionDefinition();
-
-export const definition = permissionDefinition
-  .add('Activity', PermissionsConsts.Activity_Create, 'ddd')
-  .toArray();
-
-// console.log('555', definition);

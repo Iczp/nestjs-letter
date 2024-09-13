@@ -1,10 +1,10 @@
 import { ApiBearerAuth, ApiSecurity } from '@nestjs/swagger';
 import { IService } from './IService';
 import { Assert, Checker } from 'src/common';
-import { PermissionsConsts } from 'src/permissions';
 import { client, e } from 'src/edgedb';
 import { Filters } from 'src/common/Filters';
 import { Logger } from '@nestjs/common';
+import { AppPermisstionsObject } from 'src/app.consts';
 // import { UseGuards } from '@nestjs/common';
 // import { ApiKeyGuard } from '../api-key/api-key.guard';
 
@@ -31,8 +31,7 @@ export class BaseController {
     }
 
     const policyNames = Array.isArray(policyName) ? policyName : [policyName];
-    const permissions = Object.keys(PermissionsConsts);
-    const undefinition = policyNames.filter((x) => !permissions.includes(x));
+    const undefinition = policyNames.filter((x) => !AppPermisstionsObject[x]);
     Assert.If(
       undefinition.length > 0,
       `未定义权限(${undefinition.length}): ${undefinition.join(',')} `,

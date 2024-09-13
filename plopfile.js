@@ -1,5 +1,7 @@
 module.exports = function (plop) {
   // 创建一个简单的 NestJS 模块生成器
+  // Handlebars
+
   plop.setGenerator('nestjs-module', {
     description: '创建一个新的 NestJS 模块',
     prompts: [

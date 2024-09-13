@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { client } from 'src/edgedb';
 import e from 'dbschema/edgeql-js'; // auto-generated code
 import { BaseService } from 'src/bases/BaseService';
-import { PermissionsConsts } from 'src/permissions';
+import { AppPermisstionItems } from 'src/app.consts';
 
 type EntityType = { id: string };
 @Injectable()
@@ -34,7 +34,7 @@ export class SeedService extends BaseService {
       return e.for(e.json_array_unpack(params.items), (item) => {
         return e
           .insert(e.Permission, {
-            tag: e.cast(e.str, item.tag),
+            tag: e.cast(e.str, item.module),
             name: e.cast(e.str, item.name),
             code: e.cast(e.str, item.code),
           })
@@ -52,14 +52,8 @@ export class SeedService extends BaseService {
       });
     });
 
-    const items = Object.entries(PermissionsConsts).map(([key, value]) => ({
-      tag: '',
-      name: key,
-      code: value,
-    }));
-
     const result = await rolePermisstion.run(client, {
-      items,
+      items: AppPermisstionItems,
     });
 
     Logger.log(`seed [Permission] length:${result.length}`, 'SeedService');

@@ -20,7 +20,7 @@ import {
   ActivityGetListInput,
   ActivityUpdateInput,
 } from './activities.dto';
-import { PermissionsConsts } from 'src/permissions';
+import { AcitvitiesPermisstions } from 'src/app.permisstions';
 
 @Controller('activities')
 @ApiTags('Activities')
@@ -32,15 +32,15 @@ export class ActivitiesController extends CrudController<
   ActivityCreateInput,
   ActivityUpdateInput
 > {
-  override Policy_GetItem = PermissionsConsts.Activity_GetItem;
-  override Policy_GetList = PermissionsConsts.Activity_GetList;
-  override Policy_Create = PermissionsConsts.Activity_Create;
-  override Policy_Update = PermissionsConsts.Activity_Update;
-  override Policy_Delete = PermissionsConsts.Activity_Delete;
-  override Policy_Set_IsEnabled = PermissionsConsts.Activity_Set_IsEnabled;
-  override Policy_Excel_Import = PermissionsConsts.Activity_Excel_Import;
-  override Policy_Excel_Ouput = PermissionsConsts.Activity_Excel_Ouput;
-  override Policy_Excel_Tpl = PermissionsConsts.Activity_Excel_Tpl;
+  override Policy_GetItem = AcitvitiesPermisstions.Activity_GetItem;
+  override Policy_GetList = AcitvitiesPermisstions.Activity_GetList;
+  override Policy_Create = AcitvitiesPermisstions.Activity_Create;
+  override Policy_Update = AcitvitiesPermisstions.Activity_Update;
+  override Policy_Delete = AcitvitiesPermisstions.Activity_Delete;
+  override Policy_Set_IsEnabled = AcitvitiesPermisstions.Activity_Set_IsEnabled;
+  override Policy_Excel_Import = AcitvitiesPermisstions.Activity_Excel_Import;
+  override Policy_Excel_Ouput = AcitvitiesPermisstions.Activity_Excel_Ouput;
+  override Policy_Excel_Tpl = AcitvitiesPermisstions.Activity_Excel_Tpl;
   constructor(private readonly userService: ActivitiesService) {
     super(userService);
   }
