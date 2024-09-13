@@ -20,7 +20,7 @@ import { CrudController } from 'src/bases/CrudController';
 import { RolesService } from './roles.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
-import { RolesPermisstions } from 'src/app.permisstions';
+import { RolesPermissions } from 'src/app.permissions';
 
 @Controller('roles')
 @ApiTags('Roles')
@@ -31,16 +31,16 @@ export class RolesController extends CrudController<
   RoleCreateInput,
   RoleUpdateInput
 > {
-  override Policy_GetItem = RolesPermisstions.Roles_GetItem;
-  override Policy_GetList = RolesPermisstions.Roles_GetList;
-  override Policy_Create = RolesPermisstions.Roles_Create;
-  override Policy_Update = RolesPermisstions.Roles_Update;
-  override Policy_Delete = RolesPermisstions.Roles_Delete;
-  override Policy_Set_IsEnabled = RolesPermisstions.Roles_Set_IsEnabled;
-  override Policy_Excel_Import = RolesPermisstions.Roles_Excel_Import;
-  override Policy_Excel_Ouput = RolesPermisstions.Roles_Excel_Ouput;
-  override Policy_Excel_Tpl = RolesPermisstions.Roles_Excel_Tpl;
-  protected Policy_Set_Permisstions = RolesPermisstions.Roles_Set_Permisstions;
+  override Policy_GetItem = RolesPermissions.Roles_GetItem;
+  override Policy_GetList = RolesPermissions.Roles_GetList;
+  override Policy_Create = RolesPermissions.Roles_Create;
+  override Policy_Update = RolesPermissions.Roles_Update;
+  override Policy_Delete = RolesPermissions.Roles_Delete;
+  override Policy_Set_IsEnabled = RolesPermissions.Roles_Set_IsEnabled;
+  override Policy_Excel_Import = RolesPermissions.Roles_Excel_Import;
+  override Policy_Excel_Ouput = RolesPermissions.Roles_Excel_Ouput;
+  override Policy_Excel_Tpl = RolesPermissions.Roles_Excel_Tpl;
+  protected Policy_Set_Permissions = RolesPermissions.Roles_Set_Permissions;
   constructor(private readonly rolesService: RolesService) {
     super(rolesService);
   }
@@ -96,7 +96,7 @@ export class RolesController extends CrudController<
     @Req() req: any,
   ) {
     this.setServiceRequest(req);
-    await this.checkPolicyName(req, this.Policy_Set_Permisstions);
+    await this.checkPolicyName(req, this.Policy_Set_Permissions);
     return await this.rolesService.setPermissions(id, input);
   }
 }

@@ -93,9 +93,9 @@ export class RolesService extends CrudService<
   ) {
     // Assert.If(!isGuid(id), `必须为 uuid, id:${id}`);
     Assert.IfNotGuid(id);
-    const idlist = input.permisstions;
+    const idlist = input.permissions;
     Logger.log(idlist, 'RoleSService.setPermissions');
-    const selPermisstions = e.params(
+    const selPermissions = e.params(
       { idlist: e.array(e.uuid) },
       ({ idlist }) =>
         e.select(e.Permission, (permission) => ({
@@ -104,11 +104,11 @@ export class RolesService extends CrudService<
         })),
     );
     // Logger.log(
-    //   selPermisstions.toEdgeQL(),
+    //   selPermissions.toEdgeQL(),
     //   'RoleSService.setPermissions query.toEdgeQL()',
     // );
 
-    const delPermisstions = e.params(
+    const delPermissions = e.params(
       { idlist: e.array(e.uuid) },
       ({ idlist }) =>
         e.delete(e.RolePermission, (entity) => ({
@@ -119,7 +119,7 @@ export class RolesService extends CrudService<
         })),
     );
 
-    const addRolePermisstions = e.params(
+    const addRolePermissions = e.params(
       {
         rolePermissions: e.json,
       },
@@ -144,18 +144,18 @@ export class RolesService extends CrudService<
 
     // 事务
     const ret = await client.transaction(async (tx) => {
-      const deleteResult = await delPermisstions.run(tx, { idlist });
-      const permisstions = await selPermisstions.run(tx, { idlist });
-      const insertResult = await addRolePermisstions.run(tx, {
-        rolePermissions: permisstions.map((x) => ({
+      const deleteResult = await delPermissions.run(tx, { idlist });
+      const permissions = await selPermissions.run(tx, { idlist });
+      const insertResult = await addRolePermissions.run(tx, {
+        rolePermissions: permissions.map((x) => ({
           role: { id },
           permission: { id: x.id },
         })),
       });
-      return { permisstions, deleteIds: deleteResult, insertResult };
+      return { permissions, deleteIds: deleteResult, insertResult };
     });
 
-    Logger.log(ret.permisstions, 'RoleSService.setPermissions');
+    Logger.log(ret.permissions, 'RoleSService.setPermissions');
 
     return ret;
   }

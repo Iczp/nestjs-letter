@@ -14,4 +14,4 @@ export const AuditLog_Excel_Import = 'AuditLog_Excel_Import';
 
 export const AuditLog_Excel_Ouput = 'AuditLog_Excel_Ouput';
 
-export const AuditLog_Set_Permisstions = 'AuditLog_Set_Permisstions';
+export const AuditLog_Set_Permissions = 'AuditLog_Set_Permissions';

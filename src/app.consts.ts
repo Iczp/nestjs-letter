@@ -1,8 +1,8 @@
-import * as ModulesPermisstions from './app.permisstions';
+import * as ModulesPermissions from './app.permissions';
 
-export const AppPermisstions = ModulesPermisstions;
+export const AppPermissions = ModulesPermissions;
 
-export const AppPermisstionItems = Object.entries(AppPermisstions).flatMap(
+export const AppPermissionItems = Object.entries(AppPermissions).flatMap(
   ([module, moduleValue]) => {
     // console.log('module', module, moduleValue);
     return Object.entries(moduleValue).map(([name, code]) => ({
@@ -13,7 +13,7 @@ export const AppPermisstionItems = Object.entries(AppPermisstions).flatMap(
   },
 );
 
-export const AppPermisstionsObject = AppPermisstionItems.reduce(
+export const AppPermissionsObject = AppPermissionItems.reduce(
   (acc, { code, ...rest }) => {
     acc[code] = rest;
     return acc;

@@ -23,7 +23,7 @@ import {
 } from './activity-customer.dto';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { Response } from 'express';
-import { AcitvitiyCustomersPermisstions } from 'src/app.permisstions';
+import { AcitvitiyCustomersPermissions } from 'src/app.permissions';
 
 @Controller('activity-customer')
 @ApiTags('ActivityCustomer')
@@ -35,23 +35,23 @@ export class ActivityCustomerController extends CrudController<
   ActivityCustomerUpdateInput
 > {
   override Policy_GetItem =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_GetItem;
+    AcitvitiyCustomersPermissions.ActivityCustomer_GetItem;
   override Policy_GetList =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_GetList;
+    AcitvitiyCustomersPermissions.ActivityCustomer_GetList;
   override Policy_Create =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_Create;
+    AcitvitiyCustomersPermissions.ActivityCustomer_Create;
   override Policy_Update =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_Update;
+    AcitvitiyCustomersPermissions.ActivityCustomer_Update;
   override Policy_Delete =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_Delete;
+    AcitvitiyCustomersPermissions.ActivityCustomer_Delete;
   override Policy_Set_IsEnabled =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_Set_IsEnabled;
+    AcitvitiyCustomersPermissions.ActivityCustomer_Set_IsEnabled;
   override Policy_Excel_Import =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_Excel_Import;
+    AcitvitiyCustomersPermissions.ActivityCustomer_Excel_Import;
   override Policy_Excel_Ouput =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_Excel_Ouput;
+    AcitvitiyCustomersPermissions.ActivityCustomer_Excel_Ouput;
   override Policy_Excel_Tpl =
-    AcitvitiyCustomersPermisstions.ActivityCustomer_Excel_Tpl;
+    AcitvitiyCustomersPermissions.ActivityCustomer_Excel_Tpl;
   constructor(readonly service: ActivityCustomerService) {
     super(service);
   }

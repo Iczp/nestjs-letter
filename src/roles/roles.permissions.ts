@@ -16,4 +16,4 @@ export const Roles_Excel_Ouput = 'Roles_Excel_Ouput';
 
 export const Roles_Set_IsEnabled = 'Roles_Set_IsEnabled';
 
-export const Roles_Set_Permisstions = 'Roles_Set_Permisstions';
+export const Roles_Set_Permissions = 'Roles_Set_Permissions';

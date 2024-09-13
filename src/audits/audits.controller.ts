@@ -10,7 +10,7 @@ import { CrudController } from 'src/bases/CrudController';
 import { AuditsService } from './audits.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
-import { AuditsPermisstions } from 'src/app.permisstions';
+import { AuditsPermissions } from 'src/app.permissions';
 
 @Controller('audits')
 @ApiTags('Audits')
@@ -21,14 +21,14 @@ export class AuditsController extends CrudController<
   AuditLogCreateInput,
   AuditLogUpdateInput
 > {
-  override Policy_GetItem = AuditsPermisstions.AuditLog_GetItem;
-  override Policy_GetList = AuditsPermisstions.AuditLog_GetList;
-  override Policy_Create = AuditsPermisstions.AuditLog_Create;
-  override Policy_Update = AuditsPermisstions.AuditLog_Update;
-  override Policy_Delete = AuditsPermisstions.AuditLog_Delete;
-  override Policy_Excel_Import = AuditsPermisstions.AuditLog_Excel_Import;
-  override Policy_Excel_Ouput = AuditsPermisstions.AuditLog_Excel_Ouput;
-  override Policy_Excel_Tpl = AuditsPermisstions.AuditLog_Excel_Tpl;
+  override Policy_GetItem = AuditsPermissions.AuditLog_GetItem;
+  override Policy_GetList = AuditsPermissions.AuditLog_GetList;
+  override Policy_Create = AuditsPermissions.AuditLog_Create;
+  override Policy_Update = AuditsPermissions.AuditLog_Update;
+  override Policy_Delete = AuditsPermissions.AuditLog_Delete;
+  override Policy_Excel_Import = AuditsPermissions.AuditLog_Excel_Import;
+  override Policy_Excel_Ouput = AuditsPermissions.AuditLog_Excel_Ouput;
+  override Policy_Excel_Tpl = AuditsPermissions.AuditLog_Excel_Tpl;
 
   constructor(private readonly rolesService: AuditsService) {
     super(rolesService);

@@ -4,7 +4,7 @@ import { Assert, Checker } from 'src/common';
 import { client, e } from 'src/edgedb';
 import { Filters } from 'src/common/Filters';
 import { Logger } from '@nestjs/common';
-import { AppPermisstionsObject } from 'src/app.consts';
+import { AppPermissionsObject } from 'src/app.consts';
 // import { UseGuards } from '@nestjs/common';
 // import { ApiKeyGuard } from '../api-key/api-key.guard';
 
@@ -31,7 +31,7 @@ export class BaseController {
     }
 
     const policyNames = Array.isArray(policyName) ? policyName : [policyName];
-    const undefinition = policyNames.filter((x) => !AppPermisstionsObject[x]);
+    const undefinition = policyNames.filter((x) => !AppPermissionsObject[x]);
     Assert.If(
       undefinition.length > 0,
       `未定义权限(${undefinition.length}): ${undefinition.join(',')} `,

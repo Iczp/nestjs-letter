@@ -39,8 +39,8 @@ module.exports = function (plop) {
       },
       {
         type: 'add',
-        path: 'src/{{kebabCase name}}/{{kebabCase name}}.permisstion.ts',
-        templateFile: 'plop-templates/permisstion.hbs',
+        path: 'src/{{kebabCase name}}/{{kebabCase name}}.permissions.ts',
+        templateFile: 'plop-templates/permissions.hbs',
       },
     ],
   });
