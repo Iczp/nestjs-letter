@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { client } from 'src/edgedb';
-import e from 'dbschema/edgeql-js'; // auto-generated code
+import { client, e } from 'src/edgedb';
 import { BaseService } from 'src/bases/BaseService';
 import { AppPermissionItems } from 'src/app.consts';
 

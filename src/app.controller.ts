@@ -5,6 +5,7 @@ import { AppInfo } from './dtos/AppInfo';
 import { AllowAnonymous } from './auth/allowAnonymousKey.decorator';
 import { getFieldsFromEdgeDB } from './edgedb';
 import { PagedResultDto } from './dtos/PagedResultDto';
+import { Assert } from './common';
 
 @Controller()
 @ApiTags('App')
@@ -44,7 +45,8 @@ export class AppController {
   // @AllowAnonymous()
   async getTable(@Query('name') name: string) {
     const items = await getFieldsFromEdgeDB(name);
-    return items.length > 0 ? items[0] : null;
+    Assert.If(items.length == 0, `不存在: ${name}`, 404);
+    return items[0];
   }
 
   @Get('about')

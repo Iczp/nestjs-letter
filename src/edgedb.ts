@@ -1,5 +1,5 @@
 import createClient from 'edgedb';
-import edb from 'dbschema/edgeql-js'; // auto-generated code
+import _e_ from 'dbschema/edgeql-js'; // auto-generated code
 import { SchemaType } from './types/SchemaType';
 
 // C:\Users\ZP\AppData\Local\EdgeDB\config\credentials
@@ -9,6 +9,7 @@ import { SchemaType } from './types/SchemaType';
 
 // edgedb --port 10707 --tls-security insecure --password query \
 //  "CONFIGURE INSTANCE SET listen_addresses := {'0.0.0.0'};"
+
 export const client = createClient({
   port: 10708,
   user: 'edgedb',
@@ -17,7 +18,7 @@ export const client = createClient({
   tlsSecurity: 'insecure',
 });
 
-export const e = edb;
+export const e = _e_;
 
 export const getTitle = (annotations: any): string | null => {
   const arr = annotations ?? [];

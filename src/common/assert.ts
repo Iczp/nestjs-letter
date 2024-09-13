@@ -1,4 +1,8 @@
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { isGuid } from './validator';
 
 export const If = (condition: boolean, message: string, errcode = 403) => {
@@ -9,7 +13,9 @@ export const If = (condition: boolean, message: string, errcode = 403) => {
   if (errcode === 401) {
     throw new UnauthorizedException(message);
   }
-
+  if (errcode === 404) {
+    throw new NotFoundException(message);
+  }
   throw new ForbiddenException(message);
 };
 export const IfNotGuid = (guid: any, message?: string) =>
