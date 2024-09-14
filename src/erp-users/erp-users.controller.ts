@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BaseController } from 'src/bases/BaseController';
 import { ErpUsersService } from './erp-users.service';
@@ -15,7 +15,10 @@ export class ErpUsersController extends BaseController {
   }
   @Get()
   @ApiOperation({ summary: 'ERP 用户列表' })
-  async findAll(input: ErpUsersGetListInput, @Req() req: any): Promise<any> {
+  async findAll(
+    @Query() input: ErpUsersGetListInput,
+    @Req() req: any,
+  ): Promise<any> {
     await this.checkPolicyName(req, this.GetListPolicyName);
     return this.erpUserService.findAll(input);
   }
