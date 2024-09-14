@@ -23,6 +23,7 @@ import { AuditsService } from './audits/audits.service';
 // import { JwtStrategy } from './auth/jwt.strategy';
 // import { UsersService } from './users/user.service';
 // import { AuthService } from './auth/auth.service';
+import { ErpUsersModule } from './erp-users/erp-users.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AuditsService } from './audits/audits.service';
     RolesModule,
     AuditsModule,
     LoggerModule,
+    ErpUsersModule,
   ],
   controllers: [AppController],
   providers: [

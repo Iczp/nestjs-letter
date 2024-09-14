@@ -7,3 +7,5 @@ export * as AuditsPermissions from './audits/audits.permissions';
 export * as AcitvitiesPermissions from './activities/activities.permissions';
 
 export * as AcitvitiyCustomersPermissions from './activity-customers/activity-customer.permissions';
+
+export * as ErpUsersPermissions from './erp-users/erp-users.permissions';
