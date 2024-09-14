@@ -136,7 +136,7 @@ export class UsersService extends CrudService<
         e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
       )
       .addIf(!isEmpty(input.keyword), () =>
-        e.op(entity.name, 'ilike', e.cast(e.str, `${input.keyword}`)),
+        e.op(entity.name, 'ilike', e.cast(e.str, `%${input.keyword}%`)),
       )
       .all();
   }
@@ -166,4 +166,20 @@ export class UsersService extends CrudService<
       is_enabled: input.is_enabled,
     };
   }
+
+  // override async create(input: UserCreateInput): Promise<UserDetailDto> {
+  //   await this.checkPolicy(this.Create_PolicyName);
+  //   const inputDto = await this.mapToCreateEntity(input);
+  //   console.log('create inputDto', inputDto);
+  //   const queryCreate = e.insert(e.User, inputDto as never);
+
+  //   // const queryDisplay = e.select(queryCreate, () => this.createSelect(input));
+  //   const ret = await queryDisplay.run(client);
+  //   return await this.mapToDetailDto(ret);
+  //   return super.create(input);
+  // }
+
+  // public async create(input: TCreateInput): Promise<TDetailDto> {
+
+  // }
 }

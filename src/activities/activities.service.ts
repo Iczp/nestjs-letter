@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import e from 'dbschema/edgeql-js'; // auto-generated code
-
 import { CrudService } from 'src/bases/CrudService';
 
 import { Filters } from 'src/common/Filters';
@@ -12,6 +10,9 @@ import {
   ActivityGetListInput,
   ActivityUpdateInput,
 } from './activities.dto';
+import { isEmpty } from 'src/common/validator';
+import { e } from 'src/edgedb';
+import { ExtractDBType } from 'src/types/ExtractDBType';
 
 @Injectable()
 export class ActivitiesService extends CrudService<
@@ -23,12 +24,19 @@ export class ActivitiesService extends CrudService<
 > {
   public readonly entity = e.Activity;
 
-  override listFilter(input: ActivityGetListInput): any {
+  override listFilter(
+    input: ActivityGetListInput,
+    entity: ExtractDBType<typeof e.Activity>,
+  ): any {
     return new Filters([e.op(e.Activity.is_deleted, '=', e.bool(false))])
-
       .addIf(
         input.is_enabled !== undefined,
         e.op(e.Activity.is_enabled, '=', e.bool(input.is_enabled)),
+      )
+      .addIf(!isEmpty(input.keyword), () =>
+        new Filters([
+          e.op(entity.title, 'ilike', e.str(`%${input.keyword}%`)),
+        ]).any(),
       )
       .all();
   }
