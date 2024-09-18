@@ -177,18 +177,12 @@ export abstract class CrudService<
   }
 
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
-    const queryUpdate = e.update(this.entity, (entity) => {
-      const inputDto = {
-        last_modification_time: e.datetime_current(),
-        ...this.mapToUpdateEntity(input),
-      };
-      console.log('update inputDto:', inputDto);
-
-      return {
-        filter_single: e.op(entity['id'], '=', e.uuid(id)),
-        set: inputDto,
-      };
-    });
+    const updateDto = await this.mapToUpdateEntity(input);
+    console.log('update dto:', updateDto);
+    const queryUpdate = e.update(this.entity, (entity) => ({
+      filter_single: e.op(entity['id'], '=', e.uuid(id)),
+      set: updateDto,
+    }));
     const u1 = await queryUpdate.run(client);
 
     console.log('update result:', u1);

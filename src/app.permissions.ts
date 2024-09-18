@@ -9,3 +9,5 @@ export * as AcitvitiesPermissions from './activities/activities.permissions';
 export * as AcitvitiyCustomersPermissions from './activity-customers/activity-customer.permissions';
 
 export * as ErpUsersPermissions from './erp-users/erp-users.permissions';
+
+export * as InviterConfigPermissions from './inviter-config/inviter-config.permissions';

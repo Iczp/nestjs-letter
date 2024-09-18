@@ -704,6 +704,7 @@ export type $ObjectTypeλShape = $.typeutil.flatten<$SourceλShape & Omit<$Consi
   "<__type__[is UserRole]": $.LinkDesc<_default.$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is RolePermission]": $.LinkDesc<_default.$RolePermission, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__[is logs::AuditLog]": $.LinkDesc<_logs.$AuditLog, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<__type__[is InviterConfig]": $.LinkDesc<_default.$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
   "<__type__": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<intersection_of": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<subject": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;

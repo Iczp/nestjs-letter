@@ -19,12 +19,12 @@ export type $UserType = {
 const UserType: $UserType = $.makeType<$UserType>(_.spec, "ad579a4f-6b56-11ef-b6c2-f52b0bae678e", _.syntax.literal);
 
 export type $BaseEntityλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588λShape & {
-  "creation_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
   "deletion_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
-  "last_modification_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "is_enabled": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "is_deleted": $.PropertyDesc<_std.$bool, $.Cardinality.One, false, false, false, true>;
   "tenant_id": $.PropertyDesc<_std.$str, $.Cardinality.One, false, false, false, true>;
+  "creation_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
+  "last_modification_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
 }>;
 type $BaseEntity = $.ObjectType<"default::BaseEntity", $BaseEntityλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],
@@ -48,6 +48,7 @@ export type $ActivityλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "is_image_set": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "qrcode_rect": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<activity[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<activity[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
   "<activity": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Activity = $.ObjectType<"default::Activity", $ActivityλShape, null, [
@@ -95,6 +96,19 @@ type $GiftLog = $.ObjectType<"default::GiftLog", $GiftLogλShape, null, [
 const $GiftLog = $.makeType<$GiftLog>(_.spec, "b1586329-6b56-11ef-aef9-adeced62f00e", _.syntax.literal);
 
 const GiftLog: $.$expr_PathNode<$.TypeSet<$GiftLog, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($GiftLog, $.Cardinality.Many), null);
+
+export type $InviterConfigλShape = $.typeutil.flatten<$BaseEntityλShape & {
+  "activity": $.LinkDesc<$Activity, $.Cardinality.One, {}, false, false,  false, false>;
+  "inviter": $.LinkDesc<$User, $.Cardinality.One, {}, false, false,  false, false>;
+  "max_count": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
+}>;
+type $InviterConfig = $.ObjectType<"default::InviterConfig", $InviterConfigλShape, null, [
+  ...$BaseEntity['__exclusives__'],
+  {inviter: {__element__: $User, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },activity: {__element__: $Activity, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
+]>;
+const $InviterConfig = $.makeType<$InviterConfig>(_.spec, "94800584-7587-11ef-a50a-b5cc147dbec7", _.syntax.literal);
+
+const InviterConfig: $.$expr_PathNode<$.TypeSet<$InviterConfig, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($InviterConfig, $.Cardinality.Many), null);
 
 export type $PermissionλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
@@ -174,12 +188,14 @@ export type $UserλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "<customer[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<inviter[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is UserRole]": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<inviter[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
   "<customer": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<inviter": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $User = $.ObjectType<"default::User", $UserλShape, null, [
   ...$BaseEntity['__exclusives__'],
+  {account: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },erp_user_id: {__element__: _std.$str, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $User = $.makeType<$User>(_.spec, "ad06775d-6b56-11ef-b6a4-09127c794d84", _.syntax.literal);
 
@@ -196,6 +212,7 @@ export type $UserRoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
 }>;
 type $UserRole = $.ObjectType<"default::UserRole", $UserRoleλShape, null, [
   ...$BaseEntity['__exclusives__'],
+  {user: {__element__: $User, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },role: {__element__: $Role, __cardinality__: $.Cardinality.One | $.Cardinality.AtMostOne },},
 ]>;
 const $UserRole = $.makeType<$UserRole>(_.spec, "b34fd9a6-6b56-11ef-a472-23b785e169f8", _.syntax.literal);
 
@@ -235,7 +252,7 @@ const $default__globals: {  current_user: _.syntax.$expr_Global<
 
 
 
-export { Gender, UserType, $BaseEntity, BaseEntity, $Activity, Activity, $ActivityCustomer, ActivityCustomer, $GiftLog, GiftLog, $Permission, Permission, $Role, Role, $RolePermission, RolePermission, $SignLog, SignLog, $User, User, $UserRole, UserRole, $current_user, current_user };
+export { Gender, UserType, $BaseEntity, BaseEntity, $Activity, Activity, $ActivityCustomer, ActivityCustomer, $GiftLog, GiftLog, $InviterConfig, InviterConfig, $Permission, Permission, $Role, Role, $RolePermission, RolePermission, $SignLog, SignLog, $User, User, $UserRole, UserRole, $current_user, current_user };
 
 type __defaultExports = {
   "Gender": typeof Gender;
@@ -244,6 +261,7 @@ type __defaultExports = {
   "Activity": typeof Activity;
   "ActivityCustomer": typeof ActivityCustomer;
   "GiftLog": typeof GiftLog;
+  "InviterConfig": typeof InviterConfig;
   "Permission": typeof Permission;
   "Role": typeof Role;
   "RolePermission": typeof RolePermission;
@@ -260,6 +278,7 @@ const __defaultExports: __defaultExports = {
   "Activity": Activity,
   "ActivityCustomer": ActivityCustomer,
   "GiftLog": GiftLog,
+  "InviterConfig": InviterConfig,
   "Permission": Permission,
   "Role": Role,
   "RolePermission": RolePermission,

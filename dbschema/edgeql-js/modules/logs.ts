@@ -12,7 +12,6 @@ export type $AuditLogλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f738
   "ip": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "url": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "user_id": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "user_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "duration": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
   "http_status": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
   "excution_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, true>;
@@ -25,6 +24,7 @@ export type $AuditLogλShape = $.typeutil.flatten<_std.$Object_8ce8c71ee4fa5f738
   "referer": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "class_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "handler_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "user_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
 }>;
 type $AuditLog = $.ObjectType<"logs::AuditLog", $AuditLogλShape, null, [
   ..._std.$Object_8ce8c71ee4fa5f73840c22d7eaa58588['__exclusives__'],

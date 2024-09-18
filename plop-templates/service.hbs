@@ -24,17 +24,6 @@ export class {{pascalCase name}}Service extends CrudService<
   public override itemSelect(id: string, entity: any): object {
     return {
       ...entity['*'],
-      permissions: {
-        id: true,
-        creation_time: true,
-        is_deleted: true,
-        permission: {
-          id: true,
-          name: true,
-          code: true,
-          is_enabled: true,
-        },
-      },
     };
   }
 
