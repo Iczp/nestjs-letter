@@ -50,6 +50,11 @@ export class UserCreateInput {
   //   max_count?: number;
 }
 
+export class UserAutoCreateInput extends UserCreateInput {
+  @ApiProperty()
+  public erp_user_id?: string;
+}
+
 export class UserDto extends BaseEntityDto {
   @IsNotEmpty()
   @ApiProperty()

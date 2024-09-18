@@ -95,28 +95,24 @@ export class RolesService extends CrudService<
     Assert.IfNotGuid(id);
     const idlist = input.permissions;
     Logger.log(idlist, 'RoleSService.setPermissions');
-    const selPermissions = e.params(
-      { idlist: e.array(e.uuid) },
-      ({ idlist }) =>
-        e.select(e.Permission, (permission) => ({
-          id: true,
-          filter: e.op(permission.id, 'in', e.array_unpack(idlist)),
-        })),
+    const selPermissions = e.params({ idlist: e.array(e.uuid) }, ({ idlist }) =>
+      e.select(e.Permission, (permission) => ({
+        id: true,
+        filter: e.op(permission.id, 'in', e.array_unpack(idlist)),
+      })),
     );
     // Logger.log(
     //   selPermissions.toEdgeQL(),
     //   'RoleSService.setPermissions query.toEdgeQL()',
     // );
 
-    const delPermissions = e.params(
-      { idlist: e.array(e.uuid) },
-      ({ idlist }) =>
-        e.delete(e.RolePermission, (entity) => ({
-          filter: new Filters([
-            e.op(entity.role.id, '=', e.cast(e.uuid, id)),
-            e.op(entity.permission.id, 'not in', e.array_unpack(idlist)),
-          ]).all(),
-        })),
+    const delPermissions = e.params({ idlist: e.array(e.uuid) }, ({ idlist }) =>
+      e.delete(e.RolePermission, (entity) => ({
+        filter: new Filters([
+          e.op(entity.role.id, '=', e.cast(e.uuid, id)),
+          e.op(entity.permission.id, 'not in', e.array_unpack(idlist)),
+        ]).all(),
+      })),
     );
 
     const addRolePermissions = e.params(

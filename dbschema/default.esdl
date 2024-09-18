@@ -97,13 +97,17 @@ module default {
             annotation title := 'Erp用户ID';
         };
 
-        multi roles := (.<user[is UserRole])
+        multi roles := (.<user[is UserRole]);
+
+        constraint exclusive on ((.account, .erp_user_id));
     }
 
     type UserRole extending BaseEntity {
         annotation title := '用户角色';
         required user: User;
         required role: Role;
+
+        constraint exclusive on ((.user, .role));
     }
 
     type Role extending BaseEntity {

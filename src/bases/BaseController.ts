@@ -9,11 +9,11 @@ import { AppPermissionsObject } from 'src/app.consts';
 // import { ApiKeyGuard } from '../api-key/api-key.guard';
 
 // @ApiHeader({
-//   name: 'x-api-key',
-//   description: 'api-key',
+//   name: 'x-user-id',
+//   description: 'x-user-id',
 // })
 // @UseGuards(ApiKeyGuard)
-@ApiSecurity('api-key') // 将 API Key 鉴权配置到 Swagger 文档中
+@ApiSecurity('erp-user-id') // 将 API Key 鉴权配置到 Swagger 文档中
 @ApiBearerAuth('bearer')
 export class BaseController {
   constructor(protected service?: IService) {

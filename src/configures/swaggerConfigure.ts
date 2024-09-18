@@ -15,6 +15,8 @@ declare module '@nestjs/common' {
   }
 }
 
+export const ApiKey = 'erp-user-id';
+
 export type SwaggerOptions = {
   path: string;
 };
@@ -33,15 +35,15 @@ export const swaggerConfigure = (
     .setDescription(description)
     .setVersion(version)
     .setContact(author, website, email)
-    // .addApiKey(
-    //   {
-    //     type: 'apiKey',
-    //     name: 'x-api-key',
-    //     in: 'header',
-    //     description: 'API Key',
-    //   },
-    //   'api-key', // 名称标识，用于关联到守卫
-    // )
+    .addApiKey(
+      {
+        type: 'apiKey',
+        name: 'x-user-id',
+        in: 'header',
+        description: 'Erp User Id',
+      },
+      ApiKey, // 名称标识，用于关联到守卫
+    )
 
     // 添加 JWT Bearer 认证
     .addBearerAuth(

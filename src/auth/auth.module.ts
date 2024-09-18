@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { CurrentUser } from 'src/users/users.current';
 import { LocalStrategy } from './local.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),

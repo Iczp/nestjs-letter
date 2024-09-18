@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -24,6 +24,10 @@ import { AuditsService } from './audits/audits.service';
 // import { UsersService } from './users/user.service';
 // import { AuthService } from './auth/auth.service';
 import { ErpUsersModule } from './erp-users/erp-users.module';
+import { ErpUsersService } from './erp-users/erp-users.service';
+import { ErpUserIdMiddleware } from './erp-users/ErpUserIdMiddleware';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from './users/user.service';
 
 @Module({
   imports: [
@@ -64,6 +68,9 @@ import { ErpUsersModule } from './erp-users/erp-users.module';
     },
     AppService,
     AuditsService,
+    ErpUsersService,
+    JwtService,
+    UsersService,
     // LocalStrategy,
     // JwtStrategy,
     // UsersService,
@@ -72,4 +79,10 @@ import { ErpUsersModule } from './erp-users/erp-users.module';
   ],
   exports: [],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ErpUserIdMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL }); // 对所有路由和所有请求方法应用中间件
+  }
+}

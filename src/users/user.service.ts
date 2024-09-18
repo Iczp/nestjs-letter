@@ -10,6 +10,7 @@ import { client, e } from 'src/edgedb';
 import { Assert } from 'src/common';
 import { Cache } from '@nestjs/cache-manager';
 import {
+  UserAutoCreateInput,
   UserCreateInput,
   UserDetailDto,
   UserDto,
@@ -17,8 +18,6 @@ import {
   UserUpdateInput,
 } from './users.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
 import { CurrentUser } from './users.current';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
@@ -165,6 +164,83 @@ export class UsersService extends CrudService<
       phone: input.phone,
       is_enabled: input.is_enabled,
     };
+  }
+
+  async findOneByErpUserId(erpUserId: string) {
+    const users = await e
+      .select(e.User, (user) => ({
+        ...user['*'],
+        filter: e.op(user.erp_user_id, '=', erpUserId),
+      }))
+      .run(client);
+    if (users.length > 1) {
+      return users[0];
+    }
+    return null;
+  }
+
+  async createIfNotContains(input: UserAutoCreateInput) {
+    const ret = await client.transaction(async (tx) => {
+      const password = await security.encrypt(input.passoword);
+      const user = await e
+        .insert(e.User, {
+          password,
+          account: input.account,
+          name: input.name,
+          gender: input.gender,
+          user_type: input.userType,
+          phone: input.phone,
+          is_enabled: input.is_enabled,
+          erp_user_id: input.erp_user_id,
+        })
+        .unlessConflict((u) => ({
+          on: e.tuple([u.account, u.erp_user_id]),
+          else: u,
+        }))
+        .run(tx);
+
+      // apply default roles
+      const defaultRoles = await e
+        .select(e.Role, (role) => ({
+          id: true,
+          filter: e.op(role.is_default, '=', e.bool(true)),
+        }))
+        .run(tx);
+
+      const userRoles = defaultRoles.map((role) => ({ user, role }));
+
+      const insertDefaultRoles = await e
+        .params(
+          {
+            userRoles: e.json,
+          },
+          (params) => {
+            return e.for(e.json_array_unpack(params.userRoles), (item) => {
+              return e
+                .insert(e.UserRole, {
+                  user: e.select(e.User, () => ({
+                    filter_single: { id: e.cast(e.uuid, item.user.id) },
+                  })),
+                  role: e.select(e.Role, () => ({
+                    filter_single: { id: e.cast(e.uuid, item.role.id) },
+                  })),
+                } as never)
+                .unlessConflict((rp) => ({
+                  on: e.tuple([rp.user, rp.role]),
+                  else: rp,
+                }));
+            });
+          },
+        )
+        .run(tx, {
+          userRoles,
+        });
+
+      console.log('insertDefaultRoles', insertDefaultRoles);
+
+      return { user, insertDefaultRoles };
+    });
+    return ret;
   }
 
   // override async create(input: UserCreateInput): Promise<UserDetailDto> {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { BaseService } from 'src/bases/BaseService';
-import { ErpUsersGetListInput } from './erp-users.dto';
+import { ErpUsersDto, ErpUsersGetListInput } from './erp-users.dto';
 import { ConfigService } from '@nestjs/config';
 import { AXIOS_TIMEOUT, ERP_API_BASE_URL } from 'src/configures/env';
 
@@ -16,7 +16,7 @@ export class ErpUsersService extends BaseService {
     this.timeout = configService.get<number>(AXIOS_TIMEOUT) || 30 * 1000;
   }
 
-  async findAll(input: ErpUsersGetListInput): Promise<any> {
+  async findAll(input: ErpUsersGetListInput): Promise<ErpUsersDto> {
     const { data } = await axios.request({
       baseURL: this.baseURL,
       url: `/api/rcteabasic/erp-user`,
