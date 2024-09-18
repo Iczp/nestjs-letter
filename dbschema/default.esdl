@@ -305,6 +305,8 @@ module default {
             annotation title := '可邀请人数';
         };
 
+        multi invited_customers := (.<inviterConfig[is ActivityCustomer]);
+
         constraint exclusive on ((.inviter, .activity));
 
     }
@@ -366,6 +368,10 @@ module default {
         };
 
         link inviter : User {
+            annotation title := '邀请人';
+        };
+
+        link inviterConfig : InviterConfig {
             annotation title := '邀请人';
         };
     }

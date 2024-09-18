@@ -73,10 +73,11 @@ export class UsersService extends CrudService<
   override async getList(
     input: UserGetListInput,
   ): Promise<PagedResultDto<UserDto>> {
-    return {
-      user: this.currentUser.user,
-      ...(await super.getList(input)),
-    } as PagedResultDto<UserDto>;
+    return await super.getList(input);
+    // return {
+    //   user: this.currentUser.user,
+    //   ...(await super.getList(input)),
+    // } as PagedResultDto<UserDto>;
   }
 
   override listSelect(
