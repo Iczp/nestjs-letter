@@ -47,6 +47,7 @@ export type $ActivityλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "bg_image": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "is_image_set": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "qrcode_rect": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
+  "inviterConfigs": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, true,  false, false>;
   "<activity[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<activity[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
   "<activity": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -72,10 +73,13 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "last_invite_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "customer": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "inviter": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "inviterConfig": $.LinkDesc<$InviterConfig, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "<customers[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is GiftLog]": $.LinkDesc<$GiftLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is SignLog]": $.LinkDesc<$SignLog, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<invited_customers[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
   "<customers": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<invited_customers": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $ActivityCustomer = $.ObjectType<"default::ActivityCustomer", $ActivityCustomerλShape, null, [
@@ -101,6 +105,11 @@ export type $InviterConfigλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "activity": $.LinkDesc<$Activity, $.Cardinality.One, {}, false, false,  false, false>;
   "inviter": $.LinkDesc<$User, $.Cardinality.One, {}, false, false,  false, false>;
   "max_count": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
+  "invited_customers": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, true,  false, false>;
+  "<inviterConfig[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<inviterConfigs[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<inviterConfig": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<inviterConfigs": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $InviterConfig = $.ObjectType<"default::InviterConfig", $InviterConfigλShape, null, [
   ...$BaseEntity['__exclusives__'],

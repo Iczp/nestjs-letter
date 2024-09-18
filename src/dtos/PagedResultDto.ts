@@ -5,6 +5,7 @@ export class PagedResultDto<T> {
     this.totalCount = totalCount;
     this.items = items;
   }
+  input?: any;
   totalCount: number;
   items: T[];
 }

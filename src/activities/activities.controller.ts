@@ -41,8 +41,8 @@ export class ActivitiesController extends CrudController<
   override Policy_Excel_Import = AcitvitiesPermissions.Activity_Excel_Import;
   override Policy_Excel_Ouput = AcitvitiesPermissions.Activity_Excel_Ouput;
   override Policy_Excel_Tpl = AcitvitiesPermissions.Activity_Excel_Tpl;
-  constructor(private readonly userService: ActivitiesService) {
-    super(userService);
+  constructor(private readonly activitiesService: ActivitiesService) {
+    super(activitiesService);
   }
   @Get()
   @ApiOperation({ summary: '活动列表' })
@@ -52,6 +52,16 @@ export class ActivitiesController extends CrudController<
     @Req() req: any,
   ): Promise<PagedResultDto<ActivityDto>> {
     return super.getList(input, req);
+  }
+
+  @Get('list-by-current-user')
+  @ApiOperation({ summary: '活动列表' })
+  // @Auditing(false)
+  public getListByCurrentUser(
+    @Req() req: any,
+  ): Promise<PagedResultDto<ActivityDto>> {
+    const currentUser = req.user;
+    return this.activitiesService.getListByUserId(currentUser.id);
   }
 
   @Get(':id')

@@ -282,7 +282,9 @@ module default {
         #     annotation title := '本次活动的用户列表';
         # };
 
-        multi customers := (.<activity[is ActivityCustomer])
+        multi customers := (.<activity[is ActivityCustomer]);
+
+        multi inviterConfigs := (.<activity[is InviterConfig]);
 
         # multi customers: ActivityCustomer {
         #     # ensures a one-to-many relationship

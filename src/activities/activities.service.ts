@@ -12,7 +12,7 @@ import {
 } from './activities.dto';
 import { isEmpty } from 'src/common/validator';
 import { e } from 'src/edgedb';
-import { ExtractDBType } from 'src/types/ExtractDBType';
+import { PagedResultDto } from 'src/dtos/PagedResultDto';
 
 @Injectable()
 export class ActivitiesService extends CrudService<
@@ -22,16 +22,40 @@ export class ActivitiesService extends CrudService<
   ActivityCreateInput,
   ActivityUpdateInput
 > {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getListByUserId(userId: string): Promise<PagedResultDto<ActivityDto>> {
+    const ret = await this.getList({ user_id: userId, maxResultCount: 99 });
+    ret.input = {
+      current_user_id: userId,
+    };
+    return ret;
+  }
   public readonly entity = e.Activity;
 
   override listFilter(
     input: ActivityGetListInput,
-    entity: ExtractDBType<typeof e.Activity>,
+    // entity: ExtractDBType<typeof e.Activity>,
+    entity: any,
   ): any {
-    return new Filters([e.op(e.Activity.is_deleted, '=', e.bool(false))])
-      .addIf(
-        input.is_enabled !== undefined,
-        e.op(e.Activity.is_enabled, '=', e.bool(input.is_enabled)),
+    return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
+      .addIf(!isEmpty(input.is_enabled), () =>
+        e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
+      )
+      .addIf(!isEmpty(input.start_time), () =>
+        e.op(entity.start_time, '>=', e.datetime(input.start_time)),
+      )
+      .addIf(!isEmpty(input.end_time), () =>
+        e.op(entity.end_time, '<', e.datetime(input.end_time)),
+      )
+      .addIf(!isEmpty(input.user_id), () =>
+        e.op(entity.inviterConfigs.inviter.id, '?=', e.uuid(input.user_id)),
+      )
+      .addIf(!isEmpty(input.erp_user_id), () =>
+        e.op(
+          entity.inviterConfigs.inviter.erp_user_id,
+          '?=',
+          e.str(input.erp_user_id),
+        ),
       )
       .addIf(!isEmpty(input.keyword), () =>
         new Filters([
