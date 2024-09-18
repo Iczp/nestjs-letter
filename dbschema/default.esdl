@@ -20,35 +20,38 @@ module default {
         annotation title :=  'BaseEntity';
         annotation description := 'All entities extending BaseEntity';
 
-        property creation_time -> datetime {
+        property creation_time : datetime {
             annotation title := '创建时间';
             default := (std::datetime_current());
+            rewrite insert using (datetime_of_statement())
         }
 
-        property deletion_time -> datetime {
-            annotation title := '删除时间';
-            # default := (std::datetime_current());
-        }
-
-        property last_modification_time -> datetime {
+        property last_modification_time : datetime {
             annotation title := '最后修改时间';
             # default := (std::datetime_current());
+            rewrite update using (datetime_of_statement())
         };
 
-        property is_enabled -> bool {
+        property is_enabled : bool {
             annotation title := '是否启用';
             default := (true);
         };
 
-        required tenant_id -> str {
+        required tenant_id : str {
             annotation title := '租户';
             default := ('default')
         }
 
-        required is_deleted -> bool {
+        required is_deleted : bool {
             annotation title := '是否已删除';
             default := (false);
         };
+
+        property deletion_time : datetime {
+            annotation title := '删除时间';
+            # default := (std::datetime_current());
+            # rewrite update using (CASE WHEN .is_deleted THEN datetime_of_statement() ELSE .deletion_time END)
+        }
 
         access policy allowAll
             allow all
@@ -66,34 +69,34 @@ module default {
     type User extending BaseEntity {
         annotation title := '用户表';
 
-        property account -> str {
+        property account : str {
             annotation title := '账号';
             # constraint exclusive;
         };
 
-        property password -> str {
+        property password : str {
             annotation title := '密码';
         };
 
-        property name -> str {
+        property name : str {
             annotation title := '姓名';
         };
 
-        property gender -> Gender {
+        property gender : Gender {
             annotation title := '性别';
             default := (Gender.Unknown);
         };
 
-        property phone -> str {
+        property phone : str {
             annotation title := '电话';
         };
 
-        property user_type -> UserType {
+        property user_type : UserType {
             annotation title := '用户类型';
             default := UserType.Unset
         };
 
-        property erp_user_id -> str {
+        property erp_user_id : str {
             annotation title := 'Erp用户ID';
         };
 
@@ -113,31 +116,31 @@ module default {
     type Role extending BaseEntity {
         annotation title := '角色';
 
-        property name -> str {
+        property name : str {
             annotation title := '权限名称';
         };
 
-        required property code -> str {
+        required property code : str {
             annotation title := '编码';
             constraint exclusive;
         };
 
-        property is_static -> bool {
+        property is_static : bool {
             annotation title := '是否固有';
             default := (false)
         };
 
-        property is_public -> bool {
+        property is_public : bool {
             annotation title := '是否公开';
             default := (false)
         };
 
-        property is_default -> bool {
+        property is_default : bool {
             annotation title := '是否默认';
             default := (false)
         };
 
-        property sorting -> int64 {
+        property sorting : int64 {
             annotation title := '排序';
         };
 
@@ -145,7 +148,7 @@ module default {
 
         multi permissions := (.<role[is RolePermission]);
 
-        # multi rolePermissions -> Permission {
+        # multi rolePermissions : Permission {
         #     annotation title := '角色权限';
         # }
     }
@@ -161,26 +164,26 @@ module default {
     type Permission extending BaseEntity {
         annotation title := '权限';
 
-        property name -> str {
+        property name : str {
             annotation title := '权限名称';
         };
 
-        required property code -> str {
+        required property code : str {
             annotation title := '编码';
             constraint exclusive;
         };
 
-        property tag -> str {
+        property tag : str {
             annotation title := '标签';
         };
 
-        property sorting -> int64 {
+        property sorting : int64 {
             annotation title := '编码';
         };
 
         multi roles := (.<permission[is RolePermission]);
 
-        # multi permissionRoles -> Role {
+        # multi permissionRoles : Role {
         #     annotation title := '权限角色';
         # }
     }
@@ -188,15 +191,15 @@ module default {
     # type Customer extending User {
     #     annotation title := '客户表';
 
-    #     overloaded property user_type -> UserType {
+    #     overloaded property user_type : UserType {
     #         annotation title := '用户类型';
     #         default := UserType.Customer
     #     };
 
-    #     property shopName -> str {
+    #     property shopName : str {
     #         annotation title := '门店名称';
     #     };
-    #     property shopCode -> str {
+    #     property shopCode : str {
     #         annotation title := '门店编码';
     #     };
 
@@ -208,12 +211,12 @@ module default {
     # type ShopManager extending User {
     #     annotation title := '邀请人表';
 
-    #     overloaded property user_type -> UserType {
+    #     overloaded property user_type : UserType {
     #         annotation title := '用户类型';
     #         default := UserType.ShopManager
     #     };
 
-    #     property positionName -> str {
+    #     property positionName : str {
     #         annotation title := '职位名称';
     #     };
 
@@ -223,54 +226,54 @@ module default {
         annotation title :=  '活动';
         annotation description := '活动';
 
-        property coverUrl -> str {
+        property coverUrl : str {
             annotation title := '封面地址';
         };
 
-        property title -> str {
+        property title : str {
             annotation title := '标题';
         };
 
-        property description -> str {
+        property description : str {
             annotation title := '活动简介';
         };
 
-        property address -> str {
+        property address : str {
             annotation title := '活动地址';
         };
 
-        property max_count -> int64 {
+        property max_count : int64 {
             annotation title := '参与人数量';
         };
 
-        property content -> str {
+        property content : str {
             annotation title := '活动说明';
         };
 
-        property qrcode_rect -> str {
+        property qrcode_rect : str {
             annotation title := '二维码图片位置';
         };
 
-        property bg_image -> str {
+        property bg_image : str {
             annotation title := '活动图片';
         };
 
-        property is_image_set -> bool {
+        property is_image_set : bool {
             annotation title := '是否设置了图片模板';
             default := (false)
         };
 
-        property start_time -> datetime {
+        property start_time : datetime {
             annotation title := '开始时间';
             default := (std::datetime_current());
         };
 
-        property end_time -> datetime {
+        property end_time : datetime {
             annotation title := '结束时间';
             # default := (std::datetime_current());
         };
 
-        property is_actived -> bool {
+        property is_actived : bool {
             annotation title := '是否活跃';
             default := (true);
         };
@@ -287,50 +290,69 @@ module default {
         # }
     }
 
+    type InviterConfig extending BaseEntity {
+        annotation title := '用户-活动的映射关系表';
+
+        required link inviter : User {
+            annotation title := '邀请人';
+        };
+
+        required link activity : Activity {
+            annotation title := '活动';
+        };
+
+        property max_count : int64 {
+            annotation title := '可邀请人数';
+        };
+
+        constraint exclusive on ((.inviter, .activity));
+
+    }
+
     type ActivityCustomer extending BaseEntity {
         annotation title := '用户-活动的映射关系表';
 
-        property customer_name -> str {
+        property customer_name : str {
             annotation title := '客户名称';
         };
 
-        property customer_gender -> str {
+        property customer_gender : str {
             annotation title := '客户性别';
         };
 
-        property customer_phone -> str {
+        property customer_phone : str {
             annotation title := '客户电话';
         };
 
-        property remarks -> str {
+        property remarks : str {
             annotation title := '备注';
         };
 
-        property inviter_name -> str {
+        property inviter_name : str {
             annotation title := '邀请人名称';
         };
 
-        property last_invite_time -> datetime {
+        property last_invite_time : datetime {
             annotation title := '最后邀请时间';
             # default := (std::datetime_current());
         };
 
-        property is_invited -> bool {
+        property is_invited : bool {
             annotation title := '是否邀请';
             default := (false);
         };
 
-        property is_checked -> bool {
+        property is_checked : bool {
             annotation title := '是否审核';
             default := (false);
         };
 
-        property is_signed -> bool {
+        property is_signed : bool {
             annotation title := '是否签到';
             default := (false);
         };
 
-        property is_gifted -> bool {
+        property is_gifted : bool {
             annotation title := '是否发放礼品';
             default := (false);
         };
@@ -351,11 +373,11 @@ module default {
     type SignLog extending BaseEntity {
         annotation title := '签到日志';
 
-        property customer_name -> str {
+        property customer_name : str {
             annotation title := '客户名称';
         };
 
-        property remarks -> str {
+        property remarks : str {
             annotation title := '备注';
         };
 
@@ -367,11 +389,11 @@ module default {
     type GiftLog extending BaseEntity {
         annotation title := '礼品发放日志';
 
-        property customer_name -> str {
+        property customer_name : str {
             annotation title := '客户名称';
         };
 
-        property remarks -> str {
+        property remarks : str {
             annotation title := '备注';
         };
 
