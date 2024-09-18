@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -48,8 +50,9 @@ export class UsersController extends CrudController<
     super(userService);
   }
   @Get()
-  @ApiOperation({ summary: '用户列表' })
+  @ApiOperation({ summary: '用户列表1' })
   @Authorize({ policy: UsersPermissions.Users_GetList })
+  @HttpCode(HttpStatus.OK)
   public override async getList(
     input: UserGetListInput,
     @Req() req: any,
@@ -70,6 +73,7 @@ export class UsersController extends CrudController<
   @Post()
   @ApiOperation({ summary: '创建用户' })
   @Authorize({ policy: UsersPermissions.Users_Create })
+  @HttpCode(HttpStatus.OK)
   public override create(
     @Body() input: UserCreateInput,
     @Req() req: any,

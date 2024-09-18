@@ -6,6 +6,8 @@ import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
 
+
+
 export class ActivityCustomerDto extends BaseEntityDto {
   @IsNotEmpty()
   @ApiProperty()
@@ -94,6 +96,24 @@ export class ActivityCustomerGetListInput extends GetListInput {
     description: '活动Id',
   })
   public activity_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @ApiProperty({
+    required: false,
+    default: null,
+    description: '邀请人用户Id',
+  })
+  public inviter_user_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  @ApiProperty({
+    required: false,
+    default: null,
+    description: '邀请人用户ErpUserId',
+  })
+  public inviter_erp_user_id?: string;
 
   @IsOptional()
   // @IsBoolean()

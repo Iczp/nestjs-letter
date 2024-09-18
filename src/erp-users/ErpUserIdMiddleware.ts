@@ -49,7 +49,7 @@ export class ErpUserIdMiddleware implements NestMiddleware {
       const privateKey = this.configService.get<string>(JWT_SECRET);
       const accessToken = this.jwtService.sign(payload, {
         privateKey,
-        expiresIn: '3600s',
+        expiresIn: '10s',
       });
       req.headers['authorization'] = `Bearer ${accessToken}`;
     }

@@ -54,24 +54,44 @@ export class ActivityCustomerService extends CrudService<
     input: ActivityCustomerGetListInput,
     entity: ExtractDBType<typeof e.ActivityCustomer>,
   ): any {
-    return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
-      .addIf(
-        !Checker.isEmpty(input.activity_id),
-        e.op(entity.activity['id'], '=', e.uuid(input.activity_id)),
-      )
-      .addIf(
-        !Checker.isEmpty(input.is_checked),
-        e.op(entity.is_checked, '=', e.bool(input.is_checked)),
-      )
-      .addIf(
-        !Checker.isEmpty(input.is_invited),
-        e.op(entity.is_invited, '=', e.bool(input.is_invited)),
-      )
-      .addIf(
-        !Checker.isEmpty(input.is_enabled),
-        e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
-      )
-      .all();
+    return (
+      new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
+        .addIf(
+          !Checker.isEmpty(input.activity_id),
+          e.op(entity.activity['id'], '?=', e.uuid(input.activity_id)),
+        )
+        .addIf(
+          !Checker.isEmpty(input.inviter_user_id),
+          e.op(
+            (entity.inviter as unknown as ExtractDBType<typeof e.User>).id,
+            '?=',
+            e.uuid(input.inviter_user_id),
+          ),
+        )
+        // erp_user_id
+        .addIf(
+          !Checker.isEmpty(input.inviter_erp_user_id),
+          e.op(
+            (entity.inviter as unknown as ExtractDBType<typeof e.User>)
+              .erp_user_id,
+            '?=',
+            e.str(input.inviter_erp_user_id),
+          ),
+        )
+        .addIf(
+          !Checker.isEmpty(input.is_checked),
+          e.op(entity.is_checked, '=', e.bool(input.is_checked)),
+        )
+        .addIf(
+          !Checker.isEmpty(input.is_invited),
+          e.op(entity.is_invited, '=', e.bool(input.is_invited)),
+        )
+        .addIf(
+          !Checker.isEmpty(input.is_enabled),
+          e.op(entity.is_enabled, '=', e.bool(input.is_enabled)),
+        )
+        .all()
+    );
   }
 
   public override mapToUpdateEntity(

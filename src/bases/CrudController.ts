@@ -2,6 +2,8 @@ import {
   Body,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -44,6 +46,7 @@ export abstract class CrudController<
 
   @Get('')
   @ApiOperation({ summary: '获取列表', description: '获取列表' })
+  @HttpCode(HttpStatus.OK)
   async getList(
     @Query() input: TGetListInput,
     @Req() req: any,
@@ -56,6 +59,7 @@ export abstract class CrudController<
 
   @Get(':id')
   @ApiOperation({ summary: '获取单个', description: '获取单个' })
+  @HttpCode(HttpStatus.OK)
   public async getItem(
     @Param('id') id: string,
     @Req() req: any,
