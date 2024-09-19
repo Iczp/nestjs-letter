@@ -13,10 +13,11 @@ import { Filters } from './common/Filters';
 //  "CONFIGURE INSTANCE SET listen_addresses := {'0.0.0.0'};"
 
 export const client = createClient({
-  port: 10708,
-  user: 'edgedb',
-  password: 'vpZbocFbvRXtSC2n4dMC4Zyq',
-  database: 'main',
+  host: process.env.EDGEDB_HOST || '127.0.0.1',
+  port: Number(process.env.EDGEDB_PORT) || 10708,
+  user: process.env.EDGEDB_USER || 'edgedb',
+  password: process.env.EDGEDB_PASSWORD || 'vpZbocFbvRXtSC2n4dMC4Zyq',
+  database: process.env.EDGEDB_DATABASE || 'main',
   tlsSecurity: 'insecure',
 });
 
