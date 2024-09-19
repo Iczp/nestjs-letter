@@ -88,6 +88,14 @@ export class InviterConfigService extends CrudService<
           e.uuid(input.inviter_user_id),
         ),
       )
+      .addIf(!Checker.isEmpty(input.inviter_erp_user_id), () =>
+        e.op(
+          (entity.inviter as unknown as ExtractDBType<typeof e.User>)
+            .erp_user_id,
+          '?=',
+          e.str(input.inviter_erp_user_id),
+        ),
+      )
       .addIf(!Checker.isEmpty(input.keyword), () =>
         new Filters([
           e.op(
@@ -126,8 +134,21 @@ export class InviterConfigService extends CrudService<
     input: InviterConfigCreateInput,
   ): PromiseResult {
     return Promise.resolve({
+      activity: e.select(e.Activity, (x) => ({
+        filter: e.op(x.id, '=', e.uuid(input.activity_id)),
+      })),
+      inviter: e.select(e.User, (x) => ({
+        filter: e.op(x.id, '=', e.uuid(input.inviter_user_id)),
+      })),
       max_count: input.max_count,
       is_enabled: input.is_enabled,
     });
+  }
+
+  public async getItemByUserId(userId: string) {
+    Assert.IfNotGuid(userId, '用户ID格式错误');
+    const ret = await this.getList({ inviter_user_id: userId });
+    Assert.If(ret.items.length == 0, '该用户没有配置');
+    return ret.items[0];
   }
 }

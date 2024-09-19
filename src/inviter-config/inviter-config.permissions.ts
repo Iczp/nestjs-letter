@@ -15,3 +15,6 @@ export const InviterConfig_Excel_Import = 'InviterConfig_Excel_Import';
 export const InviterConfig_Excel_Ouput = 'InviterConfig_Excel_Ouput';
 
 export const InviterConfig_Set_IsEnabled = 'InviterConfig_Set_IsEnabled';
+
+export const InviterConfig_GetItem_ByCurrentUser =
+  'InviterConfig_GetItem_ByCurrentUser';

@@ -21,6 +21,7 @@ import {
   ActivityUpdateInput,
 } from './activities.dto';
 import { AcitvitiesPermissions } from 'src/app.permissions';
+import { CurrentUserApiTags } from 'src/app.consts';
 
 @Controller('activities')
 @ApiTags('Activities 活动管理')
@@ -57,9 +58,10 @@ export class ActivitiesController extends CrudController<
     return super.getList(input, req);
   }
 
-  @Get('list-by-current-user')
+  @Get('current-user/list')
   @ApiOperation({ summary: '活动列表' })
   // @Auditing(false)
+  @ApiTags(CurrentUserApiTags)
   public async getListByCurrentUser(
     @Req() req: any,
   ): Promise<PagedResultDto<ActivityDto>> {

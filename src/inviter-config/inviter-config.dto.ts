@@ -76,6 +76,12 @@ export class InviterConfigGetListInput extends GetListInput {
     description: '邀请人用户ID',
   })
   inviter_user_id?: string;
+
+  @ApiProperty({
+    required: false,
+    description: '邀请人ERP User ID',
+  })
+  inviter_erp_user_id?: string;
 }
 
 export class SetPermissionsInput {

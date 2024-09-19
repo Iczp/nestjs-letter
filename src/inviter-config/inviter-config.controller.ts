@@ -20,6 +20,7 @@ import { InviterConfigService } from './inviter-config.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import * as InviterConfigPermissions from './inviter-config.permissions';
+import { CurrentUserApiTags } from 'src/app.consts';
 
 @Controller('inviter-config')
 @ApiTags('InviterConfig 邀请人配置')
@@ -43,6 +44,9 @@ export class InviterConfigController extends CrudController<
     InviterConfigPermissions.InviterConfig_Excel_Ouput;
   override Policy_Excel_Tpl = InviterConfigPermissions.InviterConfig_Excel_Tpl;
 
+  protected Policy_GetItem_ByCurrentUser =
+    InviterConfigPermissions.InviterConfig_GetItem_ByCurrentUser;
+
   constructor(private readonly inviterConfigService: InviterConfigService) {
     super(inviterConfigService);
   }
@@ -63,6 +67,17 @@ export class InviterConfigController extends CrudController<
     @Req() req: any,
   ): Promise<InviterConfigDetailDto> {
     return await super.getItem(id, req);
+  }
+
+  @Get('current-user/item')
+  @ApiOperation({ summary: '邀请人详情' })
+  @ApiTags(CurrentUserApiTags)
+  public async getItemByCurrentUser(
+    @Req() req: any,
+  ): Promise<InviterConfigDetailDto> {
+    const userId = req.user?.id;
+    await this.checkPolicyName(req, this.Policy_GetItem_ByCurrentUser);
+    return await this.inviterConfigService.getItemByUserId(userId);
   }
 
   @Post()
