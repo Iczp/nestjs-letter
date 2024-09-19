@@ -20,5 +20,6 @@ export const AppPermissionsObject = AppPermissionItems.reduce(
   },
   {},
 );
+export const AppPermissionsKeys = Object.keys(AppPermissionsObject);
 
 export const CurrentUserApiTags = 'CurrentUser 当前用户 API';

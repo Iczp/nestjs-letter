@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty } from 'class-validator';
+import { AppPermissionsKeys } from 'src/app.consts';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
 
@@ -75,6 +76,7 @@ export class RoleGetListInput extends GetListInput {
     required: false,
     description: '权限编码',
     default: '',
+    enum: AppPermissionsKeys,
   })
   public permission_code?: string;
 
