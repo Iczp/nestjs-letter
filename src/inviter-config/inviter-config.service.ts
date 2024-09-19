@@ -25,10 +25,9 @@ export class InviterConfigService extends CrudService<
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public override listSelect(input: InviterConfigGetListInput, entity: any) {
     return {
-      // ...entity['*'],
+      ...entity['*'],
       id: true,
       max_count: true,
-
       activity: {
         id: true,
         title: true,

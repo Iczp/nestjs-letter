@@ -73,25 +73,43 @@ export class RoleDetailDto extends RoleDto {}
 export class RoleGetListInput extends GetListInput {
   @ApiProperty({
     required: false,
-    description: '是否公开',
+    description: '权限编码',
+    default: '',
   })
-  is_public?: boolean;
+  public permission_code?: string;
 
   @ApiProperty({
     required: false,
-    description: '是否固定',
+    description: '用户ID',
+    default: '',
   })
-  is_static?: boolean;
-
-  @ApiProperty({
-    required: false,
-    description: '是否默认',
-  })
-  is_default?: boolean;
+  public user_id?: string;
 
   @IsBoolean()
   @ApiProperty({
     required: false,
+    description: '是否公开',
+  })
+  public is_public?: boolean;
+
+  @IsBoolean()
+  @ApiProperty({
+    required: false,
+    description: '是否固定',
+  })
+  public is_static?: boolean;
+
+  @IsBoolean()
+  @ApiProperty({
+    required: false,
+    description: '是否默认',
+  })
+  public is_default?: boolean;
+
+  @IsBoolean()
+  @ApiProperty({
+    required: false,
+    description: '是否可用',
   })
   public is_enabled?: boolean;
 }

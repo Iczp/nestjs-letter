@@ -45,7 +45,16 @@ export class RolesService extends CrudService<
     entity: any,
   ) {
     return new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
-
+      .addIf(!Checker.isEmpty(input.permission_code), () =>
+        e.op(
+          entity.permissions.permission.code,
+          '?=',
+          e.str(input.permission_code),
+        ),
+      )
+      .addIf(!Checker.isEmpty(input.user_id), () =>
+        e.op(entity.users.user.id, '?=', e.uuid(input.user_id)),
+      )
       .addIf(!Checker.isEmpty(input.is_default), () =>
         e.op(entity.is_default, '?=', e.bool(input.is_default)),
       )
@@ -59,9 +68,9 @@ export class RolesService extends CrudService<
         e.op(entity.is_enabled, '?=', e.bool(input.is_enabled)),
       )
       .addIf(!Checker.isEmpty(input.keyword), () =>
-        e.op(entity.name, 'ilike', e.cast(e.str, `${input.keyword}`)),
+        e.op(entity.name, 'ilike', e.cast(e.str, `%${input.keyword}%`)),
       )
-      .all();
+      .and();
   }
 
   public override mapToUpdateEntity(input: RoleUpdateInput): PromiseResult {
