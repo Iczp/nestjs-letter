@@ -23,7 +23,7 @@ import {
 import { AcitvitiesPermissions } from 'src/app.permissions';
 
 @Controller('activities')
-@ApiTags('Activities')
+@ApiTags('Activities 活动管理')
 // @Auditing(false)
 export class ActivitiesController extends CrudController<
   ActivityDto,
@@ -41,6 +41,9 @@ export class ActivitiesController extends CrudController<
   override Policy_Excel_Import = AcitvitiesPermissions.Activity_Excel_Import;
   override Policy_Excel_Ouput = AcitvitiesPermissions.Activity_Excel_Ouput;
   override Policy_Excel_Tpl = AcitvitiesPermissions.Activity_Excel_Tpl;
+
+  protected Policy_GetList_ByCurrentUser =
+    AcitvitiesPermissions.Activity_GetList_ByCurrentUser;
   constructor(private readonly activitiesService: ActivitiesService) {
     super(activitiesService);
   }
@@ -57,11 +60,12 @@ export class ActivitiesController extends CrudController<
   @Get('list-by-current-user')
   @ApiOperation({ summary: '活动列表' })
   // @Auditing(false)
-  public getListByCurrentUser(
+  public async getListByCurrentUser(
     @Req() req: any,
   ): Promise<PagedResultDto<ActivityDto>> {
     const currentUser = req.user;
-    return this.activitiesService.getListByUserId(currentUser.id);
+    await this.checkPolicyName(req, this.Policy_GetList_ByCurrentUser);
+    return await this.activitiesService.getListByUserId(currentUser.id);
   }
 
   @Get(':id')

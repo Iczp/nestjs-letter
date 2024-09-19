@@ -80,6 +80,30 @@ export class UsersService extends CrudService<
     // } as PagedResultDto<UserDto>;
   }
 
+  override itemSelect(id: string, entity: any): object {
+    return {
+      ...entity['*'],
+      password: false,
+      // roles: {
+      //   // id: true,
+      //   creation_time: true,
+      //   role: {
+      //     id: true,
+      //     name: true,
+      //     // creation_time: true,
+      //   },
+      // },
+      roles: (r) => ({
+        // id: true,
+        creation_time: true,
+        role_id: r.role.id,
+        name: r.role.name,
+        // role_creation_time: r.role.creation_time,
+        // filter: e.op(r.role.is_static, '=', true),
+      }),
+    };
+  }
+
   override listSelect(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: UserGetListInput,

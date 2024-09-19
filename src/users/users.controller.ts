@@ -28,7 +28,7 @@ import { UsersPermissions } from 'src/app.permissions';
   path: 'user',
   scope: Scope.REQUEST,
 })
-@ApiTags('Users')
+@ApiTags('Users 用户管理')
 export class UsersController extends CrudController<
   UserDto,
   UserDetailDto,

@@ -23,7 +23,7 @@ import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { RolesPermissions } from 'src/app.permissions';
 
 @Controller('roles')
-@ApiTags('Roles')
+@ApiTags('Roles 角色管理')
 export class RolesController extends CrudController<
   RoleDto,
   RoleDetailDto,

@@ -2,9 +2,9 @@ import { ApiBearerAuth, ApiSecurity } from '@nestjs/swagger';
 import { IService } from './IService';
 import { Assert, Checker } from 'src/common';
 import { client, e } from 'src/edgedb';
-import { Filters } from 'src/common/Filters';
 import { Logger } from '@nestjs/common';
 import { AppPermissionsObject } from 'src/app.consts';
+import { Filters } from 'src/common/Filters';
 // import { UseGuards } from '@nestjs/common';
 // import { ApiKeyGuard } from '../api-key/api-key.guard';
 
@@ -58,13 +58,13 @@ export class BaseController {
       //   code: true,
       // },
       // filter: e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))),
-      filter: new Filters()
-        .add(e.op(rp.role.users.user.id, '?=', e.uuid(userId)))
-        .add(e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))))
-        .all(),
+      filter: new Filters([
+        e.op(rp.role.users.user.id, '?=', e.uuid(userId)),
+        e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))),
+      ]).and(),
     }));
 
-    // Logger.log(`query:${query.toEdgeQL()}`, BaseController.name);
+    Logger.log(`query:${query.toEdgeQL()}`, BaseController.name);
 
     const granted = await query.run(client);
 

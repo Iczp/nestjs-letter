@@ -14,7 +14,7 @@ import { AllowAnonymous } from './allowAnonymousKey.decorator';
 import { AuthInput } from './auth.dto';
 
 @Controller('auth')
-@ApiTags('Auth')
+@ApiTags('Auth 鉴权管理')
 export class AuthController extends BaseController {
   constructor(private authService: AuthService) {
     super(authService);

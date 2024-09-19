@@ -4,7 +4,7 @@ import { BaseController } from 'src/bases/BaseController';
 import { SeedService } from './seed.service';
 
 @Controller('seed')
-@ApiTags('Seed')
+@ApiTags('Seed 种子数据管理')
 export class SeedController extends BaseController {
   constructor(readonly service: SeedService) {
     super(service);

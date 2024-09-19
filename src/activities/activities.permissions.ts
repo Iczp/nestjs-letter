@@ -15,3 +15,5 @@ export const Activity_Excel_Import = 'Activity_Excel_Import';
 export const Activity_Excel_Ouput = 'Activity_Excel_Ouput';
 
 export const Activity_Set_IsEnabled = 'Activity_Set_IsEnabled';
+
+export const Activity_GetList_ByCurrentUser = 'Activity_GetList_ByCurrentUser';

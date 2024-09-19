@@ -26,7 +26,7 @@ import { Response } from 'express';
 import { AcitvitiyCustomersPermissions } from 'src/app.permissions';
 
 @Controller('activity-customer')
-@ApiTags('ActivityCustomer')
+@ApiTags('ActivityCustomer 活动客户管理')
 export class ActivityCustomerController extends CrudController<
   ActivityCustomerDto,
   ActivityCustomerDetailDto,

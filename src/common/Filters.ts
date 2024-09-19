@@ -60,4 +60,21 @@ export class Filters /** <T extends TypeSet<$bool, Cardinality>> */ {
   any() {
     return e.any(e.set(...this.array));
   }
+
+  /**
+   * e.any(e.set(...this.array));
+   */
+  and() {
+    if (this.array.length === 0) {
+      return undefined;
+    }
+    if (this.array.length === 1) {
+      return this.array[0];
+    }
+    let op = e.op(this.array[0], 'and', this.array[1]);
+    for (let i = 2; i < this.array.length; i++) {
+      op = e.op(op, 'and', this.array[i]);
+    }
+    return op;
+  }
 }

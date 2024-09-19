@@ -22,7 +22,7 @@ import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import * as InviterConfigPermissions from './inviter-config.permissions';
 
 @Controller('inviter-config')
-@ApiTags('InviterConfig')
+@ApiTags('InviterConfig 邀请人配置')
 export class InviterConfigController extends CrudController<
   InviterConfigDto,
   InviterConfigDetailDto,

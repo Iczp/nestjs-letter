@@ -13,7 +13,7 @@ import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { AuditsPermissions } from 'src/app.permissions';
 
 @Controller('audits')
-@ApiTags('Audits')
+@ApiTags('Audits 审计日志管理')
 export class AuditsController extends CrudController<
   AuditLogDto,
   AuditLogDetailDto,

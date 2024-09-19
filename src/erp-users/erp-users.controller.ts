@@ -5,7 +5,7 @@ import { ErpUsersService } from './erp-users.service';
 import { ErpUsersPermissions } from 'src/app.permissions';
 import { ErpUsersGetListInput } from './erp-users.dto';
 @Controller('erp-users')
-@ApiTags('ERP-Users')
+@ApiTags('ERP-Users ERP 用户管理')
 export class ErpUsersController extends BaseController {
   protected GetListPolicyName = ErpUsersPermissions.ErpUsers_GetList;
   protected GetItemPolicyName = ErpUsersPermissions.ErpUsers_GetItem;
