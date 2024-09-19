@@ -5,6 +5,10 @@ services:
   rctea-basic:
     networks:
       - internal_network
+
+    volumes:
+      - ./logs/rctea-basic:/app/Logs # Logs 要大写，否则日志会丢失
+
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionStrings__Default=Server=host.docker.internal;Initial Catalog=Chat_Main;User ID=sa;Password=123;TrustServerCertificate=True
@@ -24,6 +28,9 @@ services:
       - internal_network
     ports:
       - "3005:3000"
+
+    volumes:
+      - ./logs/nest-letter:/app/logs
 
     environment:
       # 这里可以显式地添加环境变量，但通常不需要这样做，因为.env中的变量会自动被加载
