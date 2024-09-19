@@ -52,7 +52,8 @@ export class ActivityCustomerService extends CrudService<
 
   override listFilter(
     input: ActivityCustomerGetListInput,
-    entity: ExtractDBType<typeof e.ActivityCustomer>,
+    // entity: ExtractDBType<typeof e.ActivityCustomer>,
+    entity: any,
   ): any {
     return (
       new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
@@ -63,7 +64,7 @@ export class ActivityCustomerService extends CrudService<
         .addIf(
           !Checker.isEmpty(input.inviter_user_id),
           e.op(
-            (entity.inviter as unknown as ExtractDBType<typeof e.User>).id,
+            entity.inviterConfig.inviter.id,
             '?=',
             e.uuid(input.inviter_user_id),
           ),
@@ -72,8 +73,7 @@ export class ActivityCustomerService extends CrudService<
         .addIf(
           !Checker.isEmpty(input.inviter_erp_user_id),
           e.op(
-            (entity.inviter as unknown as ExtractDBType<typeof e.User>)
-              .erp_user_id,
+            entity.inviterConfig.inviter.erp_user_id,
             '?=',
             e.str(input.inviter_erp_user_id),
           ),

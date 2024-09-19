@@ -71,9 +71,9 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "is_gifted": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "is_signed": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "last_invite_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
-  "customer": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
-  "inviter": $.LinkDesc<$User, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "inviterConfig": $.LinkDesc<$InviterConfig, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
+  "inviterConfig_Name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
+  "activity_title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "<customers[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is GiftLog]": $.LinkDesc<$GiftLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is SignLog]": $.LinkDesc<$SignLog, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -105,6 +105,7 @@ export type $InviterConfigλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "inviter": $.LinkDesc<$User, $.Cardinality.One, {}, false, false,  false, false>;
   "max_count": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
   "customers": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, true,  false, false>;
+  "inviter_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "<inviterConfig[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<inviterConfigs[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
   "<inviterConfig": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -159,6 +160,10 @@ const Role: $.$expr_PathNode<$.TypeSet<$Role, $.Cardinality.Many>, null> = _.syn
 export type $RolePermissionλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "permission": $.LinkDesc<$Permission, $.Cardinality.One, {}, false, false,  false, false>;
   "role": $.LinkDesc<$Role, $.Cardinality.One, {}, false, false,  false, false>;
+  "permission_code": $.PropertyDesc<_std.$str, $.Cardinality.One, false, true, false, false>;
+  "permission_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
+  "role_code": $.PropertyDesc<_std.$str, $.Cardinality.One, false, true, false, false>;
+  "role_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "<permissions[is Role]": $.LinkDesc<$Role, $.Cardinality.Many, {}, false, false,  false, false>;
   "<roles[is Permission]": $.LinkDesc<$Permission, $.Cardinality.Many, {}, false, false,  false, false>;
   "<permissions": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
@@ -193,11 +198,8 @@ export type $UserλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "roles": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, true,  false, false>;
   "account": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "password": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "<customer[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<inviter[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user[is UserRole]": $.LinkDesc<$UserRole, $.Cardinality.Many, {}, false, false,  false, false>;
   "<inviter[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<customer": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<inviter": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<user": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
@@ -212,6 +214,8 @@ const User: $.$expr_PathNode<$.TypeSet<$User, $.Cardinality.Many>, null> = _.syn
 export type $UserRoleλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "role": $.LinkDesc<$Role, $.Cardinality.One, {}, false, false,  false, false>;
   "user": $.LinkDesc<$User, $.Cardinality.One, {}, false, false,  false, false>;
+  "role_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
+  "user_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "<roles[is User]": $.LinkDesc<$User, $.Cardinality.Many, {}, false, false,  false, false>;
   "<users[is Role]": $.LinkDesc<$Role, $.Cardinality.Many, {}, false, false,  false, false>;
   "<roles[is current_user]": $.LinkDesc<$current_user, $.Cardinality.Many, {}, false, false,  false, false>;

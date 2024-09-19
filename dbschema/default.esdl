@@ -110,6 +110,9 @@ module default {
         required user: User;
         required role: Role;
 
+        user_name := .user.name;
+        role_name := .role.name;
+
         constraint exclusive on ((.user, .role));
     }
 
@@ -157,6 +160,13 @@ module default {
         annotation title := '角色权限';
         required permission: Permission;
         required role: Role;
+
+        role_name := .role.name;
+        role_code := .role.code;
+
+        permission_name := .permission.name;
+        permission_code := .permission.code;
+
         # 唯一性约束
         constraint exclusive on ((.permission, .role));
     }
@@ -295,6 +305,8 @@ module default {
     type InviterConfig extending BaseEntity {
         annotation title := '用户-活动的映射关系表';
 
+        inviter_name := .inviter.name;
+
         required link inviter : User {
             annotation title := '邀请人';
         };
@@ -315,6 +327,10 @@ module default {
 
     type ActivityCustomer extending BaseEntity {
         annotation title := '用户-活动的映射关系表';
+
+        inviterConfig_Name := .inviterConfig.inviter.name;
+
+        activity_title := .activity.title;
 
         property customer_name : str {
             annotation title := '客户名称';
@@ -365,13 +381,13 @@ module default {
             annotation title := '活动';
         };
 
-        link customer : User {
-            annotation title := '客户';
-        };
+        # link customer : User {
+        #     annotation title := '客户';
+        # };
 
-        link inviter : User {
-            annotation title := '邀请人';
-        };
+        # link inviter : User {
+        #     annotation title := '邀请人';
+        # };
 
         link inviterConfig : InviterConfig {
             annotation title := '邀请人';
