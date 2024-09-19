@@ -1,12 +1,20 @@
 version: '3.8'
 
 services:
+  rctea-basic:
+    image: iczpnet/letter-netcore-rctea-basic
+    build:
+      context: ../letter-netcore/
+      dockerfile: host/IczpNet.IczpNet.RcteaBasic.HttpApi.Host/Dockerfile
+
   nest-letter:
     image: iczpnet/nest-letter:v0.1
     # container_name: nest-letter
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - rctea-basic
     ports:
       - "3005:3000"
     # 重启策略

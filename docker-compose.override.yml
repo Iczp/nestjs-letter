@@ -1,16 +1,39 @@
 version: '3.8'
 
 services:
-  nest-letter:
 
+  rctea-basic:
+    networks:
+      - internal_network
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionStrings__Default=Server=host.docker.internal;Initial Catalog=Chat_Main;User ID=sa;Password=123;TrustServerCertificate=True
+      # - ConnectionStrings__RcteaBasic=Server=host.docker.internal;Initial Catalog=Chat_Main;User ID=sa;Password=123;TrustServerCertificate=True
+      - ConnectionStrings__RcteaBasic=Server=10.20.5.179;Initial Catalog=rcerp;User ID=sa;Password=sa;Pooling=true;Max Pool Size=10000;Min Pool Size=0;TrustServerCertificate=True
+      # - ConnectionStrings__AbpSettingManagement=Server=host.docker.internal;Initial Catalog=Chat_Main;User ID=sa;Password=123;TrustServerCertificate=True
+      # - ConnectionStrings__AbpPermissionManagement=Server=host.docker.internal;Initial Catalog=Chat_Main;User ID=sa;Password=123;TrustServerCertificate=True
+      # - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Initial Catalog=Chat_Main;User ID=sa;Password=123;TrustServerCertificate=True
+      # - ConnectionStrings__SqlServerCache=Server=sqlserver;Database=RcteaBasic_Cache;Trusted_Connection=True;User=sa;Password=123;Integrated Security=false
+      - AuthServer__Authority=http://identity-server
+      - Redis__Configuration=host.docker.internal
+    # ports:
+    #   - "51602:80"
+
+  nest-letter:
+    networks:
+      - internal_network
     ports:
       - "3005:3000"
-
 
     environment:
       # 这里可以显式地添加环境变量，但通常不需要这样做，因为.env中的变量会自动被加载
       # API_KEY: ${API_KEY}  # 这行是多余的，除非你想覆盖.env中的值或添加注释
       NODE_ENV: production
       EDGEDB_HOST: host.docker.internal
+      # ERP_API_BASE_URL: http://host.docker.internal:51602
+      ERP_API_BASE_URL: http://rctea-basic:80
     env_file:
       - .env # 这行是可选的，因为docker-compose会自动查找同目录下的.env文件
+networks:
+  internal_network:
+    driver: bridge
