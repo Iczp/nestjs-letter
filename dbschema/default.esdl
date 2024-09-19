@@ -307,7 +307,7 @@ module default {
             annotation title := '可邀请人数';
         };
 
-        multi invited_customers := (.<inviterConfig[is ActivityCustomer]);
+        multi customers := (.<inviterConfig[is ActivityCustomer]);
 
         constraint exclusive on ((.inviter, .activity));
 
