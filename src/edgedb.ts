@@ -1,6 +1,8 @@
 import createClient from 'edgedb';
 import _e_ from 'dbschema/edgeql-js'; // auto-generated code
 import { SchemaType } from './types/SchemaType';
+import { Logger } from '@nestjs/common';
+import { Filters } from './common/Filters';
 
 // C:\Users\ZP\AppData\Local\EdgeDB\config\credentials
 // edgedb --host=10.0.5.20 --port=10707 --database=main --user=edgedb --password
@@ -81,3 +83,26 @@ FILTER
     })),
   }));
 }
+
+export const getGranted = async (userId: string, policyNames: string[]) => {
+  const query = e.select(e.RolePermission, (rp) => ({
+    id: true,
+    role: {
+      name: true,
+    },
+    // permission: {
+    //   id: true,
+    //   name: true,
+    //   code: true,
+    // },
+    // filter: e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))),
+    filter: new Filters([
+      e.op(rp.role.users.user.id, '?=', e.uuid(userId)),
+      e.op(rp.permission.code, 'in', e.set(...policyNames.map(e.str))),
+    ]).and(),
+  }));
+
+  Logger.log(`query:${query.toEdgeQL()}`, 'EdgeDB');
+
+  return await query.run(client);
+};
