@@ -22,7 +22,7 @@ export class RolesService extends CrudService<
 > {
   public readonly entity = e.Role;
 
-  public override itemSelect(id: string, entity: any): object {
+  protected override itemSelect(id: string, entity: any): object {
     return {
       ...entity['*'],
       permissions: {
@@ -39,7 +39,7 @@ export class RolesService extends CrudService<
     };
   }
 
-  public override listFilter(
+  protected override listFilter(
     input: RoleGetListInput,
     // entity: ExtractDBType<typeof e.Role>,
     entity: any,

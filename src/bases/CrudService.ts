@@ -29,27 +29,30 @@ export abstract class CrudService<
   // public abstract entity: ObjectTypeExpression | $expr_PathNode;
   // public client = createClient();
 
-  public itemSelect(id: string, entity: any): object {
+  protected itemSelect(id: string, entity: any): object {
     return entity['*'];
   }
 
-  public createSelect(input: TCreateInput): object {
+  protected createSelect(input: TCreateInput): object {
     return this.entity['*'];
   }
 
-  public updateSelect(id: string, input: TUpdateInput): object {
+  protected updateSelect(id: string, input: TUpdateInput): object {
     return this.entity['*'];
   }
 
-  public listSelect(input: TGetListInput, entity?: any): any {
+  protected listSelect(input: TGetListInput, entity?: any): any {
     return this.entity['*'];
   }
 
-  public listFilter(input: TGetListInput, entity?: any): any {
+  protected listFilter(input: TGetListInput, entity?: any): any {
     return e.op(this.entity['is_deleted'], '=', e.bool(false));
   }
 
-  public mapToUpdateEntity(input: TUpdateInput, entity?: any): PromiseResult {
+  protected mapToUpdateEntity(
+    input: TUpdateInput,
+    entity?: any,
+  ): PromiseResult {
     const result = {};
     if (this.entity['last_modification_time']) {
       result['last_modification_time'] = e.datetime_current();
@@ -60,16 +63,16 @@ export abstract class CrudService<
     });
   }
 
-  public mapToCreateEntity(input: TCreateInput): PromiseResult {
+  protected mapToCreateEntity(input: TCreateInput): PromiseResult {
     return Promise.resolve({
       ...input,
     });
   }
 
-  public mapToDto(item: any): Promise<TDto> {
+  protected mapToDto(item: any): Promise<TDto> {
     return Promise.resolve(item as TDto);
   }
-  public mapToDetailDto(item: any): Promise<TDetailDto> {
+  protected mapToDetailDto(item: any): Promise<TDetailDto> {
     return Promise.resolve(item as TDetailDto);
   }
 

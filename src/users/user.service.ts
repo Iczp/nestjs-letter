@@ -80,7 +80,7 @@ export class UsersService extends CrudService<
     // } as PagedResultDto<UserDto>;
   }
 
-  override itemSelect(id: string, entity: any): object {
+  protected override itemSelect(id: string, entity: any): object {
     return {
       ...entity['*'],
       password: false,
@@ -104,7 +104,7 @@ export class UsersService extends CrudService<
     };
   }
 
-  override listSelect(
+  protected override listSelect(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     input: UserGetListInput,
     // entity: ExtractDBType<typeof e.User>,
@@ -134,7 +134,7 @@ export class UsersService extends CrudService<
     };
   }
 
-  public listFilter(
+  protected override listFilter(
     input: UserGetListInput,
     // entity: ExtractDBType<typeof e.User>,
     entity: any,

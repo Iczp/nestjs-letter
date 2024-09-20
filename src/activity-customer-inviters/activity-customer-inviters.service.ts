@@ -9,7 +9,10 @@ import { Cardinality } from 'edgedb/dist/reflection';
 
 @Injectable()
 export class ActivityCustomerInvitersService extends BaseActivityCustomerService<ActivityCustomerInvitersGetListInput> {
-  override listFilter(input: ActivityCustomerInvitersGetListInput, entity) {
+  protected override listFilter(
+    input: ActivityCustomerInvitersGetListInput,
+    entity,
+  ) {
     input.inviter_user_id = this.currentUserId;
     return super.listFilter(input, entity);
   }

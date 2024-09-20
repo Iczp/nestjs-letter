@@ -32,7 +32,7 @@ export class ActivitiesService extends CrudService<
   }
   public readonly entity = e.Activity;
 
-  override listFilter(
+  protected override listFilter(
     input: ActivityGetListInput,
     // entity: ExtractDBType<typeof e.Activity>,
     entity: any,

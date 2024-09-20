@@ -39,7 +39,7 @@ export class BaseActivityCustomerService<
   // }
   public readonly entity = e.ActivityCustomer;
 
-  public override listSelect(
+  protected override listSelect(
     input: TGetListInput,
     entity: ExtractDBType<typeof e.ActivityCustomer>,
   ) {
@@ -52,7 +52,7 @@ export class BaseActivityCustomerService<
     };
   }
 
-  override listFilter(
+  protected override listFilter(
     input: TGetListInput,
     // entity: ExtractDBType<typeof e.ActivityCustomer>,
     entity: any,

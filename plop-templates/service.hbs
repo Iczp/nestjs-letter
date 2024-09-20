@@ -21,13 +21,13 @@ export class {{pascalCase name}}Service extends CrudService<
 > {
   public readonly entity = e.{{pascalCase name}};
 
-  public override itemSelect(id: string, entity: any): object {
+  protected override itemSelect(id: string, entity: any): object {
     return {
       ...entity['*'],
     };
   }
 
-  public override listFilter(
+  protected override listFilter(
     input: {{pascalCase name}}GetListInput,
     // entity: ExtractDBType<typeof e.{{pascalCase name}}>,
     entity: any,
@@ -52,7 +52,7 @@ export class {{pascalCase name}}Service extends CrudService<
       .any();
   }
 
-  public override mapToUpdateEntity(input: {{pascalCase name}}UpdateInput): PromiseResult {
+  protected override mapToUpdateEntity(input: {{pascalCase name}}UpdateInput): PromiseResult {
     const entity = e.{{pascalCase name}};
     return Promise.resolve({
       name: input.name ?? entity.name,
@@ -62,7 +62,7 @@ export class {{pascalCase name}}Service extends CrudService<
     });
   }
 
-  public override mapToCreateEntity(input: {{pascalCase name}}CreateInput): PromiseResult {
+  protected override mapToCreateEntity(input: {{pascalCase name}}CreateInput): PromiseResult {
     return Promise.resolve({
       name: input.name,
       code: input.code,

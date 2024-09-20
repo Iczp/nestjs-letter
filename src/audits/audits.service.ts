@@ -36,7 +36,7 @@ export class AuditsService extends CrudService<
     super();
   }
 
-  override listSelect(
+  protected override listSelect(
     input: AuditLogGetListInput,
     // entity: ExtractDBType<typeof e.logs.AuditLog>,
     entity: any,
@@ -50,7 +50,7 @@ export class AuditsService extends CrudService<
     };
   }
 
-  public override listFilter(
+  protected override listFilter(
     input: AuditLogGetListInput,
     // entity: ExtractDBType<typeof e.AuditLog>,
     entity: any,

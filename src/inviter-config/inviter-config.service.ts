@@ -23,7 +23,7 @@ export class InviterConfigService extends CrudService<
   public readonly entity = e.InviterConfig;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public override listSelect(input: InviterConfigGetListInput, entity: any) {
+  protected override listSelect(input: InviterConfigGetListInput, entity: any) {
     return {
       ...entity['*'],
       id: true,
@@ -42,7 +42,7 @@ export class InviterConfigService extends CrudService<
     };
   }
 
-  public override itemSelect(id: string, entity: any): object {
+  protected override itemSelect(id: string, entity: any): object {
     return {
       ...entity['*'],
       activity: {
@@ -57,7 +57,7 @@ export class InviterConfigService extends CrudService<
     };
   }
 
-  public override listFilter(
+  protected override listFilter(
     input: InviterConfigGetListInput,
     entity: ExtractDBType<typeof e.InviterConfig>,
     // entity: any,
