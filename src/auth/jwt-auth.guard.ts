@@ -20,7 +20,9 @@ import { ErpUsersService } from 'src/erp-users/erp-users.service';
 
 // require('./passport')(passport); // as strategy in ./passport.js needs passport object
 
-@Injectable()
+@Injectable({
+  // scope: Scope.REQUEST,
+})
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
     private readonly configService: ConfigService,

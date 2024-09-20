@@ -4,13 +4,14 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Put,
   Req,
   Scope,
 } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './user.service';
 import { CrudController } from 'src/bases/CrudController';
 import {
@@ -23,6 +24,7 @@ import {
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { Authorize } from 'src/auth/Authorize.decorator';
 import { UsersPermissions } from 'src/app.permissions';
+import { REQUEST } from '@nestjs/core';
 
 @Controller({
   path: 'user',
@@ -46,17 +48,18 @@ export class UsersController extends CrudController<
   override Policy_Excel_Ouput = UsersPermissions.Users_Excel_Ouput;
   override Policy_Excel_Tpl = UsersPermissions.Users_Excel_Tpl;
 
-  constructor(private readonly userService: UsersService) {
+  constructor(
+    private readonly userService: UsersService,
+    @Inject(REQUEST)
+    private request: Request,
+  ) {
     super(userService);
   }
   @Get()
   @ApiOperation({ summary: '用户列表' })
   @Authorize({ policy: UsersPermissions.Users_GetList })
   @HttpCode(HttpStatus.OK)
-  @ApiBody({
-    description: `PagedResultDto<UserDto>`,
-    type: () => [UserDto],
-  })
+  @ApiOkResponse({ type: [UserDto] })
   public override async getList(
     input: UserGetListInput,
     @Req() req: any,
@@ -65,12 +68,9 @@ export class UsersController extends CrudController<
   }
 
   @Get(':id')
-  @ApiBody({
-    description: `${UserDetailDto.name}`,
-    type: UserDetailDto,
-  })
   @ApiOperation({ summary: '用户详情' })
   @Authorize({ policy: UsersPermissions.Users_GetItem })
+  @ApiOkResponse({ type: UserDetailDto })
   public override getItem(
     @Param('id') id: string,
     @Req() req: any,
@@ -82,10 +82,7 @@ export class UsersController extends CrudController<
   @ApiOperation({ summary: '创建用户' })
   @Authorize({ policy: UsersPermissions.Users_Create })
   @HttpCode(HttpStatus.OK)
-  @ApiBody({
-    description: `${UserDetailDto.name}`,
-    type: UserDetailDto,
-  })
+  @ApiOkResponse({ type: UserDetailDto })
   public override create(
     @Body() input: UserCreateInput,
     @Req() req: any,
@@ -96,10 +93,7 @@ export class UsersController extends CrudController<
   @Put(':id')
   @ApiOperation({ summary: '修改用户' })
   @Authorize({ policy: UsersPermissions.Users_Update })
-  @ApiBody({
-    description: `${UserDetailDto.name}`,
-    type: UserDetailDto,
-  })
+  @ApiOkResponse({ type: UserDetailDto })
   public override update(
     @Param('id') id: string,
     input: UserUpdateInput,
@@ -112,14 +106,8 @@ export class UsersController extends CrudController<
   // @Delete(':id')
   // @ApiOperation({ summary: '删除用户' })
   // @Authorize({ policy: UsersPermissions.Users_Delete })
+
   public override delete(id: string, @Req() req: any): Promise<void> {
     return super.delete(id, req);
   }
-
-  // @Get('test')
-  // @ApiOperation({ summary: 'test' })
-  // @Authorize({ policy: Users_Delete })
-  // public override test(input:reqInput): Promise<void> {
-  //   return input;
-  // }
 }
