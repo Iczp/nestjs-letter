@@ -19,7 +19,7 @@
     "build": "nest build",
     "build:dc": "docker-compose up --build -d",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "ejs": "npx @edgedb/generate edgeql-js",
+    "ejs": "npx @edgedb/generate edgeql-js && npx @edgedb/generate interfaces",
     "em": "edgedb migrate",
     "emc": "edgedb migration create",
     "start": "nest start",

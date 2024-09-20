@@ -10,7 +10,7 @@ import {
   Req,
   Scope,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './user.service';
 import { CrudController } from 'src/bases/CrudController';
 import {
@@ -50,9 +50,13 @@ export class UsersController extends CrudController<
     super(userService);
   }
   @Get()
-  @ApiOperation({ summary: '用户列表1' })
+  @ApiOperation({ summary: '用户列表' })
   @Authorize({ policy: UsersPermissions.Users_GetList })
   @HttpCode(HttpStatus.OK)
+  @ApiBody({
+    description: `PagedResultDto<UserDto>`,
+    type: () => [UserDto],
+  })
   public override async getList(
     input: UserGetListInput,
     @Req() req: any,
@@ -61,6 +65,10 @@ export class UsersController extends CrudController<
   }
 
   @Get(':id')
+  @ApiBody({
+    description: `${UserDetailDto.name}`,
+    type: UserDetailDto,
+  })
   @ApiOperation({ summary: '用户详情' })
   @Authorize({ policy: UsersPermissions.Users_GetItem })
   public override getItem(
@@ -74,6 +82,10 @@ export class UsersController extends CrudController<
   @ApiOperation({ summary: '创建用户' })
   @Authorize({ policy: UsersPermissions.Users_Create })
   @HttpCode(HttpStatus.OK)
+  @ApiBody({
+    description: `${UserDetailDto.name}`,
+    type: UserDetailDto,
+  })
   public override create(
     @Body() input: UserCreateInput,
     @Req() req: any,
@@ -84,6 +96,10 @@ export class UsersController extends CrudController<
   @Put(':id')
   @ApiOperation({ summary: '修改用户' })
   @Authorize({ policy: UsersPermissions.Users_Update })
+  @ApiBody({
+    description: `${UserDetailDto.name}`,
+    type: UserDetailDto,
+  })
   public override update(
     @Param('id') id: string,
     input: UserUpdateInput,

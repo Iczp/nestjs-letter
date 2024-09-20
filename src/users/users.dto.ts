@@ -3,6 +3,7 @@ import { IsNotEmpty, IsIn, IsOptional, IsBoolean } from 'class-validator';
 import { Gender, UserType } from 'dbschema/interfaces';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
 import { UserTypeEnums, UserTypeKeys } from 'src/enums/UserType';
 
@@ -61,7 +62,7 @@ export class UserDto extends BaseEntityDto {
   id: string;
 
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({ description: '账号' })
   account: string;
 
   @ApiProperty()
@@ -70,7 +71,7 @@ export class UserDto extends BaseEntityDto {
   @ApiProperty()
   phone?: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: UserTypeKeys })
   user_type?: UserType;
 
   @ApiProperty()
@@ -79,6 +80,8 @@ export class UserDto extends BaseEntityDto {
   @ApiProperty()
   erp_user_id?: string;
 }
+
+export class UserGetListResult extends PagedResultDto<UserDto> {}
 
 export class UserUpdateInput extends UserCreateInput {}
 
