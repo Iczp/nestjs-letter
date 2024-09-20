@@ -17,7 +17,7 @@ import {
 } from './{{kebabCase name}}.dto';
 import { CrudController } from 'src/bases/CrudController';
 import { {{pascalCase name}}Service } from './{{kebabCase name}}.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import * as {{pascalCase name}}Permissions from './{{kebabCase name}}.permissions';
 
@@ -46,6 +46,7 @@ export class {{pascalCase name}}Controller extends CrudController<
 
   @Get()
   @ApiOperation({ summary: '角色列表' })
+  @ApiOkResponse({ type: [{{pascalCase name}}Dto] })
   public override async getList(
     input: {{pascalCase name}}GetListInput,
     @Req() req: any,
@@ -55,6 +56,7 @@ export class {{pascalCase name}}Controller extends CrudController<
 
   @Get(':id')
   @ApiOperation({ summary: '角色详情' })
+  @ApiOkResponse({ type: {{pascalCase name}}DetailDto })
   public override async getItem(
     @Param('id') id: string,
     @Req() req: any,
@@ -64,6 +66,7 @@ export class {{pascalCase name}}Controller extends CrudController<
 
   @Post()
   @ApiOperation({ summary: '创建角色' })
+  @ApiOkResponse({ type: {{pascalCase name}}DetailDto })
   public override async create(
     @Body() input: {{pascalCase name}}CreateInput,
     @Req() req: any,
@@ -73,6 +76,7 @@ export class {{pascalCase name}}Controller extends CrudController<
 
   @Put(':id')
   @ApiOperation({ summary: '修改角色' })
+  @ApiOkResponse({ type: {{pascalCase name}}DetailDto })
   public override async update(
     @Param('id') id: string,
     input: {{pascalCase name}}UpdateInput,

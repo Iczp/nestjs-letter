@@ -11,6 +11,10 @@ import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
 import { IService } from './IService';
 import { Assert, Checker } from 'src/common';
+import { $bool } from 'dbschema/edgeql-js/modules/std';
+import { Cardinality } from 'edgedb/dist/ifaces';
+import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
+import { TypeSet } from 'dbschema/edgeql-js/typesystem';
 
 export abstract class CrudService<
     TDto,
@@ -43,15 +47,15 @@ export abstract class CrudService<
     return this.entity['*'];
   }
 
-  public listSelect(input: TGetListInput, entity: any): any {
+  public listSelect(input: TGetListInput, entity?: any): any {
     return this.entity['*'];
   }
 
-  public listFilter(input: TGetListInput, entity: any): any {
+  public listFilter(input: TGetListInput, entity?: any): any {
     return e.op(this.entity['is_deleted'], '=', e.bool(false));
   }
 
-  public mapToUpdateEntity(input: TUpdateInput): PromiseResult {
+  public mapToUpdateEntity(input: TUpdateInput, entity?: any): PromiseResult {
     const result = {};
     if (this.entity['last_modification_time']) {
       result['last_modification_time'] = e.datetime_current();
@@ -176,16 +180,20 @@ export abstract class CrudService<
     return await q.run(client);
   }
 
+  protected updateFilter(id: string, entity: any) {
+    return e.op(entity['id'], '=', e.uuid(id));
+  }
+
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
     const updateDto = await this.mapToUpdateEntity(input);
     console.log('update dto:', updateDto);
-    const queryUpdate = e.update(this.entity, (entity) => ({
-      filter_single: e.op(entity['id'], '=', e.uuid(id)),
-      set: updateDto,
-    }));
-    const u1 = await queryUpdate.run(client);
-
-    console.log('update result:', u1);
+    const queryUpdate = e.update(this.entity, (entity) => {
+      const filter = this.updateFilter(id, entity);
+      return {
+        filter_single: filter,
+        set: updateDto,
+      };
+    });
 
     const queryDisplay = e.select(queryUpdate, (entity) => ({
       order_by: [
@@ -198,7 +206,15 @@ export abstract class CrudService<
       ...this.updateSelect(id, input),
     }));
 
-    const item = await queryDisplay.run(client);
+    const { item } = await client.transaction(async () => {
+      const u1 = await queryUpdate.run(client);
+
+      console.log('update result:', u1);
+
+      const item = await queryDisplay.run(client);
+      await queryDisplay.run(client);
+      return { item };
+    });
 
     if (!item) {
       throw new NotFoundException(`Item not found,id:${id}`);
@@ -207,19 +223,21 @@ export abstract class CrudService<
     return await this.mapToDetailDto(item);
   }
 
+  protected deleteFilter(id: string, entity: any) {
+    return e.op(entity['id'], '=', e.uuid(id));
+  }
+
   public async delete(id: string): Promise<void> {
-    // const queryDelete = e.delete(this.entity, (entity) => ({
-    //   filter_single: e.op(entity[id], '=', e.uuid(id)),
-    // }));
-
-    const queryUpdate = e.update(this.entity, (entity) => ({
-      filter_single: e.op(entity['id'], '=', e.uuid(id)),
-      set: {
-        is_deleted: e.bool(true),
-        deletion_time: e.datetime_current(),
-      },
-    }));
-
+    const queryUpdate = e.update(this.entity, (entity) => {
+      const filter = this.deleteFilter(id, entity);
+      return {
+        filter_single: filter,
+        set: {
+          is_deleted: e.bool(true),
+          deletion_time: e.datetime_current(),
+        },
+      };
+    });
     const result = await queryUpdate.run(client);
     console.log(result);
   }

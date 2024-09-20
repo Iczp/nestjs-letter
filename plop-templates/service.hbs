@@ -47,9 +47,9 @@ export class {{pascalCase name}}Service extends CrudService<
         e.op(entity.is_enabled, '?=', e.bool(input.is_enabled)),
       )
       .addIf(!Checker.isEmpty(input.keyword), () =>
-        e.op(entity.name, 'ilike', e.cast(e.str, `${input.keyword}`)),
+        e.op(entity.name, 'ilike', e.cast(e.str, `%${input.keyword}%`)),
       )
-      .all();
+      .any();
   }
 
   public override mapToUpdateEntity(input: {{pascalCase name}}UpdateInput): PromiseResult {
@@ -69,7 +69,6 @@ export class {{pascalCase name}}Service extends CrudService<
       is_default: input.is_default,
       is_public: input.is_public,
       is_enabled: input.is_enabled,
-      //   is_static: input.is_static,
     });
   }
 }
