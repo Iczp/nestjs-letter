@@ -11,3 +11,5 @@ export * as AcitvitiyCustomersPermissions from './activity-customers/activity-cu
 export * as ErpUsersPermissions from './erp-users/erp-users.permissions';
 
 export * as InviterConfigPermissions from './inviter-config/inviter-config.permissions';
+
+export * as AcitvitiyCustomerInvitersPermissions from './activity-customer-inviters/activity-customer-inviters.permissions';

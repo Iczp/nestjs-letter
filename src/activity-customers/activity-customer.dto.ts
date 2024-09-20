@@ -6,8 +6,6 @@ import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
 
-
-
 export class ActivityCustomerDto extends BaseEntityDto {
   @IsNotEmpty()
   @ApiProperty()

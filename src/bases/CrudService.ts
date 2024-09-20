@@ -1,20 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ICrudService } from './ICrudService';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
-import e from 'dbschema/edgeql-js'; // auto-generated code
-import { client } from 'src/edgedb';
+import { client, e } from 'src/edgedb';
 import { GetListInput } from './GetListInput';
 import { Logger, NotFoundException } from '@nestjs/common';
 import { $expr_PathNode } from 'dbschema/edgeql-js/path';
 import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
-import { IService } from './IService';
-import { Assert, Checker } from 'src/common';
-import { $bool } from 'dbschema/edgeql-js/modules/std';
-import { Cardinality } from 'edgedb/dist/ifaces';
-import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
-import { TypeSet } from 'dbschema/edgeql-js/typesystem';
+import { Assert } from 'src/common';
 
 export abstract class CrudService<
     TDto,
@@ -79,16 +73,20 @@ export abstract class CrudService<
     return Promise.resolve(item as TDetailDto);
   }
 
+  protected itemFilter(id: string, entity?: any) {
+    return new Filters([e.op(entity['id'], '=', e.uuid(id))])
+      .addIf(
+        entity['is_deleted'],
+        e.op(entity['is_deleted'], '=', e.bool(false)),
+      )
+      .and();
+  }
+
   public async getItem(id: string): Promise<TDetailDto> {
     Logger.log(`getItem id:${id}`, CrudService.name);
     Assert.IfNotGuid(id);
     const query = e.select(this.entity, (entity) => {
-      const filter = new Filters([e.op(entity['id'], '=', e.uuid(id))])
-        .addIf(
-          entity['is_deleted'],
-          e.op(entity['is_deleted'], '=', e.bool(false)),
-        )
-        .all();
+      const filter = this.itemFilter(id, entity);
       return {
         filter_single: filter,
         ...this.itemSelect(id, this.entity),

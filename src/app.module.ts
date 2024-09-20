@@ -29,6 +29,7 @@ import { ErpUserIdMiddleware } from './erp-users/ErpUserIdMiddleware';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from './users/user.service';
 import { InviterConfigModule } from './inviter-config/inviter-config.module';
+import { ActivityCustomerInvitersModule } from './activity-customer-inviters/activity-customer-inviters.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { InviterConfigModule } from './inviter-config/inviter-config.module';
     UsersModule,
     ActivitiesModule,
     ActivityCustomerModule,
+    ActivityCustomerInvitersModule,
     PermissionsModule,
     AuthModule,
     SeedModule,

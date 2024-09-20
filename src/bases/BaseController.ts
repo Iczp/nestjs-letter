@@ -33,7 +33,7 @@ export class BaseController {
     const undefinition = policyNames.filter((x) => !AppPermissionsObject[x]);
     Assert.If(
       undefinition.length > 0,
-      `未定义权限(${undefinition.length}): ${undefinition.join(',')} `,
+      `未定义权限(${undefinition.length}): ${undefinition.join(',')}`,
     );
 
     const userId = req.user?.id;
