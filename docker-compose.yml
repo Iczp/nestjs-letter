@@ -6,9 +6,10 @@ services:
     build:
       context: ../letter-netcore/
       dockerfile: host/IczpNet.IczpNet.RcteaBasic.HttpApi.Host/Dockerfile
+    restart: unless-stopped
 
   nest-letter:
-    image: iczpnet/nest-letter:v0.1
+    image: iczpnet/letter-nest:v0.1.5
     # container_name: nest-letter
     build:
       context: .
