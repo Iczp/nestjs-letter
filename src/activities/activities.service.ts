@@ -62,7 +62,7 @@ export class ActivitiesService extends CrudService<
           e.op(entity.title, 'ilike', e.str(`%${input.keyword}%`)),
         ]).any(),
       )
-      .all();
+      .and();
   }
 
   public override mapToUpdateEntity(input: ActivityUpdateInput): PromiseResult {

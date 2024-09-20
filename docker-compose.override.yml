@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-
   rctea-basic:
     networks:
       - iczpnet
@@ -16,7 +15,7 @@ services:
       # - ConnectionStrings__AbpPermissionManagement=Server=host.docker.internal;Initial Catalog=Chat_Main;User ID=sa;Password=123;TrustServerCertificate=True
       # - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Initial Catalog=Chat_Main;User ID=sa;Password=123;TrustServerCertificate=True
       # - ConnectionStrings__SqlServerCache=Server=sqlserver;Database=RcteaBasic_Cache;Trusted_Connection=True;User=sa;Password=123;Integrated Security=false
-      - AuthServer__Authority=http://identity-server
+      # - AuthServer__Authority=http://identity-server
       - Redis__Configuration=host.docker.internal
     # ports:
     #   - "51602:80"

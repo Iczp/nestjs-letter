@@ -110,7 +110,7 @@ export class InviterConfigService extends CrudService<
           ),
         ]).any(),
       )
-      .all();
+      .and();
   }
 
   public override mapToUpdateEntity(

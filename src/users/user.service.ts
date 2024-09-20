@@ -162,7 +162,7 @@ export class UsersService extends CrudService<
       .addIf(!isEmpty(input.keyword), () =>
         e.op(entity.name, 'ilike', e.cast(e.str, `%${input.keyword}%`)),
       )
-      .all();
+      .and();
   }
 
   public override async mapToUpdateEntity(

@@ -86,7 +86,7 @@ export class AuditsService extends CrudService<
       .addIf(!Checker.isEmpty(input.keyword), () =>
         e.op(entity.handler_name, 'ilike', e.cast(e.str, `%${input.keyword}%`)),
       )
-      .all();
+      .and();
   }
 
   async shouldBeLog(context: ExecutionContext) {
