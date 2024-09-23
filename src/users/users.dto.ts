@@ -3,7 +3,7 @@ import { IsNotEmpty, IsIn, IsOptional, IsBoolean } from 'class-validator';
 import { Gender, UserType } from 'dbschema/interfaces';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
+import { PagedResult, PagedResultDto } from 'src/dtos/PagedResultDto';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
 import { UserTypeEnums, UserTypeKeys } from 'src/enums/UserType';
 
@@ -124,7 +124,9 @@ export class UserGetListInput extends GetListInput {
   public is_enabled?: boolean;
 }
 
-// export class ArgsInput {
-//   @Req() req: any;
-//   @Body() body: any;
-// }
+export class UserPagedResult extends PagedResult {
+  constructor(totalCount: number, items: UserDto[]) {
+    super(totalCount, items);
+  }
+  override items: UserDto[];
+}

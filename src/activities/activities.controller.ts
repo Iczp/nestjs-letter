@@ -17,7 +17,7 @@ import {
   ActivityDetailDto,
   ActivityDto,
   ActivityGetListInput,
-  ActivityGetListResult,
+  ActivityPagedResult,
   ActivityUpdateInput,
 } from './activities.dto';
 import { AcitvitiesPermissions } from 'src/app.permissions';
@@ -54,7 +54,7 @@ export class ActivitiesController extends CrudController<
   public override getList(
     input: ActivityGetListInput,
     @Req() req: any,
-  ): Promise<ActivityGetListResult> {
+  ): Promise<ActivityPagedResult> {
     return super.getList(input, req);
   }
 
@@ -64,7 +64,7 @@ export class ActivitiesController extends CrudController<
   @ApiTags(CurrentUserApiTags)
   public async getListByCurrentUser(
     @Req() req: any,
-  ): Promise<ActivityGetListResult> {
+  ): Promise<ActivityPagedResult> {
     const currentUser = req.user;
     await this.checkPolicyName(req, this.Policy_GetList_ByCurrentUser);
     return await this.activitiesService.getListByUserId(currentUser.id);

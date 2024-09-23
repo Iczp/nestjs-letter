@@ -97,7 +97,7 @@ export class ActivityGetListInput extends GetListInput {
   public end_time?: Date;
 }
 
-export class ActivityGetListResult extends PagedResult {
+export class ActivityPagedResult extends PagedResult {
   constructor(totalCount: number, items: ActivityDto[]) {
     super(totalCount, items);
   }

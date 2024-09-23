@@ -42,7 +42,7 @@ export class ActivityInput {
   public id: string;
 }
 
-export class ActivityCustomerInvitersResult extends PagedResult {
+export class ActivityCustomerInvitersPagedResult extends PagedResult {
   constructor(totalCount: number, items: ActivityCustomerDto[]) {
     super(totalCount, items);
   }

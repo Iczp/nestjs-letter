@@ -4,6 +4,7 @@ import { Gender } from 'dbschema/interfaces';
 import { ActivityDto } from 'src/activities/activities.dto';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+import { PagedResult } from 'src/dtos/PagedResultDto';
 import { GenderEnums, GenderKeys } from 'src/enums/Gender';
 
 export class ActivityCustomerDto extends BaseEntityDto {
@@ -131,4 +132,11 @@ export class ActivityCustomerGetListInput extends GetListInput {
     description: '是否可用',
   })
   public is_enabled?: boolean;
+}
+
+export class ActivityCustomerPagedResult extends PagedResult {
+  constructor(totalCount: number, items: ActivityCustomerDto[]) {
+    super(totalCount, items);
+  }
+  override items: ActivityCustomerDto[];
 }

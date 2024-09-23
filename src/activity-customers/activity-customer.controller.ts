@@ -19,9 +19,9 @@ import {
   ActivityCustomerDetailDto,
   ActivityCustomerDto,
   ActivityCustomerGetListInput,
+  ActivityCustomerPagedResult,
   ActivityCustomerUpdateInput,
 } from './activity-customer.dto';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { Response } from 'express';
 import { AcitvitiyCustomersPermissions } from 'src/app.permissions';
 
@@ -61,7 +61,7 @@ export class ActivityCustomerController extends CrudController<
   public override getList(
     input: ActivityCustomerGetListInput,
     @Req() req: any,
-  ): Promise<PagedResultDto<ActivityCustomerDto>> {
+  ): Promise<ActivityCustomerPagedResult> {
     return super.getList(input, req);
   }
 

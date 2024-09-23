@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+import { PagedResult } from 'src/dtos/PagedResultDto';
 
 export class AuditLogDto extends BaseEntityDto {
   @ApiProperty({ description: '应用名称' })
@@ -124,4 +125,11 @@ export class AuditLogGetListInput extends GetListInput {
     description: 'IP',
   })
   ip?: string;
+}
+
+export class AuditLogPagedResult extends PagedResult {
+  constructor(totalCount: number, items: AuditLogDto[]) {
+    super(totalCount, items);
+  }
+  override items: AuditLogDto[];
 }

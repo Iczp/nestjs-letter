@@ -13,13 +13,13 @@ import {
   RoleDetailDto,
   RoleDto,
   RoleGetListInput,
+  RolePagedResult,
   RoleUpdateInput,
   SetPermissionsInput,
 } from './roles.dto';
 import { CrudController } from 'src/bases/CrudController';
 import { RolesService } from './roles.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { RolesPermissions } from 'src/app.permissions';
 
 @Controller('roles')
@@ -50,7 +50,7 @@ export class RolesController extends CrudController<
   public override async getList(
     input: RoleGetListInput,
     @Req() req: any,
-  ): Promise<PagedResultDto<RoleDto>> {
+  ): Promise<RolePagedResult> {
     return await super.getList(input, req);
   }
 

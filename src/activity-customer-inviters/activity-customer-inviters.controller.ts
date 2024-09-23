@@ -13,7 +13,7 @@ import {
   ActivityCustomerInvitersDetailDto,
   ActivityCustomerInvitersDto,
   ActivityCustomerInvitersGetListInput,
-  ActivityCustomerInvitersResult,
+  ActivityCustomerInvitersPagedResult,
   ActivityCustomerInvitersUpdateInput,
 } from './activity-customer-inviters.dto';
 import { CrudController } from 'src/bases/CrudController';
@@ -61,7 +61,7 @@ export class ActivityCustomerInvitersController extends CrudController<
   public override async getList(
     input: ActivityCustomerInvitersGetListInput,
     @Req() req: any,
-  ): Promise<ActivityCustomerInvitersResult> {
+  ): Promise<ActivityCustomerInvitersPagedResult> {
     return await super.getList(input, req);
   }
 

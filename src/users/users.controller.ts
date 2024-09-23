@@ -19,9 +19,9 @@ import {
   UserDetailDto,
   UserDto,
   UserGetListInput,
+  UserPagedResult,
   UserUpdateInput,
 } from './users.dto';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { Authorize } from 'src/auth/Authorize.decorator';
 import { UsersPermissions } from 'src/app.permissions';
 import { REQUEST } from '@nestjs/core';
@@ -63,7 +63,7 @@ export class UsersController extends CrudController<
   public override async getList(
     input: UserGetListInput,
     @Req() req: any,
-  ): Promise<PagedResultDto<UserDto>> {
+  ): Promise<UserPagedResult> {
     return super.getList(input, req);
   }
 

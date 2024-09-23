@@ -3,6 +3,7 @@ import { IsBoolean, IsNotEmpty } from 'class-validator';
 import { AppPermissionsKeys } from 'src/app.consts';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+import { PagedResult } from 'src/dtos/PagedResultDto';
 
 export class RoleUpdateInput {
   @IsNotEmpty()
@@ -121,4 +122,11 @@ export class SetPermissionsInput {
     description: '权限列表',
   })
   permissions: string[];
+}
+
+export class RolePagedResult extends PagedResult {
+  constructor(totalCount: number, items: RoleDto[]) {
+    super(totalCount, items);
+  }
+  override items: RoleDto[];
 }

@@ -4,12 +4,12 @@ import {
   AuditLogDetailDto,
   AuditLogDto,
   AuditLogGetListInput,
+  AuditLogPagedResult,
   AuditLogUpdateInput,
 } from './audits.dto';
 import { CrudController } from 'src/bases/CrudController';
 import { AuditsService } from './audits.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { AuditsPermissions } from 'src/app.permissions';
 
 @Controller('audits')
@@ -39,7 +39,7 @@ export class AuditsController extends CrudController<
   public override async getList(
     input: AuditLogGetListInput,
     @Req() req: any,
-  ): Promise<PagedResultDto<AuditLogDto>> {
+  ): Promise<AuditLogPagedResult> {
     return await super.getList(input, req);
   }
 
