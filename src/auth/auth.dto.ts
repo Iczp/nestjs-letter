@@ -63,4 +63,13 @@ export class TokenResult {
    */
   @ApiProperty()
   public refresh_token?: string;
+
+  /**
+   *
+   *
+   * @type {(string )}
+   * @memberof TokenResult
+   */
+  @ApiProperty({ description: '创建时间' })
+  public creation_time?: string;
 }
