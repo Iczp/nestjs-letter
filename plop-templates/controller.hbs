@@ -14,11 +14,11 @@ import {
   {{pascalCase name}}Dto,
   {{pascalCase name}}GetListInput,
   {{pascalCase name}}UpdateInput,
+  {{pascalCase name}}PagedResult,
 } from './{{kebabCase name}}.dto';
 import { CrudController } from 'src/bases/CrudController';
 import { {{pascalCase name}}Service } from './{{kebabCase name}}.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import * as {{pascalCase name}}Permissions from './{{kebabCase name}}.permissions';
 
 @Controller('{{kebabCase name}}')
@@ -50,7 +50,7 @@ export class {{pascalCase name}}Controller extends CrudController<
   public override async getList(
     input: {{pascalCase name}}GetListInput,
     @Req() req: any,
-  ): Promise<PagedResultDto<{{pascalCase name}}Dto>> {
+  ): Promise<{{pascalCase name}}PagedResult> {
     return await super.getList(input, req);
   }
 
