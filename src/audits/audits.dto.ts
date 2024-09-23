@@ -65,7 +65,7 @@ export class AuditLogDto extends BaseEntityDto {
   excution_time: string;
 }
 
-export class AuditLogUpdateInput {}
+export class AuditLogUpdateInput extends AuditLogDto {}
 
 export class AuditLogCreateInput extends AuditLogDto {}
 

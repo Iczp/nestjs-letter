@@ -59,7 +59,7 @@ export class UsersController extends CrudController<
   @ApiOperation({ summary: '用户列表' })
   @Authorize({ policy: UsersPermissions.Users_GetList })
   @HttpCode(HttpStatus.OK)
-  @ApiOkResponse({ type: [UserDto] })
+  @ApiOkResponse({ type: UserPagedResult })
   public override async getList(
     input: UserGetListInput,
     @Req() req: any,

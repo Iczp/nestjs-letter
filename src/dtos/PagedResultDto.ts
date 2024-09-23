@@ -5,7 +5,7 @@ export class PagedResult {
     this.totalCount = totalCount;
     this.items = items;
   }
-  @ApiProperty({ description: '输入参数' })
+  @ApiProperty({ required: false, description: '输入参数' })
   public input?: any;
   @ApiProperty({ description: '总数' })
   public totalCount: number;
