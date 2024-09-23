@@ -101,5 +101,8 @@ export class ActivityPagedResult extends PagedResult {
   constructor(totalCount: number, items: ActivityDto[]) {
     super(totalCount, items);
   }
-  override items: ActivityDto[];
+  @ApiProperty({
+    type: [ActivityDto],
+  })
+  public override items: ActivityDto[];
 }

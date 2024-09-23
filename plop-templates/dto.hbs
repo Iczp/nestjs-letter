@@ -101,5 +101,8 @@ export class {{pascalCase name}}PagedResult extends PagedResult {
   constructor(totalCount: number, items: {{pascalCase name}}Dto[]) {
     super(totalCount, items);
   }
-  override items: {{pascalCase name}}Dto[];
+  @ApiProperty({
+    type: [{{pascalCase name}}Dto],
+  })
+  public override items: {{pascalCase name}}Dto[];
 }

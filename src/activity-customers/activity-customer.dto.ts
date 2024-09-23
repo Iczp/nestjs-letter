@@ -138,5 +138,8 @@ export class ActivityCustomerPagedResult extends PagedResult {
   constructor(totalCount: number, items: ActivityCustomerDto[]) {
     super(totalCount, items);
   }
-  override items: ActivityCustomerDto[];
+  @ApiProperty({
+    type: [ActivityCustomerDto],
+  })
+  public override items: ActivityCustomerDto[];
 }

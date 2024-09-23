@@ -128,5 +128,8 @@ export class RolePagedResult extends PagedResult {
   constructor(totalCount: number, items: RoleDto[]) {
     super(totalCount, items);
   }
-  override items: RoleDto[];
+  @ApiProperty({
+    type: [RoleDto],
+  })
+  public override items: RoleDto[];
 }

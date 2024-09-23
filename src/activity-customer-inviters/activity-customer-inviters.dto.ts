@@ -1,4 +1,4 @@
-import { ApiHideProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   ActivityCustomerCreateInput,
   ActivityCustomerDto,
@@ -46,5 +46,8 @@ export class ActivityCustomerInvitersPagedResult extends PagedResult {
   constructor(totalCount: number, items: ActivityCustomerDto[]) {
     super(totalCount, items);
   }
-  override items: ActivityCustomerDto[];
+  @ApiProperty({
+    type: [ActivityCustomerDto],
+  })
+  public override items: ActivityCustomerDto[];
 }

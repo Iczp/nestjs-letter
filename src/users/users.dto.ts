@@ -128,5 +128,8 @@ export class UserPagedResult extends PagedResult {
   constructor(totalCount: number, items: UserDto[]) {
     super(totalCount, items);
   }
-  override items: UserDto[];
+  @ApiProperty({
+    type: [UserDto],
+  })
+  public override items: UserDto[];
 }

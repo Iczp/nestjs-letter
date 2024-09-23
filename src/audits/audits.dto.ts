@@ -131,5 +131,8 @@ export class AuditLogPagedResult extends PagedResult {
   constructor(totalCount: number, items: AuditLogDto[]) {
     super(totalCount, items);
   }
-  override items: AuditLogDto[];
+  @ApiProperty({
+    type: [AuditLogDto],
+  })
+  public items: AuditLogDto[];
 }
