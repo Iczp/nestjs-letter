@@ -34,6 +34,7 @@ export const swaggerConfigure = (
     .setTitle(name)
     .setDescription(description)
     .setVersion(version)
+    .setExternalDoc('letter', 'https://vvll.net')
     .setContact(author, website, email)
     .addApiKey(
       {
@@ -59,6 +60,10 @@ export const swaggerConfigure = (
 
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(settings.path, app, document);
+
+  console.log('swagger document', document);
+  SwaggerModule.setup(settings.path, app, document, {
+    jsonDocumentUrl: 'swagger.json',
+  });
   return app;
 };
