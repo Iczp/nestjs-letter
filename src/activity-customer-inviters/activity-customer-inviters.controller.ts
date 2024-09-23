@@ -13,12 +13,12 @@ import {
   ActivityCustomerInvitersDetailDto,
   ActivityCustomerInvitersDto,
   ActivityCustomerInvitersGetListInput,
+  ActivityCustomerInvitersResult,
   ActivityCustomerInvitersUpdateInput,
 } from './activity-customer-inviters.dto';
 import { CrudController } from 'src/bases/CrudController';
 import { ActivityCustomerInvitersService } from './activity-customer-inviters.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import * as ActivityCustomerInvitersPermissions from './activity-customer-inviters.permissions';
 
 @Controller('activity-customer-inviters')
@@ -61,7 +61,7 @@ export class ActivityCustomerInvitersController extends CrudController<
   public override async getList(
     input: ActivityCustomerInvitersGetListInput,
     @Req() req: any,
-  ): Promise<PagedResultDto<ActivityCustomerInvitersDto>> {
+  ): Promise<ActivityCustomerInvitersResult> {
     return await super.getList(input, req);
   }
 

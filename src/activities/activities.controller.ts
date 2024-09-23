@@ -11,13 +11,13 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivitiesService } from './activities.service';
 import { CrudController } from 'src/bases/CrudController';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
 // import { Auditing } from 'src/audits/audits.decorator';
 import {
   ActivityCreateInput,
   ActivityDetailDto,
   ActivityDto,
   ActivityGetListInput,
+  ActivityGetListResult,
   ActivityUpdateInput,
 } from './activities.dto';
 import { AcitvitiesPermissions } from 'src/app.permissions';
@@ -54,7 +54,7 @@ export class ActivitiesController extends CrudController<
   public override getList(
     input: ActivityGetListInput,
     @Req() req: any,
-  ): Promise<PagedResultDto<ActivityDto>> {
+  ): Promise<ActivityGetListResult> {
     return super.getList(input, req);
   }
 
@@ -64,7 +64,7 @@ export class ActivitiesController extends CrudController<
   @ApiTags(CurrentUserApiTags)
   public async getListByCurrentUser(
     @Req() req: any,
-  ): Promise<PagedResultDto<ActivityDto>> {
+  ): Promise<ActivityGetListResult> {
     const currentUser = req.user;
     await this.checkPolicyName(req, this.Policy_GetList_ByCurrentUser);
     return await this.activitiesService.getListByUserId(currentUser.id);

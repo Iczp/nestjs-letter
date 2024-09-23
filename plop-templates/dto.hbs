@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty } from 'class-validator';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+import { PagedResult } from 'src/dtos/PagedResultDto';
 
 export class {{pascalCase name}}UpdateInput {
   @IsNotEmpty()
@@ -96,9 +97,9 @@ export class {{pascalCase name}}GetListInput extends GetListInput {
   public is_enabled?: boolean;
 }
 
-export class SetPermissionsInput {
-  @ApiProperty({
-    description: '权限列表',
-  })
-  permissions: string[];
+export class {{pascalCase name}}PagedResult extends PagedResult {
+  constructor(totalCount: number, items: {{pascalCase name}}Dto[]) {
+    super(totalCount, items);
+  }
+  override items: {{pascalCase name}}Dto[];
 }

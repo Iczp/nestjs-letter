@@ -3,6 +3,7 @@ import { IsNotEmpty, IsInt, IsOptional, IsBoolean } from 'class-validator';
 import { UserType } from 'dbschema/interfaces';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+import { PagedResult } from 'src/dtos/PagedResultDto';
 
 export class ActivityCreateInput {
   @IsNotEmpty()
@@ -94,4 +95,11 @@ export class ActivityGetListInput extends GetListInput {
     description: '结束时间',
   })
   public end_time?: Date;
+}
+
+export class ActivityGetListResult extends PagedResult {
+  constructor(totalCount: number, items: ActivityDto[]) {
+    super(totalCount, items);
+  }
+  override items: ActivityDto[];
 }
