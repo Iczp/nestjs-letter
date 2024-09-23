@@ -5,6 +5,15 @@
   "compilerOptions": {
     "builder": "webpack",
     "typeCheck": false,
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "plugins": [
+      {
+        "name": "@nestjs/swagger",
+        "options": {
+          "classValidatorShim": false,
+          "introspectComments": true
+        }
+      }
+    ]
   }
 }

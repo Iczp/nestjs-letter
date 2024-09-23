@@ -68,34 +68,29 @@ export class ActivityGetListInput extends GetListInput {
   @IsBoolean()
   @ApiProperty({
     required: false,
-    // default: null,
   })
   public is_enabled?: boolean;
 
   @ApiProperty({
     required: false,
-    default: null,
     description: '用户ID',
   })
   public user_id?: string;
 
   @ApiProperty({
     required: false,
-    default: null,
     description: 'ERP用户ID',
   })
   public erp_user_id?: string;
 
   @ApiProperty({
     required: false,
-    default: null,
     description: '起始时间',
   })
   public start_time?: Date;
 
   @ApiProperty({
     required: false,
-    default: null,
     description: '结束时间',
   })
   public end_time?: Date;

@@ -24,7 +24,6 @@ export class PagedRequestInput {
     type: Number,
     description: 'skin',
     required: false,
-    default: null,
   })
   @IsInt()
   public skip?: number;

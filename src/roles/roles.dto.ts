@@ -75,7 +75,7 @@ export class RoleGetListInput extends GetListInput {
   @ApiProperty({
     required: false,
     description: '权限编码',
-    default: '',
+    // default: '',
     enum: AppPermissionsKeys,
   })
   public permission_code?: string;
@@ -83,7 +83,7 @@ export class RoleGetListInput extends GetListInput {
   @ApiProperty({
     required: false,
     description: '用户ID',
-    default: '',
+    // default: '',
   })
   public user_id?: string;
 

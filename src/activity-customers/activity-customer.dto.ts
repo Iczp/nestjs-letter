@@ -90,7 +90,6 @@ export class ActivityCustomerGetListInput extends GetListInput {
   @IsUUID()
   @ApiProperty({
     required: false,
-    default: null,
     description: '活动Id',
   })
   public activity_id?: string;
@@ -99,7 +98,6 @@ export class ActivityCustomerGetListInput extends GetListInput {
   @IsUUID()
   @ApiProperty({
     required: false,
-    default: null,
     description: '邀请人用户Id',
   })
   public inviter_user_id?: string;
@@ -108,7 +106,6 @@ export class ActivityCustomerGetListInput extends GetListInput {
   @IsUUID()
   @ApiProperty({
     required: false,
-    default: null,
     description: '邀请人用户ErpUserId',
   })
   public inviter_erp_user_id?: string;
@@ -117,7 +114,6 @@ export class ActivityCustomerGetListInput extends GetListInput {
   // @IsBoolean()
   @ApiProperty({
     required: false,
-    default: null,
   })
   public is_invited?: boolean;
 
@@ -125,7 +121,6 @@ export class ActivityCustomerGetListInput extends GetListInput {
   // @IsBoolean()
   @ApiProperty({
     required: false,
-    default: null,
   })
   public is_checked?: boolean;
 
@@ -133,7 +128,6 @@ export class ActivityCustomerGetListInput extends GetListInput {
   // @IsBoolean()
   @ApiProperty({
     required: false,
-    default: null,
     description: '是否可用',
   })
   public is_enabled?: boolean;
