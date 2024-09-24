@@ -71,5 +71,5 @@ export class TokenResult {
    * @memberof TokenResult
    */
   @ApiProperty({ description: '创建时间' })
-  public creation_time?: string;
+  public creation_time?: Date;
 }
