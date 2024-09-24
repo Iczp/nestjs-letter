@@ -50,7 +50,7 @@ export class ActivityUpdateInput extends ActivityCreateInput {
 export class ActivityDto extends BaseEntityDto {
   @IsNotEmpty()
   @ApiProperty()
-  name!: string;
+  title!: string;
 
   @ApiProperty()
   phone?: string;
