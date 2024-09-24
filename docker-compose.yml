@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   rctea-basic:
     image: iczpnet/letter-netcore-rctea-basic
@@ -7,23 +6,17 @@ services:
       context: ../letter-netcore/
       dockerfile: host/IczpNet.IczpNet.RcteaBasic.HttpApi.Host/Dockerfile
     restart: unless-stopped
-
   nest-letter:
-    image: iczpnet/letter-nest:v0.1.10-beta.2
-    # container_name: nest-letter
+    image: iczpnet/letter-nest:v0.0.19
     build:
       context: .
       dockerfile: Dockerfile
     depends_on:
       - rctea-basic
     ports:
-      - "3005:3000"
-    # 重启策略
+      - '3005:3000'
     restart: unless-stopped
-
     environment:
-      # 这里可以显式地添加环境变量，但通常不需要这样做，因为.env中的变量会自动被加载
-      # API_KEY: ${API_KEY}  # 这行是多余的，除非你想覆盖.env中的值或添加注释
       NODE_ENV: production
     env_file:
-      - .env # 这行是可选的，因为docker-compose会自动查找同目录下的.env文件
+      - .env
