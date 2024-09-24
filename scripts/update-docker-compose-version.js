@@ -1,7 +1,9 @@
-import fs from 'fs';
-import yaml from 'yaml';
-import path from 'path';
-import { version } from '../package.json';
+/* eslint-disable @typescript-eslint/no-var-requires */
+const fs = require('fs');
+const yaml = require('js-yaml');
+const path = require('path');
+const packageJson = require('../package.json');
+const version = packageJson.version;
 
 // 读取 docker-compose.yml 文件
 const dockerComposePath = path.resolve(__dirname, '../docker-compose.yml');
