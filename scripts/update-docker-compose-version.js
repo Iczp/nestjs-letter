@@ -8,6 +8,9 @@ const version = packageJson.version;
 // 读取 docker-compose.yml 文件
 const dockerComposePath = path.resolve(__dirname, '../docker-compose.yml');
 const dockerComposeFile = fs.readFileSync(dockerComposePath, 'utf8');
+
+console.log(`dockerComposeFile`, dockerComposeFile);
+
 const dockerCompose = yaml.parse(dockerComposeFile);
 
 // 假设你要更新的服务名为 'myservice'
