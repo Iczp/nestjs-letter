@@ -9,7 +9,9 @@ const dockerComposeFile = fs.readFileSync(dockerComposePath, 'utf8');
 const dockerCompose = yaml.parse(dockerComposeFile);
 
 // 假设你要更新的服务名为 'myservice'
-const serviceName = 'myservice';
+const serviceName = 'nest-letter';
+
+console.log(`Updating image version for service '${serviceName}'...`);
 
 // 检查服务是否存在并更新镜像版本号
 if (dockerCompose.services && dockerCompose.services[serviceName]) {
