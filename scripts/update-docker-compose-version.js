@@ -11,7 +11,7 @@ const dockerComposeFile = fs.readFileSync(dockerComposePath, 'utf8');
 
 console.log(`dockerComposeFile`, dockerComposeFile);
 
-const dockerCompose = yaml.parse(dockerComposeFile);
+const dockerCompose = yaml.load(dockerComposeFile);
 
 // 假设你要更新的服务名为 'myservice'
 const serviceName = 'nest-letter';
