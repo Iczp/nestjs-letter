@@ -26,4 +26,4 @@ if (dockerCompose.services && dockerCompose.services[serviceName]) {
 }
 
 // 保存更改回文件
-fs.writeFileSync(dockerComposePath, yaml.stringify(dockerCompose));
+fs.writeFileSync(dockerComposePath, yaml.dump(dockerCompose));
