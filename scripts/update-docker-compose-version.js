@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const fs = require('fs');
-const yaml = require('js-yaml');
+// const yaml = require('js-yaml');
+const yaml = require('yaml-comment-include');
 const path = require('path');
 const packageJson = require('../package.json');
 const version = packageJson.version;

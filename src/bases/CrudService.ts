@@ -85,9 +85,7 @@ export abstract class CrudService<
       .and();
   }
 
-  public async getItem(id: string): Promise<TDetailDto> {
-    Logger.log(`getItem id:${id}`, CrudService.name);
-    Assert.IfNotGuid(id);
+  protected getItemQuery(id: string) {
     const query = e.select(this.entity, (entity) => {
       const filter = this.itemFilter(id, entity);
       return {
@@ -95,6 +93,12 @@ export abstract class CrudService<
         ...this.itemSelect(id, this.entity),
       };
     });
+    return query;
+  }
+  public async getItem(id: string): Promise<TDetailDto> {
+    Logger.log(`getItem id:${id}`, CrudService.name);
+    Assert.IfNotGuid(id);
+    const query = this.getItemQuery(id);
     const entity = await query.run(client);
 
     // console.log('getItem result', user);
@@ -196,22 +200,14 @@ export abstract class CrudService<
       };
     });
 
-    const queryDisplay = e.select(queryUpdate, (entity) => ({
-      order_by: [
-        {
-          expression: entity['creation_time'],
-          direction: e.DESC,
-          empty: e.EMPTY_LAST,
-        },
-      ],
+    const queryDisplay = e.select(this.entity, (entity) => ({
+      filter_single: this.updateFilter(id, entity),
       ...this.updateSelect(id, input),
     }));
 
     const { item } = await client.transaction(async () => {
       const u1 = await queryUpdate.run(client);
-
       console.log('update result:', u1);
-
       const item = await queryDisplay.run(client);
       await queryDisplay.run(client);
       return { item };
