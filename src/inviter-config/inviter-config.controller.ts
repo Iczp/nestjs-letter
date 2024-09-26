@@ -13,12 +13,12 @@ import {
   InviterConfigDetailDto,
   InviterConfigDto,
   InviterConfigGetListInput,
+  InviterConfigPagedResult,
   InviterConfigUpdateInput,
 } from './inviter-config.dto';
 import { CrudController } from 'src/bases/CrudController';
 import { InviterConfigService } from './inviter-config.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import * as InviterConfigPermissions from './inviter-config.permissions';
 import { CurrentUserApiTags } from 'src/app.consts';
 
@@ -56,7 +56,7 @@ export class InviterConfigController extends CrudController<
   public override async getList(
     input: InviterConfigGetListInput,
     @Req() req: any,
-  ): Promise<PagedResultDto<InviterConfigDto>> {
+  ): Promise<InviterConfigPagedResult> {
     return await super.getList(input, req);
   }
 

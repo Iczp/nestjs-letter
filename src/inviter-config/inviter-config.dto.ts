@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+import { PagedResult } from 'src/dtos/PagedResultDto';
 
 export class InviterConfigUpdateInput {
   @IsNotEmpty()
@@ -84,9 +85,12 @@ export class InviterConfigGetListInput extends GetListInput {
   inviter_erp_user_id?: string;
 }
 
-export class SetPermissionsInput {
+export class InviterConfigPagedResult extends PagedResult {
+  constructor(totalCount: number, items: InviterConfigDto[]) {
+    super(totalCount, items);
+  }
   @ApiProperty({
-    description: '权限列表',
+    type: [InviterConfigDto],
   })
-  permissions: string[];
+  public override items: InviterConfigDto[];
 }

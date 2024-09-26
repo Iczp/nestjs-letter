@@ -17,6 +17,7 @@ import { Cache } from '@nestjs/cache-manager';
 import { Assert } from 'src/common';
 import { isGuid } from 'src/common/validator';
 import { ErpUsersService } from 'src/erp-users/erp-users.service';
+import { client } from 'src/edgedb';
 
 // require('./passport')(passport); // as strategy in ./passport.js needs passport object
 
@@ -81,6 +82,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (user) {
       request.body['user'] = user;
       this.currentUser.user = user;
+      // edgedb current_user_id
+      client.withGlobals({
+        current_user_id: user.id,
+      });
+
       Logger.log(`set user ${JSON.stringify(user)}`, JwtAuthGuard.name);
     }
 
