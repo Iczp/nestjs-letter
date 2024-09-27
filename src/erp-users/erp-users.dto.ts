@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { GetListInput } from 'src/bases/GetListInput';
+import { PagedResult } from 'src/dtos/PagedResultDto';
 
 export class ErpUsersDto {
   @ApiProperty({
     description: 'id',
   })
-  id?: string;
+  id: string;
 
   @ApiProperty({
     description: 'name',
@@ -119,4 +120,14 @@ export class ErpUsersGetListInput extends GetListInput {
     description: 'http_status',
   })
   http_status?: number;
+}
+
+export class ErpUsersPagedResult extends PagedResult {
+  constructor(totalCount: number, items: ErpUsersDto[]) {
+    super(totalCount, items);
+  }
+  @ApiProperty({
+    type: [ErpUsersDto],
+  })
+  public override items: ErpUsersDto[];
 }
