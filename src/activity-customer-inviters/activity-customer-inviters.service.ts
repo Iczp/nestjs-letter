@@ -33,11 +33,11 @@ export class ActivityCustomerInvitersService extends BaseActivityCustomerService
   }
 
   protected override deleteFilter(
-    id: string,
+    idList: string[],
     entity: any,
   ): $expr_Operator<$bool, Cardinality.One> {
     return new Filters([
-      super.itemFilter(id, entity),
+      super.deleteFilter(idList, entity),
       this.currentUserOp(entity),
     ]).and();
   }

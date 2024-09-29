@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivitiesService } from './activities.service';
 import { CrudController } from 'src/bases/CrudController';
@@ -98,9 +89,12 @@ export class ActivitiesController extends CrudController<
     return super.update(id, input, req);
   }
 
-  @Delete(':id')
-  @ApiOperation({ summary: '删除活动' })
-  public override delete(id: string, @Req() req: any): Promise<void> {
-    return super.delete(id, req);
-  }
+  // @Delete(':id')
+  // @ApiOperation({ summary: '删除活动' })
+  // public override delete(
+  //   @Query('id') id: string | string[],
+  //   @Req() req: any,
+  // ): Promise<void> {
+  //   return super.delete(id, req);
+  // }
 }

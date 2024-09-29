@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { ActivityDto } from 'src/activities/activities.dto';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
 import { PagedResult } from 'src/dtos/PagedResultDto';
+import { UserSimpleDto } from 'src/users/users.dto';
 
 export class InviterConfigUpdateInput {
   @IsNotEmpty()
@@ -36,31 +38,22 @@ export class InviterConfigCreateInput extends InviterConfigUpdateInput {
 }
 
 export class InviterConfigDto extends BaseEntityDto {
-  @ApiProperty()
-  name: string;
-
-  @ApiProperty()
-  code!: string;
+  @ApiProperty({
+    description: '最大邀请人数',
+  })
+  max_count: number;
 
   @ApiProperty({
-    description: '是否公开',
+    description: '活动',
+    type: () => ActivityDto,
   })
-  is_public?: boolean;
+  activity: ActivityDto;
 
   @ApiProperty({
-    description: '是否固定',
+    description: '邀请人',
+    type: () => UserSimpleDto,
   })
-  is_static?: boolean;
-
-  @ApiProperty({
-    description: '是否默认',
-  })
-  is_default?: boolean;
-
-  @ApiProperty({
-    description: '是否启用',
-  })
-  is_enabled?: boolean;
+  inviter: UserSimpleDto;
 }
 
 export class InviterConfigDetailDto extends InviterConfigDto {}

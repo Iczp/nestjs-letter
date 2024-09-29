@@ -102,12 +102,4 @@ export class UsersController extends CrudController<
     this.setServiceRequest(req);
     return super.update(id, input, req);
   }
-
-  // @Delete(':id')
-  // @ApiOperation({ summary: '删除用户' })
-  // @Authorize({ policy: UsersPermissions.Users_Delete })
-
-  public override delete(id: string, @Req() req: any): Promise<void> {
-    return super.delete(id, req);
-  }
 }

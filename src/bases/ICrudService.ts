@@ -14,7 +14,7 @@ export interface ICrudService<
   create(input: TCreateInput): Promise<TDetailDto>;
   update(id: string, input: TUpdateInput): Promise<TDetailDto>;
   updateEntity(id: string, obj: { [x: string]: any }): Promise<any>;
-  delete(id: string): Promise<void>;
+  delete(id: string | string[]): Promise<void>;
 }
 
 // export interface IService {

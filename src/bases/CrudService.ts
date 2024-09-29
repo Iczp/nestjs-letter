@@ -220,13 +220,14 @@ export abstract class CrudService<
     return await this.mapToDetailDto(item);
   }
 
-  protected deleteFilter(id: string, entity: any) {
-    return e.op(entity['id'], '=', e.uuid(id));
+  protected deleteFilter(idList: string[], entity: any) {
+    return e.op(entity['id'], 'in', e.set(...idList.map(e.uuid)));
   }
 
-  public async delete(id: string): Promise<void> {
+  public async delete(id: string | string[]): Promise<void> {
+    const idList = Array.isArray(id) ? id : [id];
     const queryUpdate = e.update(this.entity, (entity) => {
-      const filter = this.deleteFilter(id, entity);
+      const filter = this.deleteFilter(idList, entity);
       return {
         filter_single: filter,
         set: {

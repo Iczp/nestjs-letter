@@ -84,10 +84,4 @@ export class {{pascalCase name}}Controller extends CrudController<
   ): Promise<{{pascalCase name}}DetailDto> {
     return await super.update(id, input, req);
   }
-
-  @Delete(':id')
-  @ApiOperation({ summary: '删除角色' })
-  public override async delete(id: string, @Req() req: any): Promise<void> {
-    return await super.delete(id, req);
-  }
 }

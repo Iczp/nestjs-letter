@@ -106,9 +106,21 @@ export abstract class CrudController<
     return this.service.update(id, input);
   }
 
-  @Delete(':id')
+  // @Delete(':id')
   @ApiOperation({ summary: '删除', description: `` })
-  public async delete(@Query('id') id: string, @Req() req: any) {
+  public async delete(@Query('id') id: string | string[], @Req() req: any) {
+    console.log(id);
+    this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Delete);
+    await this.service.delete(id);
+  }
+
+  @Delete()
+  @ApiOperation({ summary: '删除' })
+  public async deleteMany(
+    @Query('id') id: string[],
+    @Req() req: any,
+  ): Promise<void> {
     console.log(id);
     this.setServiceRequest(req);
     await this.checkPolicyName(req, this.Policy_Delete);

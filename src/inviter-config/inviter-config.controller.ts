@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import {
   InviterConfigCreateInput,
   InviterConfigDetailDto,
@@ -97,11 +88,5 @@ export class InviterConfigController extends CrudController<
     @Req() req: any,
   ): Promise<InviterConfigDetailDto> {
     return await super.update(id, input, req);
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: '删除邀请人' })
-  public override async delete(id: string, @Req() req: any): Promise<void> {
-    return await super.delete(id, req);
   }
 }

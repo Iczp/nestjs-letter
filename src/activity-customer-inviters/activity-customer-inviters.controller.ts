@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import {
   ActivityCustomerInvitersCreateInput,
   ActivityCustomerInvitersDetailDto,
@@ -94,11 +85,5 @@ export class ActivityCustomerInvitersController extends CrudController<
     @Req() req: any,
   ): Promise<ActivityCustomerInvitersDetailDto> {
     return await super.update(id, input, req);
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: '删除客户' })
-  public override async delete(id: string, @Req() req: any): Promise<void> {
-    return await super.delete(id, req);
   }
 }

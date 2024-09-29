@@ -45,10 +45,6 @@ export class UserCreateInput {
 
   @ApiProperty()
   public is_enabled: boolean;
-
-  //   @IsInt()
-  //   @ApiProperty()
-  //   max_count?: number;
 }
 
 export class UserAutoCreateInput extends UserCreateInput {
@@ -56,7 +52,7 @@ export class UserAutoCreateInput extends UserCreateInput {
   public erp_user_id?: string;
 }
 
-export class UserDto extends BaseEntityDto {
+export class UserSimpleDto extends BaseEntityDto {
   @IsNotEmpty()
   @ApiProperty()
   id: string;
@@ -65,9 +61,11 @@ export class UserDto extends BaseEntityDto {
   @ApiProperty({ description: '账号' })
   account: string;
 
-  @ApiProperty()
-  name!: string;
+  @ApiProperty({ description: '名称' })
+  name: string;
+}
 
+export class UserDto extends UserSimpleDto {
   @ApiProperty()
   phone?: string;
 

@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Post,
@@ -111,12 +110,6 @@ export class ActivityCustomerController extends CrudController<
   ) {
     this.setServiceRequest(req);
     return this.service.updateEntity(id, { is_invited: is_invited });
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: '删除[活动客户]' })
-  public override delete(id: string, @Req() req: any): Promise<void> {
-    return super.delete(id, req);
   }
 
   @Get('excel/output')

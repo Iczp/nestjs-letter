@@ -70,10 +70,4 @@ export class AuditsController extends CrudController<
   ): Promise<AuditLogDetailDto> {
     return await super.update(id, input, req);
   }
-
-  // @Delete(':id')
-  @ApiOperation({ summary: '删除审计日志' })
-  public override async delete(id: string, @Req() req: any): Promise<void> {
-    return await super.delete(id, req);
-  }
 }

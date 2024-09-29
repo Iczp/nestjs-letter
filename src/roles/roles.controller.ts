@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
 import {
   RoleCreateInput,
   RoleDetailDto,
@@ -80,12 +71,6 @@ export class RolesController extends CrudController<
     @Req() req: any,
   ): Promise<RoleDetailDto> {
     return await super.update(id, input, req);
-  }
-
-  @Delete(':id')
-  @ApiOperation({ summary: '删除角色' })
-  public override async delete(id: string, @Req() req: any): Promise<void> {
-    return await super.delete(id, req);
   }
 
   @Put('permissions/:id')
