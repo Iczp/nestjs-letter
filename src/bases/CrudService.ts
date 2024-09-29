@@ -229,7 +229,7 @@ export abstract class CrudService<
     const queryUpdate = e.update(this.entity, (entity) => {
       const filter = this.deleteFilter(idList, entity);
       return {
-        filter_single: filter,
+        filter,
         set: {
           is_deleted: e.bool(true),
           deletion_time: e.datetime_current(),
