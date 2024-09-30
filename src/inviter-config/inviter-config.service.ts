@@ -28,6 +28,7 @@ export class InviterConfigService extends CrudService<
       ...entity['*'],
       id: true,
       max_count: true,
+      customer_count: true,
       activity: {
         id: true,
         title: true,

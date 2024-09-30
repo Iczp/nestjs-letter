@@ -69,7 +69,7 @@ export class ActivitiesService extends CrudService<
     const entity = e.Activity;
     return Promise.resolve({
       title: input.title ?? entity.title,
-      coverUrl: input.coverUrl ?? entity.coverUrl,
+      coverUrl: input.coverUrl ?? '',
       description: input.description ?? entity.description,
       address: input.address ?? entity.address,
       max_count: input.max_count ?? entity.max_count,

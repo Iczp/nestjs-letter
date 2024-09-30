@@ -9,6 +9,7 @@ import { Filters } from 'src/common/Filters';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
 import { Assert } from 'src/common';
+import { IdDto } from 'src/dtos/IdDto';
 
 export abstract class CrudService<
     TDto,
@@ -224,7 +225,7 @@ export abstract class CrudService<
     return e.op(entity['id'], 'in', e.set(...idList.map(e.uuid)));
   }
 
-  public async delete(id: string | string[]): Promise<void> {
+  public async delete(id: string | string[]): Promise<IdDto[]> {
     const idList = Array.isArray(id) ? id : [id];
     const queryUpdate = e.update(this.entity, (entity) => {
       const filter = this.deleteFilter(idList, entity);
@@ -238,5 +239,7 @@ export abstract class CrudService<
     });
     const result = await queryUpdate.run(client);
     console.log(result);
+
+    return result as IdDto[];
   }
 }

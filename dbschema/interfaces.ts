@@ -126,6 +126,8 @@ export namespace $default {
     "max_count"?: number | null;
     "customers": ActivityCustomer[];
     "inviter_name"?: string | null;
+    "activity_title"?: string | null;
+    "customers_count": number;
   }
   export interface Permission extends BaseEntity {
     "name"?: string | null;

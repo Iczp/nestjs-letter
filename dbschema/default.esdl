@@ -303,9 +303,7 @@ module default {
     }
 
     type InviterConfig extending BaseEntity {
-        annotation title := '用户-活动的映射关系表';
-
-        inviter_name := .inviter.name;
+        annotation title := '活动邀请人配置表';
 
         required link inviter : User {
             annotation title := '邀请人';
@@ -321,8 +319,17 @@ module default {
 
         multi customers := (.<inviterConfig[is ActivityCustomer]);
 
-        constraint exclusive on ((.inviter, .activity));
+        inviter_name := .inviter.name;
 
+        activity_title := .activity.title;
+
+        # 添加计算属性 customers_count
+        customers_count := count((select .customers filter .is_deleted = false));
+
+        constraint exclusive on ((.inviter, .activity)) except (.is_deleted) 
+        {
+           errmessage := '活动邀请人配置已经存在';
+        };
     }
 
     type ActivityCustomer extending BaseEntity {

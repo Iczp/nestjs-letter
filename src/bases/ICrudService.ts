@@ -1,6 +1,7 @@
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { GetListInput } from './GetListInput';
 import { IExcelService } from './IExcelService';
+import { IdDto } from 'src/dtos/IdDto';
 
 export interface ICrudService<
   TDto,
@@ -14,7 +15,7 @@ export interface ICrudService<
   create(input: TCreateInput): Promise<TDetailDto>;
   update(id: string, input: TUpdateInput): Promise<TDetailDto>;
   updateEntity(id: string, obj: { [x: string]: any }): Promise<any>;
-  delete(id: string | string[]): Promise<void>;
+  delete(id: string | string[]): Promise<IdDto[]>;
 }
 
 // export interface IService {
