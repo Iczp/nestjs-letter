@@ -292,11 +292,11 @@ module default {
         #     annotation title := '本次活动的用户列表';
         # };
 
-        multi customers := (.<activity[is ActivityCustomer]);
+        # multi customers := (.<activity[is ActivityCustomer]);
 
         multi inviterConfigs := (.<activity[is InviterConfig]);
 
-        customers_list := .inviterConfigs.customers;
+        inviter_customers := .inviterConfigs.customers;
 
         inviter_configs_count := count((select .inviterConfigs filter .is_deleted = false));
 
@@ -341,7 +341,9 @@ module default {
 
         inviterConfig_Name := .inviterConfig.inviter.name;
 
-        activity_title := .activity.title;
+        # activity_title := .activity.title;
+
+        activity_title := .inviterConfig.activity.title;
 
         property customer_name : str {
             annotation title := '客户名称';
@@ -388,9 +390,9 @@ module default {
             default := (false);
         };
 
-        required link activity : Activity {
-            annotation title := '活动';
-        };
+        # required link activity : Activity {
+        #     annotation title := '活动';
+        # };
 
         # link customer : User {
         #     annotation title := '客户';

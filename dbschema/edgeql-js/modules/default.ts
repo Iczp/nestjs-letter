@@ -42,15 +42,13 @@ export type $ActivityλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "content": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "description": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "max_count": $.PropertyDesc<_std.$int64, $.Cardinality.AtMostOne, false, false, false, false>;
-  "customers": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, true,  false, false>;
   "is_actived": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "bg_image": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "is_image_set": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "qrcode_rect": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "inviterConfigs": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, true,  false, false>;
   "inviter_configs_count": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, true, false, false>;
-  "customers_list": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, true,  false, false>;
-  "<activity[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
+  "inviter_customers": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, true,  false, false>;
   "<activity[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
   "<activity": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
@@ -68,7 +66,6 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "inviter_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "is_invited": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "remarks": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "activity": $.LinkDesc<$Activity, $.Cardinality.One, {}, false, false,  false, false>;
   "is_checked": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "is_gifted": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "is_signed": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
@@ -76,13 +73,12 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "inviterConfig": $.LinkDesc<$InviterConfig, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "inviterConfig_Name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "activity_title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
-  "<customers[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is GiftLog]": $.LinkDesc<$GiftLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is SignLog]": $.LinkDesc<$SignLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<customers[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<customers_list[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<inviter_customers[is Activity]": $.LinkDesc<$Activity, $.Cardinality.Many, {}, false, false,  false, false>;
   "<customers": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
-  "<customers_list": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<inviter_customers": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $ActivityCustomer = $.ObjectType<"default::ActivityCustomer", $ActivityCustomerλShape, null, [

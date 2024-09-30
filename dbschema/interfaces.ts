@@ -91,14 +91,13 @@ export namespace $default {
     "content"?: string | null;
     "description"?: string | null;
     "max_count"?: number | null;
-    "customers": ActivityCustomer[];
     "is_actived"?: boolean | null;
     "bg_image"?: string | null;
     "is_image_set"?: boolean | null;
     "qrcode_rect"?: string | null;
     "inviterConfigs": InviterConfig[];
     "inviter_configs_count": number;
-    "customers_list": ActivityCustomer[];
+    "inviter_customers": ActivityCustomer[];
   }
   export interface ActivityCustomer extends BaseEntity {
     "customer_gender"?: string | null;
@@ -107,7 +106,6 @@ export namespace $default {
     "inviter_name"?: string | null;
     "is_invited"?: boolean | null;
     "remarks"?: string | null;
-    "activity": Activity;
     "is_checked"?: boolean | null;
     "is_gifted"?: boolean | null;
     "is_signed"?: boolean | null;
