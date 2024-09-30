@@ -44,6 +44,11 @@ export class InviterConfigDto extends BaseEntityDto {
   max_count: number;
 
   @ApiProperty({
+    description: '客户数量',
+  })
+  customers_count: number;
+
+  @ApiProperty({
     description: '活动',
     type: () => ActivityDto,
   })
