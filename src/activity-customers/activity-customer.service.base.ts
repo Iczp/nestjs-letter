@@ -20,6 +20,7 @@ import {
   ActivityCustomerGetListInput,
   ActivityCustomerUpdateInput,
 } from './activity-customer.dto';
+import { ObjectResult } from 'src/types/ObjectResult';
 
 @Injectable()
 export class BaseActivityCustomerService<
@@ -98,13 +99,15 @@ export class BaseActivityCustomerService<
 
   public override mapToUpdateEntity(
     input: ActivityCustomerUpdateInput,
-  ): PromiseResult {
-    const entity = e.ActivityCustomer;
-    return Promise.resolve({
+    entity: ExtractDBType<typeof e.ActivityCustomer>,
+    // entity: ExtractDBType<typeof e.ActivityCustomer>,
+  ): ObjectResult {
+    // const entity = e.ActivityCustomer;
+    return {
       customer_name: input.customer_name ?? entity.customer_name,
       customer_phone: input.customer_phone ?? entity.customer_phone,
       customer_gender: input.customer_gender ?? entity.customer_gender,
-    });
+    };
   }
 
   public override async mapToCreateEntity(

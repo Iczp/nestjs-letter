@@ -10,6 +10,7 @@ import { PromiseResult } from 'src/types/PromiseResult';
 import { ExcelService } from './ExcelService';
 import { Assert } from 'src/common';
 import { IdDto } from 'src/dtos/IdDto';
+import { ObjectResult } from 'src/types/ObjectResult';
 
 export abstract class CrudService<
     TDto,
@@ -50,18 +51,15 @@ export abstract class CrudService<
     return e.op(this.entity['is_deleted'], '=', e.bool(false));
   }
 
-  protected mapToUpdateEntity(
-    input: TUpdateInput,
-    entity?: any,
-  ): PromiseResult {
+  protected mapToUpdateEntity(input: TUpdateInput, entity?: any): ObjectResult {
     const result = {};
     if (this.entity['last_modification_time']) {
       result['last_modification_time'] = e.datetime_current();
     }
-    return Promise.resolve({
+    return {
       ...result,
       ...input,
-    });
+    };
   }
 
   protected mapToCreateEntity(input: TCreateInput): PromiseResult {
@@ -205,9 +203,10 @@ export abstract class CrudService<
 
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
     await this.checkUpdate(id, input);
-    const updateDto = await this.mapToUpdateEntity(input);
-    console.log('update dto:', updateDto);
+
     const queryUpdate = e.update(this.entity, (entity) => {
+      const updateDto = this.mapToUpdateEntity(input, entity);
+      console.log('update dto:', updateDto);
       const filter = this.updateFilter(id, entity);
       return {
         filter_single: filter,

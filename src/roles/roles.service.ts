@@ -12,6 +12,7 @@ import {
   RoleUpdateInput,
   SetPermissionsInput,
 } from './roles.dto';
+import { ObjectResult } from 'src/types/ObjectResult';
 @Injectable()
 export class RolesService extends CrudService<
   RoleDto,
@@ -73,14 +74,17 @@ export class RolesService extends CrudService<
       .and();
   }
 
-  public override mapToUpdateEntity(input: RoleUpdateInput): PromiseResult {
-    const entity = e.Role;
-    return Promise.resolve({
+  public override mapToUpdateEntity(
+    input: RoleUpdateInput,
+    entity: any,
+  ): ObjectResult {
+    // const entity = e.Role;
+    return {
       name: input.name ?? entity.name,
       is_default: input.is_default ?? entity.is_default,
       is_public: input.is_public ?? entity.is_public,
       is_enabled: input.is_enabled ?? entity.is_enabled,
-    });
+    };
   }
 
   public override mapToCreateEntity(input: RoleCreateInput): PromiseResult {

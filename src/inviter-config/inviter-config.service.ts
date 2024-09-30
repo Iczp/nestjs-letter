@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CrudService } from 'src/bases/CrudService';
 import { PromiseResult } from 'src/types/PromiseResult';
 import { Filters } from 'src/common/Filters';
-import { e } from 'src/edgedb';
+import { client, e } from 'src/edgedb';
 import { Assert, Checker } from 'src/common';
 import {
   InviterConfigCreateInput,
@@ -150,5 +150,27 @@ export class InviterConfigService extends CrudService<
     const ret = await this.getList({ inviter_user_id: userId });
     Assert.If(ret.items.length == 0, '该用户没有配置');
     return ret.items[0];
+  }
+
+  protected override async checkDelete(idList: string[]): Promise<void> {
+    await super.checkDelete(idList);
+    const items = await e
+      .select(e.InviterConfig, (x) => ({
+        id: true,
+        inviter_name: true,
+        customers_count: true,
+        filter: new Filters([
+          e.op(x.id, 'in', e.set(...idList.map(e.uuid))),
+          e.op(x.customers_count, '>', 0),
+        ]).and(),
+        limit: 1,
+      }))
+      .run(client);
+
+    Assert.If(
+      items.length > 0,
+      () =>
+        `'${items[0].inviter_name}' 邀请的客户数为 ${items[0].customers_count},请先清空后再删除`,
+    );
   }
 }

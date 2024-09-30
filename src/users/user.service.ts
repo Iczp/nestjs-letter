@@ -20,6 +20,7 @@ import {
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { CurrentUser } from './users.current';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
+import { ObjectResult } from 'src/types/ObjectResult';
 
 @Injectable({
   // scope: Scope.REQUEST,
@@ -165,20 +166,22 @@ export class UsersService extends CrudService<
       .and();
   }
 
-  public override async mapToUpdateEntity(
+  public override mapToUpdateEntity(
     input: UserUpdateInput,
-  ): Promise<PromiseResult> {
-    const entity = e.User;
-    return await Promise.resolve({
+    entity: any,
+    // entity: ExtractDBType<typeof e.User>,
+  ): ObjectResult {
+    // const entity = e.User;
+    return {
       name: input.name ?? entity.name,
       phone: input.phone ?? entity.phone,
       gender: input.gender ?? entity.gender,
-    });
+    };
   }
 
   public override async mapToCreateEntity(
     input: UserCreateInput,
-  ): Promise<PromiseResult> {
+  ): PromiseResult {
     const password = await security.encrypt(input.passoword);
     return {
       account: input.account,

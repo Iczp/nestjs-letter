@@ -5,9 +5,16 @@ import {
 } from '@nestjs/common';
 import { isGuid } from './validator';
 
-export const If = (condition: boolean, message: string, errcode = 403) => {
+export const If = (
+  condition: boolean,
+  message: string | (() => string),
+  errcode = 403,
+) => {
   if (!condition) {
     return;
+  }
+  if (typeof message === 'function') {
+    message = message();
   }
 
   if (errcode === 401) {

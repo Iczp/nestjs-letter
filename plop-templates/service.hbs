@@ -11,6 +11,8 @@ import {
   {{pascalCase name}}GetListInput,
   {{pascalCase name}}UpdateInput,
 } from './{{kebabCase name}}.dto';
+import { ObjectResult } from 'src/types/ObjectResult';
+
 @Injectable()
 export class {{pascalCase name}}Service extends CrudService<
   {{pascalCase name}}Dto,
@@ -52,7 +54,7 @@ export class {{pascalCase name}}Service extends CrudService<
       .any();
   }
 
-  protected override mapToUpdateEntity(input: {{pascalCase name}}UpdateInput): PromiseResult {
+  protected override mapToUpdateEntity(input: {{pascalCase name}}UpdateInput): ObjectResult {
     const entity = e.{{pascalCase name}};
     return Promise.resolve({
       name: input.name ?? entity.name,

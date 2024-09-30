@@ -1,1 +1,3 @@
-export type PromiseResult = Promise<{ [x: string]: any }>;
+import { ObjectResult } from './ObjectResult';
+
+export type PromiseResult = Promise<ObjectResult>;

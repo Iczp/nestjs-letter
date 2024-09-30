@@ -13,6 +13,7 @@ import {
 import { isEmpty } from 'src/common/validator';
 import { e } from 'src/edgedb';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
+import { ObjectResult } from 'src/types/ObjectResult';
 
 @Injectable()
 export class ActivitiesService extends CrudService<
@@ -65,9 +66,12 @@ export class ActivitiesService extends CrudService<
       .and();
   }
 
-  public override mapToUpdateEntity(input: ActivityUpdateInput): PromiseResult {
-    const entity = e.Activity;
-    return Promise.resolve({
+  public override mapToUpdateEntity(
+    input: ActivityUpdateInput,
+    entity: any,
+  ): ObjectResult {
+    // const entity = e.Activity;
+    return {
       title: input.title ?? entity.title,
       coverUrl: input.coverUrl ?? '',
       description: input.description ?? entity.description,
@@ -77,7 +81,9 @@ export class ActivitiesService extends CrudService<
       end_time: input.end_time ?? entity.end_time,
       is_actived:
         input.is_actived !== undefined ? input.is_actived : entity.is_actived,
-    });
+      is_enabled:
+        input.is_enabled !== undefined ? input.is_enabled : entity.is_enabled,
+    };
   }
 
   public override mapToCreateEntity(input: ActivityCreateInput): PromiseResult {
