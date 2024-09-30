@@ -3,6 +3,7 @@ import _e_ from 'dbschema/edgeql-js'; // auto-generated code
 import { SchemaType } from './types/SchemaType';
 import { Logger } from '@nestjs/common';
 import { Filters } from './common/Filters';
+// import { TlsSecurity } from 'edgedb/dist/conUtils';
 
 // C:\Users\ZP\AppData\Local\EdgeDB\config\credentials
 // edgedb --host=10.0.5.20 --port=10707 --database=main --user=edgedb --password
@@ -12,14 +13,22 @@ import { Filters } from './common/Filters';
 // edgedb --port 10707 --tls-security insecure --password query \
 //  "CONFIGURE INSTANCE SET listen_addresses := {'0.0.0.0'};"
 
-export const client = createClient({
+const dbOptions = {
+  // host: process.env.EDGEDB_HOST,
+  // port: Number(process.env.EDGEDB_PORT) || 10708,
+  // user: process.env.EDGEDB_USER,
+  // password: process.env.EDGEDB_PASSWORD,
+  // database: process.env.EDGEDB_DATABASE,
+  // tlsSecurity: process.env.EDGEDB_TLSSECURITY as TlsSecurity,
   host: process.env.EDGEDB_HOST || '127.0.0.1',
   port: Number(process.env.EDGEDB_PORT) || 10708,
   user: process.env.EDGEDB_USER || 'edgedb',
   password: process.env.EDGEDB_PASSWORD || 'vpZbocFbvRXtSC2n4dMC4Zyq',
   database: process.env.EDGEDB_DATABASE || 'main',
   tlsSecurity: 'insecure',
-});
+};
+console.log('dbOptions', process.env, dbOptions);
+export const client = createClient(dbOptions as any);
 
 export const e = _e_;
 

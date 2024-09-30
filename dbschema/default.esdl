@@ -296,6 +296,10 @@ module default {
 
         multi inviterConfigs := (.<activity[is InviterConfig]);
 
+        customers_list := .inviterConfigs.customers;
+
+        inviter_configs_count := count((select .inviterConfigs filter .is_deleted = false));
+
         # multi customers: ActivityCustomer {
         #     # ensures a one-to-many relationship
         #     constraint exclusive;

@@ -97,6 +97,8 @@ export namespace $default {
     "is_image_set"?: boolean | null;
     "qrcode_rect"?: string | null;
     "inviterConfigs": InviterConfig[];
+    "inviter_configs_count": number;
+    "customers_list": ActivityCustomer[];
   }
   export interface ActivityCustomer extends BaseEntity {
     "customer_gender"?: string | null;

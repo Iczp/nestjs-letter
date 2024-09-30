@@ -22,7 +22,7 @@
     "ejs": "npx @edgedb/generate edgeql-js && npx @edgedb/generate interfaces",
     "em": "edgedb migrate",
     "emc": "edgedb migration create",
-    "start": "nest start",
+    "start": "nest start ",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
     "prod": "node dist/main",

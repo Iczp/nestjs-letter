@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { ActivityCustomerInvitersGetListInput } from './activity-customer-inviters.dto';
 import { BaseActivityCustomerService } from 'src/activity-customers/activity-customer.service.base';
 import { Filters } from 'src/common/Filters';
-import { e } from 'src/edgedb';
+import { client, e } from 'src/edgedb';
 import { $expr_Operator } from 'dbschema/edgeql-js/funcops';
 import { $bool } from 'dbschema/edgeql-js/modules/std';
 import { Cardinality } from 'edgedb/dist/reflection';
+import { Assert } from 'src/common';
 
 @Injectable()
 export class ActivityCustomerInvitersService extends BaseActivityCustomerService<ActivityCustomerInvitersGetListInput> {
@@ -40,5 +41,27 @@ export class ActivityCustomerInvitersService extends BaseActivityCustomerService
       super.deleteFilter(idList, entity),
       this.currentUserOp(entity),
     ]).and();
+  }
+
+  protected override async checkDelete(idList: string[]): Promise<void> {
+    await super.checkDelete(idList);
+    const items = await e
+      .select(e.Activity, (x) => ({
+        id: true,
+        inviter_name: true,
+        customers_count: true,
+        filter: new Filters([
+          e.op(x.id, 'in', e.set(...idList.map(e.uuid))),
+          e.op(x.customers_count, '>', 0),
+        ]).and(),
+        limit: 1,
+      }))
+      .run(client);
+
+    Assert.If(
+      items.length > 0,
+      () =>
+        `'${items[0].inviter_name}' 邀请的客户数为 ${items[0].customers_count},请先清空后再删除`,
+    );
   }
 }
