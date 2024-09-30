@@ -96,9 +96,13 @@ export abstract class CrudService<
     });
     return query;
   }
+  protected async checkGetItem(id: string) {
+    Assert.IfNotGuid(id);
+  }
+
   public async getItem(id: string): Promise<TDetailDto> {
     Logger.log(`getItem id:${id}`, CrudService.name);
-    Assert.IfNotGuid(id);
+    await this.checkGetItem(id);
     const query = this.getItemQuery(id);
     const entity = await query.run(client);
 
@@ -110,10 +114,13 @@ export abstract class CrudService<
     return await this.mapToDetailDto(entity);
   }
 
+  protected async checkGetList(input: TGetListInput) {}
+
   public async getList(input: TGetListInput): Promise<PagedResultDto<TDto>> {
     // console.log('listFilter', filter);
     // console.log('toEdgeQL', filter.toEdgeQL());
     Logger.log('getList input', 'getList');
+    await this.checkGetList(input);
 
     const totalCount = e.count(
       e.select(this.entity as any, (entity) => {
@@ -165,7 +172,9 @@ export abstract class CrudService<
     return new PagedResultDto<TDto>(ret.totalCount, items);
   }
 
+  protected async checkCreate(input: TCreateInput) {}
   public async create(input: TCreateInput): Promise<TDetailDto> {
+    await this.checkCreate(input);
     const inputDto = await this.mapToCreateEntity(input);
     console.log('create inputDto', inputDto);
     const queryCreate = e.insert(
@@ -190,7 +199,12 @@ export abstract class CrudService<
     return e.op(entity['id'], '=', e.uuid(id));
   }
 
+  protected async checkUpdate(id: string, input: TUpdateInput) {
+    Assert.IfNotGuid(id);
+  }
+
   public async update(id: string, input: TUpdateInput): Promise<TDetailDto> {
+    await this.checkUpdate(id, input);
     const updateDto = await this.mapToUpdateEntity(input);
     console.log('update dto:', updateDto);
     const queryUpdate = e.update(this.entity, (entity) => {
@@ -225,8 +239,15 @@ export abstract class CrudService<
     return e.op(entity['id'], 'in', e.set(...idList.map(e.uuid)));
   }
 
+  protected async checkDelete(idList: string[]) {
+    for (const id of idList) {
+      Assert.IfNotGuid(id);
+    }
+  }
+
   public async delete(id: string | string[]): Promise<IdDto[]> {
     const idList = Array.isArray(id) ? id : [id];
+    await this.checkDelete(idList);
     const queryUpdate = e.update(this.entity, (entity) => {
       const filter = this.deleteFilter(idList, entity);
       return {
@@ -239,7 +260,6 @@ export abstract class CrudService<
     });
     const result = await queryUpdate.run(client);
     console.log(result);
-
     return result as IdDto[];
   }
 }
