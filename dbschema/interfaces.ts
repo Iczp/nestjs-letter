@@ -98,6 +98,7 @@ export namespace $default {
     "inviterConfigs": InviterConfig[];
     "inviter_configs_count": number;
     "inviter_customers": ActivityCustomer[];
+    "customers_count": number;
   }
   export interface ActivityCustomer extends BaseEntity {
     "customer_name"?: string | null;

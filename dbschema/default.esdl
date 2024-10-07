@@ -296,7 +296,9 @@ module default {
 
         multi inviterConfigs := (.<activity[is InviterConfig]);
 
-        inviter_customers := .inviterConfigs.customers;
+        inviter_customers := (select .inviterConfigs.customers filter .is_deleted = false);
+
+        customers_count := count((select .inviter_customers filter .is_deleted = false));
 
         inviter_configs_count := count((select .inviterConfigs filter .is_deleted = false));
 

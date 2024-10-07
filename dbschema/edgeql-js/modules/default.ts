@@ -49,6 +49,7 @@ export type $ActivityλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "inviterConfigs": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, true,  false, false>;
   "inviter_configs_count": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, true, false, false>;
   "inviter_customers": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, true,  false, false>;
+  "customers_count": $.PropertyDesc<_std.$int64, $.Cardinality.One, false, true, false, false>;
   "<activity[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
   "<activity": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
