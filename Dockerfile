@@ -51,7 +51,7 @@ COPY --from=builder /app/edgedb.toml ./
 
 RUN npm install -g pnpm
 
-RUN pnpm install --frozen-lockfile --production
+RUN pnpm install --production --frozen-lockfile
 
 # COPY --from=builder /app/node_modules ./node_modules
 
