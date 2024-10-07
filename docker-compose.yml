@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
 
   nest-letter:
-    image: iczpnet/letter-nest:v0.0.23
+    image: iczpnet/letter-nest:v0.0.24
     # container_name: nest-letter
     build:
       context: .
