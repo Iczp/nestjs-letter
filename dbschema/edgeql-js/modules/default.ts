@@ -73,6 +73,10 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "inviterConfig_Name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "activity_title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "customer_gender": $.PropertyDesc<$Gender, $.Cardinality.AtMostOne, false, false, false, false>;
+  "check_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "gift_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "invite_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "sign_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "<owner[is GiftLog]": $.LinkDesc<$GiftLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is SignLog]": $.LinkDesc<$SignLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<customers[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;

@@ -113,6 +113,10 @@ export namespace $default {
     "inviterConfig_Name"?: string | null;
     "activity_title"?: string | null;
     "customer_gender"?: Gender | null;
+    "check_time"?: Date | null;
+    "gift_time"?: Date | null;
+    "invite_time"?: Date | null;
+    "sign_time"?: Date | null;
   }
   export type Gender = "Unknown" | "Male" | "Female";
   export interface GiftLog extends BaseEntity {

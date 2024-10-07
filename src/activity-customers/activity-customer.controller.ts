@@ -51,6 +51,19 @@ export class ActivityCustomerController extends CrudController<
     AcitvitiyCustomersPermissions.ActivityCustomer_Excel_Ouput;
   override Policy_Excel_Tpl =
     AcitvitiyCustomersPermissions.ActivityCustomer_Excel_Tpl;
+
+  protected Policy_Set_IsChecked =
+    AcitvitiyCustomersPermissions.ActivityCustomer_Set_IsChecked;
+
+  protected Policy_Set_IsGifted =
+    AcitvitiyCustomersPermissions.ActivityCustomer_Set_IsGifed;
+
+  protected Policy_Set_IsInvited =
+    AcitvitiyCustomersPermissions.ActivityCustomer_Set_IsInvited;
+
+  protected Policy_Set_IsSigned =
+    AcitvitiyCustomersPermissions.ActivityCustomer_Set_IsSigned;
+
   constructor(readonly service: ActivityCustomerService) {
     super(service);
   }
@@ -93,23 +106,51 @@ export class ActivityCustomerController extends CrudController<
   }
 
   @Post('checked/:id')
-  @ApiOperation({ summary: '设置 是否签到' })
+  @ApiOperation({ summary: '设置 是否审核' })
   public setIsChecked(
     @Param('id') id: string,
     @Query('is_checked') is_checked: boolean,
+    @Req() req: any,
   ) {
+    this.setServiceRequest(req);
+    this.checkPolicyName(req, this.Policy_Set_IsChecked);
     return this.service.updateEntity(id, { is_checked });
   }
 
   @Post('invited/:id')
   @ApiOperation({ summary: '设置 是否已邀请' })
-  public setIsActived(
+  public setIsInvited(
     @Param('id') id: string,
     @Query('is_invited') is_invited: boolean,
     @Req() req: any,
   ) {
     this.setServiceRequest(req);
-    return this.service.updateEntity(id, { is_invited: is_invited });
+    this.checkPolicyName(req, this.Policy_Set_IsInvited);
+    return this.service.updateEntity(id, { is_invited });
+  }
+
+  @Post('gifted/:id')
+  @ApiOperation({ summary: '设置 是否赠送礼品' })
+  public setIsIsGifted(
+    @Param('id') id: string,
+    @Query('is_gifted') is_gifted: boolean,
+    @Req() req: any,
+  ) {
+    this.setServiceRequest(req);
+    this.checkPolicyName(req, this.Policy_Set_IsGifted);
+    return this.service.updateEntity(id, { is_gifted });
+  }
+
+  @Post('gifted/:id')
+  @ApiOperation({ summary: '设置 是否签到' })
+  public setIsIsSigned(
+    @Param('id') id: string,
+    @Query('is_signed') is_signed: boolean,
+    @Req() req: any,
+  ) {
+    this.setServiceRequest(req);
+    this.checkPolicyName(req, this.Policy_Set_IsSigned);
+    return this.service.updateEntity(id, { is_signed });
   }
 
   @Get('excel/output')

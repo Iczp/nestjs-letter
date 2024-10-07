@@ -20,4 +20,6 @@ export const ActivityCustomer_Set_IsInvited = 'ActivityCustomer_Set_IsInvited';
 
 export const ActivityCustomer_Set_IsGifed = 'ActivityCustomer_Set_IsGifed';
 
+export const ActivityCustomer_Set_IsSigned = 'ActivityCustomer_Set_IsSigned';
+
 export const ActivityCustomer_Set_IsEnabled = 'ActivityCustomer_Set_IsEnabled';

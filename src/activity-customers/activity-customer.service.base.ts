@@ -46,14 +46,14 @@ export class BaseActivityCustomerService<
   ) {
     return {
       ...entity['*'],
-      inviterConfig: {
-        id: true,
-        inviter: {
-          id: true,
-          name: true,
-          erp_user_id: true,
-        },
-      },
+      // inviterConfig: {
+      //   id: true,
+      //   inviter: {
+      //     id: true,
+      //     name: true,
+      //     erp_user_id: true,
+      //   },
+      // },
       // activity: {
       //   id: true,
       //   title: true,
@@ -96,6 +96,14 @@ export class BaseActivityCustomerService<
         .addIf(
           !Checker.isEmpty(input.is_checked),
           e.op(entity.is_checked, '=', e.bool(input.is_checked)),
+        )
+        .addIf(
+          !Checker.isEmpty(input.is_signed),
+          e.op(entity.is_signed, '=', e.bool(input.is_signed)),
+        )
+        .addIf(
+          !Checker.isEmpty(input.is_gifted),
+          e.op(entity.is_gifted, '=', e.bool(input.is_gifted)),
         )
         .addIf(
           !Checker.isEmpty(input.is_invited),

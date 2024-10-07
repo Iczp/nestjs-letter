@@ -370,6 +370,22 @@ module default {
             # default := (std::datetime_current());
         };
 
+        property invite_time : datetime {
+            annotation title := '邀请时间';
+        };
+
+         property check_time : datetime {
+            annotation title := '审核时间';
+        };
+
+        property sign_time : datetime {
+            annotation title := '签到时间';
+        };
+
+        property gift_time : datetime {
+            annotation title := '礼品发放时间';
+        };
+
         property is_invited : bool {
             annotation title := '是否邀请';
             default := (false);
@@ -389,6 +405,8 @@ module default {
             annotation title := '是否发放礼品';
             default := (false);
         };
+
+
 
         # required link activity : Activity {
         #     annotation title := '活动';

@@ -114,6 +114,7 @@ export class ActivityCustomerGetListInput extends GetListInput {
   @IsOptional()
   // @IsBoolean()
   @ApiProperty({
+    description: '是否已邀请',
     required: false,
   })
   public is_invited?: boolean;
@@ -122,6 +123,22 @@ export class ActivityCustomerGetListInput extends GetListInput {
   // @IsBoolean()
   @ApiProperty({
     required: false,
+    description: '是否签到',
+  })
+  public is_signed?: boolean;
+
+  @IsOptional()
+  @ApiProperty({
+    required: false,
+    description: '是否已赠送',
+  })
+  public is_gifted?: boolean;
+
+  @IsOptional()
+  // @IsBoolean()
+  @ApiProperty({
+    required: false,
+    description: '是否审核',
   })
   public is_checked?: boolean;
 
