@@ -62,7 +62,6 @@ const Activity: $.$expr_PathNode<$.TypeSet<$Activity, $.Cardinality.Many>, null>
 export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "customer_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "customer_phone": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
-  "inviter_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "is_invited": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "remarks": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "is_checked": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;

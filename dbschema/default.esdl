@@ -361,9 +361,9 @@ module default {
             annotation title := '备注';
         };
 
-        property inviter_name : str {
-            annotation title := '邀请人名称';
-        };
+        # property inviter_name : str {
+        #     annotation title := '邀请人名称';
+        # };
 
         property last_invite_time : datetime {
             annotation title := '最后邀请时间';

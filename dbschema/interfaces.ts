@@ -102,7 +102,6 @@ export namespace $default {
   export interface ActivityCustomer extends BaseEntity {
     "customer_name"?: string | null;
     "customer_phone"?: string | null;
-    "inviter_name"?: string | null;
     "is_invited"?: boolean | null;
     "remarks"?: string | null;
     "is_checked"?: boolean | null;

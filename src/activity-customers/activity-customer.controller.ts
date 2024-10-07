@@ -23,6 +23,7 @@ import {
 } from './activity-customer.dto';
 import { Response } from 'express';
 import { AcitvitiyCustomersPermissions } from 'src/app.permissions';
+import { e } from 'src/edgedb';
 
 @Controller('activity-customer')
 @ApiTags('ActivityCustomer 活动客户管理')
@@ -114,7 +115,10 @@ export class ActivityCustomerController extends CrudController<
   ) {
     this.setServiceRequest(req);
     this.checkPolicyName(req, this.Policy_Set_IsChecked);
-    return this.service.updateEntity(id, { is_checked });
+    return this.service.updateEntity(id, {
+      is_checked,
+      check_time: e.datetime_current(),
+    });
   }
 
   @Post('invited/:id')
@@ -126,7 +130,10 @@ export class ActivityCustomerController extends CrudController<
   ) {
     this.setServiceRequest(req);
     this.checkPolicyName(req, this.Policy_Set_IsInvited);
-    return this.service.updateEntity(id, { is_invited });
+    return this.service.updateEntity(id, {
+      is_invited,
+      invite_time: e.datetime_current(),
+    });
   }
 
   @Post('gifted/:id')
@@ -138,7 +145,10 @@ export class ActivityCustomerController extends CrudController<
   ) {
     this.setServiceRequest(req);
     this.checkPolicyName(req, this.Policy_Set_IsGifted);
-    return this.service.updateEntity(id, { is_gifted });
+    return this.service.updateEntity(id, {
+      is_gifted,
+      gift_time: e.datetime_current(),
+    });
   }
 
   @Post('gifted/:id')
@@ -150,7 +160,10 @@ export class ActivityCustomerController extends CrudController<
   ) {
     this.setServiceRequest(req);
     this.checkPolicyName(req, this.Policy_Set_IsSigned);
-    return this.service.updateEntity(id, { is_signed });
+    return this.service.updateEntity(id, {
+      is_signed,
+      sign_time: e.datetime_current(),
+    });
   }
 
   @Get('excel/output')
