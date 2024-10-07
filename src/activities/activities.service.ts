@@ -11,9 +11,10 @@ import {
   ActivityUpdateInput,
 } from './activities.dto';
 import { isEmpty } from 'src/common/validator';
-import { e } from 'src/edgedb';
+import { client, e } from 'src/edgedb';
 import { PagedResultDto } from 'src/dtos/PagedResultDto';
 import { ObjectResult } from 'src/types/ObjectResult';
+import { Assert } from 'src/common';
 
 @Injectable()
 export class ActivitiesService extends CrudService<
@@ -97,5 +98,26 @@ export class ActivitiesService extends CrudService<
       end_time: input.end_time,
       is_actived: input.is_actived,
     });
+  }
+
+  protected override async checkDelete(idList: string[]): Promise<void> {
+    await super.checkDelete(idList);
+    const items = await e
+      .select(e.Activity, (x) => ({
+        id: true,
+        title: true,
+        inviter_configs_count: true,
+        filter: new Filters([
+          e.op(x.id, 'in', e.set(...idList.map(e.uuid))),
+          e.op(x.inviter_configs_count, '>', 0),
+        ]).and(),
+        limit: 1,
+      }))
+      .run(client);
+
+    Assert.If(
+      items.length > 0,
+      () => `'${items[0].title}' 邀请人为 ${items[0].title},请先清空后再删除`,
+    );
   }
 }

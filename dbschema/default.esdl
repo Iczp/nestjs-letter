@@ -349,7 +349,7 @@ module default {
             annotation title := '客户名称';
         };
 
-        property customer_gender : str {
+        property customer_gender : Gender {
             annotation title := '客户性别';
         };
 

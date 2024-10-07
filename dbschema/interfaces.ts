@@ -100,7 +100,6 @@ export namespace $default {
     "inviter_customers": ActivityCustomer[];
   }
   export interface ActivityCustomer extends BaseEntity {
-    "customer_gender"?: string | null;
     "customer_name"?: string | null;
     "customer_phone"?: string | null;
     "inviter_name"?: string | null;
@@ -113,6 +112,7 @@ export namespace $default {
     "inviterConfig"?: InviterConfig | null;
     "inviterConfig_Name"?: string | null;
     "activity_title"?: string | null;
+    "customer_gender"?: Gender | null;
   }
   export type Gender = "Unknown" | "Male" | "Female";
   export interface GiftLog extends BaseEntity {

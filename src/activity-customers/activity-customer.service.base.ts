@@ -46,10 +46,18 @@ export class BaseActivityCustomerService<
   ) {
     return {
       ...entity['*'],
-      activity: {
+      inviterConfig: {
         id: true,
-        title: true,
+        inviter: {
+          id: true,
+          name: true,
+          erp_user_id: true,
+        },
       },
+      // activity: {
+      //   id: true,
+      //   title: true,
+      // },
     };
   }
 
@@ -62,7 +70,11 @@ export class BaseActivityCustomerService<
       new Filters([e.op(entity.is_deleted, '=', e.bool(false))])
         .addIf(
           !Checker.isEmpty(input.activity_id),
-          e.op(entity.activity['id'], '?=', e.uuid(input.activity_id)),
+          e.op(
+            entity.inviterConfig.activity.id,
+            '?=',
+            e.uuid(input.activity_id),
+          ),
         )
         .addIf(
           !Checker.isEmpty(input.inviter_user_id),
@@ -173,7 +185,7 @@ export class BaseActivityCustomerService<
 
       return {
         ...entity['*'],
-        activity_id: entity.activity.id,
+        // activity_id: entity.activity.id,
         offset: e.int64(input.skip),
         limit: e.int64(input.maxResultCount),
         filter,
@@ -193,7 +205,7 @@ export class BaseActivityCustomerService<
 
     return items.map((x) => ({
       id: x.id,
-      activity_id: x.activity_id,
+      // activity_id: x.activity_id,
       customer_name: x.customer_name,
       customer_gender: GenderText[x.customer_gender],
       customer_phone: x.customer_phone,
@@ -262,7 +274,7 @@ export class BaseActivityCustomerService<
           //     id: e.uuid(activity_id),
           //   },
           // })),
-          activity: activity as never,
+          // activity: activity as never,
           customer_name: e.cast(e.str, item.customer_name),
         });
       });

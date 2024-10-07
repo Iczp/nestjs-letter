@@ -60,7 +60,6 @@ const $Activity = $.makeType<$Activity>(_.spec, "abc5b574-6b56-11ef-896c-1bb4455
 const Activity: $.$expr_PathNode<$.TypeSet<$Activity, $.Cardinality.Many>, null> = _.syntax.$PathNode($.$toSet($Activity, $.Cardinality.Many), null);
 
 export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
-  "customer_gender": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "customer_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "customer_phone": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "inviter_name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
@@ -73,6 +72,7 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "inviterConfig": $.LinkDesc<$InviterConfig, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "inviterConfig_Name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "activity_title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
+  "customer_gender": $.PropertyDesc<$Gender, $.Cardinality.AtMostOne, false, false, false, false>;
   "<owner[is GiftLog]": $.LinkDesc<$GiftLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is SignLog]": $.LinkDesc<$SignLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<customers[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
