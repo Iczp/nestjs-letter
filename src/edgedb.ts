@@ -27,7 +27,7 @@ const dbOptions = {
   database: process.env.EDGEDB_DATABASE || 'main',
   tlsSecurity: 'insecure',
 };
-console.log('dbOptions', process.env, dbOptions);
+// console.log('dbOptions', process.env, dbOptions);
 export const client = createClient(dbOptions as any);
 
 export const e = _e_;

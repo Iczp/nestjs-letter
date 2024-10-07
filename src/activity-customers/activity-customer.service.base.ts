@@ -217,10 +217,11 @@ export class BaseActivityCustomerService<
       customer_name: x.customer_name,
       customer_gender: GenderText[x.customer_gender],
       customer_phone: x.customer_phone,
-      inviter_name: x.inviter_name,
+      // inviter_name: x.inviter_name,
       is_invited: x.is_invited ? '是' : '否',
       is_signed: x.is_signed ? '是' : '否',
       is_gifted: x.is_gifted ? '是' : '否',
+      is_checked: x.is_checked ? '是' : '否',
       remarks: x.remarks,
     }));
   }

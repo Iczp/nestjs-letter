@@ -206,6 +206,9 @@ export abstract class CrudService<
 
     const queryUpdate = e.update(this.entity, (entity) => {
       const updateDto = this.mapToUpdateEntity(input, entity);
+      if (updateDto instanceof Promise) {
+        Logger.warn('updateDto is promise');
+      }
       console.log('update dto:', updateDto);
       const filter = this.updateFilter(id, entity);
       return {

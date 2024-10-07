@@ -12,6 +12,7 @@ import {
   InviterConfigUpdateInput,
 } from './inviter-config.dto';
 import { ExtractDBType } from 'src/types/ExtractDBType';
+import { ObjectResult } from 'src/types/ObjectResult';
 @Injectable()
 export class InviterConfigService extends CrudService<
   InviterConfigDto,
@@ -116,7 +117,7 @@ export class InviterConfigService extends CrudService<
 
   public override mapToUpdateEntity(
     input: InviterConfigUpdateInput,
-  ): PromiseResult {
+  ): ObjectResult {
     const entity = e.InviterConfig;
 
     const dto = {
@@ -127,7 +128,7 @@ export class InviterConfigService extends CrudService<
       `mapToUpdateEntity: ${JSON.stringify(dto)}`,
       InviterConfigService.name,
     );
-    return Promise.resolve(dto);
+    return dto;
   }
 
   public override mapToCreateEntity(

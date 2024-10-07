@@ -38,7 +38,7 @@ export class BaseController {
 
     const userId = req.user?.id;
 
-    console.log('req.user:', req.user);
+    // console.log('req.user:', req.user);
 
     console.log('policyNames:', policyNames);
 

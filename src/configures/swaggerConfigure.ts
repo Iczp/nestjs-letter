@@ -61,7 +61,7 @@ export const swaggerConfigure = (
     .build();
   const document = SwaggerModule.createDocument(app, options);
 
-  console.log('swagger document', document);
+  // console.log('swagger document', document);
   SwaggerModule.setup(settings.path, app, document, {
     jsonDocumentUrl: 'swagger.json',
   });
