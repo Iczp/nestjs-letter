@@ -8,6 +8,8 @@ export const Activity_GetList = 'Activity_GetList';
 
 export const Activity_Delete = 'Activity_Delete';
 
+export const Activity_Set_Template = 'Activity_Set_Template';
+
 export const Activity_Excel_Tpl = 'Activity_Excel_Tpl';
 
 export const Activity_Excel_Import = 'Activity_Excel_Import';

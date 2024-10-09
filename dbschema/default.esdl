@@ -236,12 +236,12 @@ module default {
         annotation title :=  '活动';
         annotation description := '活动';
 
-        property coverUrl : str {
-            annotation title := '封面地址';
-        };
-
         property title : str {
             annotation title := '标题';
+        };
+
+        property cover_url : str {
+            annotation title := '封面地址';
         };
 
         property description : str {
@@ -260,19 +260,6 @@ module default {
             annotation title := '活动说明';
         };
 
-        property qrcode_rect : str {
-            annotation title := '二维码图片位置';
-        };
-
-        property bg_image : str {
-            annotation title := '活动图片';
-        };
-
-        property is_image_set : bool {
-            annotation title := '是否设置了图片模板';
-            default := (false)
-        };
-
         property start_time : datetime {
             annotation title := '开始时间';
             default := (std::datetime_current());
@@ -286,6 +273,29 @@ module default {
         property is_actived : bool {
             annotation title := '是否活跃';
             default := (true);
+        };
+
+        property image_base64 : str {
+            annotation title := '模板图片base64';
+        };
+
+        property image_crop : json {
+            annotation title := '模板二维码图片位置信息';
+        };
+
+        property image_size := len(.image_base64);
+        # {
+        #     annotation title := '图片大小';
+        # };
+
+        property is_image_seted : bool {
+            annotation title := '是否设置了图片模板';
+            default := (false);
+        };
+
+        property image_last_modification_time : datetime {
+            annotation title := '图片模板修改时间';
+            # default := (std::datetime_current());
         };
 
         # multi customers: ActivityCustomer {

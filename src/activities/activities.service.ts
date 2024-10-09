@@ -8,6 +8,7 @@ import {
   ActivityDetailDto,
   ActivityDto,
   ActivityGetListInput,
+  ActivityTemplageInput,
   ActivityUpdateInput,
 } from './activities.dto';
 import { isEmpty } from 'src/common/validator';
@@ -74,7 +75,7 @@ export class ActivitiesService extends CrudService<
     // const entity = e.Activity;
     return {
       title: input.title ?? entity.title,
-      coverUrl: input.coverUrl ?? '',
+      cover_url: input.cover_url ?? '',
       description: input.description ?? entity.description,
       address: input.address ?? entity.address,
       max_count: input.max_count ?? entity.max_count,
@@ -90,7 +91,7 @@ export class ActivitiesService extends CrudService<
   public override mapToCreateEntity(input: ActivityCreateInput): PromiseResult {
     return Promise.resolve({
       title: input.title,
-      coverUrl: input.coverUrl,
+      cover_url: input.cover_url,
       description: input.description,
       address: input.address,
       max_count: input.max_count,
@@ -119,5 +120,18 @@ export class ActivitiesService extends CrudService<
       items.length > 0,
       () => `'${items[0].title}' 邀请人为 ${items[0].title},请先清空后再删除`,
     );
+  }
+
+  public async setTemplate(
+    id: string,
+    base64: string,
+    input: ActivityTemplageInput,
+  ): Promise<ObjectResult> {
+    return await this.updateEntity(id, {
+      is_image_seted: true,
+      image_base64: base64,
+      image_crop: input.body,
+      image_last_modification_time: e.datetime_current(),
+    });
   }
 }

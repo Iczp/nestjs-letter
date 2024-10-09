@@ -1,5 +1,17 @@
-import { Body, Controller, Get, Param, Post, Put, Req } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ActivitiesService } from './activities.service';
 import { CrudController } from 'src/bases/CrudController';
 // import { Auditing } from 'src/audits/audits.decorator';
@@ -9,10 +21,13 @@ import {
   ActivityDto,
   ActivityGetListInput,
   ActivityPagedResult,
+  ActivityTemplageInput as ActivityTemplateInput,
   ActivityUpdateInput,
 } from './activities.dto';
 import { AcitvitiesPermissions } from 'src/app.permissions';
 import { CurrentUserApiTags } from 'src/app.consts';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ObjectResult } from 'src/types/ObjectResult';
 
 @Controller('activities')
 @ApiTags('Activities 活动管理')
@@ -36,6 +51,9 @@ export class ActivitiesController extends CrudController<
 
   protected Policy_GetList_ByCurrentUser =
     AcitvitiesPermissions.Activity_GetList_ByCurrentUser;
+
+  protected Policy_Set_Template = AcitvitiesPermissions.Activity_Set_Template;
+
   constructor(private readonly activitiesService: ActivitiesService) {
     super(activitiesService);
   }
@@ -89,12 +107,46 @@ export class ActivitiesController extends CrudController<
     return super.update(id, input, req);
   }
 
-  // @Delete(':id')
-  // @ApiOperation({ summary: '删除活动' })
-  // public override delete(
-  //   @Query('id') id: string | string[],
-  //   @Req() req: any,
-  // ): Promise<void> {
-  //   return super.delete(id, req);
-  // }
+  @Post('/set-temp/:id')
+  @ApiOperation({
+    summary: '设置活动模板',
+    description: `设置模板`,
+  })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+      fileFilter: (req, file, cb) => {
+        if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
+          return cb(
+            new BadRequestException(`Only 'png|jpg|jpeg' files are allowed!`),
+            false,
+          );
+        }
+        cb(null, true);
+      },
+    }),
+  )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: '模板图片',
+    type: ActivityTemplateInput,
+  })
+  public async setTemplate(
+    @UploadedFile() file: Express.Multer.File,
+    @Query('id') id: string,
+    @Body() body: ActivityTemplateInput,
+    @Req() req: any,
+  ): Promise<ObjectResult> {
+    this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Set_Template);
+    const base64 = file.buffer.toString('base64');
+
+    console.log('typeof body', typeof body);
+    console.log(body, id);
+
+    body = typeof body === 'string' ? JSON.parse(body) : body;
+    // return this.activitiesService.setTemplate(id, base64);
+    // return true;
+    return await this.activitiesService.setTemplate(id, base64, body);
+  }
 }

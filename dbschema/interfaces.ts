@@ -86,19 +86,21 @@ export namespace $default {
     "end_time"?: Date | null;
     "start_time"?: Date | null;
     "title"?: string | null;
-    "coverUrl"?: string | null;
     "address"?: string | null;
     "content"?: string | null;
     "description"?: string | null;
     "max_count"?: number | null;
     "is_actived"?: boolean | null;
-    "bg_image"?: string | null;
-    "is_image_set"?: boolean | null;
-    "qrcode_rect"?: string | null;
     "inviterConfigs": InviterConfig[];
     "inviter_configs_count": number;
     "inviter_customers": ActivityCustomer[];
     "customers_count": number;
+    "cover_url"?: string | null;
+    "image_base64"?: string | null;
+    "image_crop"?: unknown | null;
+    "image_size"?: number | null;
+    "image_last_modification_time"?: Date | null;
+    "is_image_seted"?: boolean | null;
   }
   export interface ActivityCustomer extends BaseEntity {
     "customer_name"?: string | null;

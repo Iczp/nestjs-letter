@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsInt, IsOptional, IsBoolean } from 'class-validator';
-import { UserType } from 'dbschema/interfaces';
 import { GetListInput } from 'src/bases/GetListInput';
 import { BaseEntityDto } from 'src/dtos/BaseEntityDto';
+import { FileUploadInput } from 'src/dtos/FileUploadInput';
 import { PagedResult } from 'src/dtos/PagedResultDto';
 
 export class ActivityCreateInput {
@@ -12,7 +12,7 @@ export class ActivityCreateInput {
 
   @ApiProperty()
   @IsOptional()
-  public coverUrl?: string;
+  public cover_url?: string;
 
   @ApiProperty()
   @IsOptional()
@@ -49,20 +49,96 @@ export class ActivityUpdateInput extends ActivityCreateInput {
 
 export class ActivityDto extends BaseEntityDto {
   @IsNotEmpty()
-  @ApiProperty()
-  title!: string;
+  @ApiProperty({ description: '活动标题' })
+  title: string;
 
-  @ApiProperty()
-  phone?: string;
+  @ApiProperty({ description: '封面地址' })
+  cover_url?: string;
 
-  @ApiProperty()
-  user_type?: UserType;
+  @ApiProperty({ description: '活动简介' })
+  description?: string;
 
-  @ApiProperty()
+  @ApiProperty({ description: '参与人数量' })
+  max_count?: number;
+
+  @ApiProperty({ description: '客户数量' })
+  customers_count?: number;
+
+  @ApiProperty({ description: '邀请人数量' })
+  inviter_configs_count?: number;
+
+  @ApiProperty({ description: '开始时间' })
+  start_time?: Date;
+
+  @ApiProperty({ description: '结束时间' })
+  end_time?: Date;
+
+  @ApiProperty({ description: '是否活跃' })
+  is_actived?: boolean;
+
+  @ApiProperty({ description: '是否设置了图片模板' })
+  is_image_seted?: boolean;
+
+  @ApiProperty({ description: '是否可用' })
   is_enabled?: boolean;
 }
 
-export class ActivityDetailDto extends ActivityDto {}
+export class ActivityDetailDto extends ActivityDto {
+  @ApiProperty({ description: '活动说明' })
+  content?: string;
+}
+
+export class CropBoxDto {
+  @ApiProperty()
+  left?: number;
+  @ApiProperty()
+  top?: number;
+  @ApiProperty()
+  width?: number;
+  @ApiProperty()
+  height?: number;
+}
+
+export class CropDataDto {
+  @ApiProperty()
+  x?: number;
+  @ApiProperty()
+  y?: number;
+  @ApiProperty()
+  width?: number;
+  @ApiProperty()
+  height?: number;
+  @ApiProperty()
+  rotate?: number;
+  @ApiProperty()
+  scaleX?: number;
+  @ApiProperty()
+  scaleY?: number;
+}
+
+export class CropDto {
+  @ApiProperty({ description: '剪裁数据信息', type: CropDataDto })
+  data?: CropDataDto;
+  @ApiProperty({ description: '剪裁框信息', type: CropBoxDto })
+  box?: CropBoxDto;
+}
+
+export class ActivityTemplageDto extends BaseEntityDto {
+  @ApiProperty({ description: '模板图片base64' })
+  image_base64?: string;
+
+  @ApiProperty({ description: '模板二维码图片位置信息', type: CropDto })
+  image_crop?: CropDto;
+}
+
+export class ActivityTemplageInput extends FileUploadInput {
+  @ApiProperty({
+    required: false,
+    description: '二维码图片剪裁信息',
+    type: CropDto,
+  })
+  public body?: CropDto;
+}
 
 export class ActivityGetListInput extends GetListInput {
   @IsOptional()
