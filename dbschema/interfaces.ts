@@ -101,6 +101,7 @@ export namespace $default {
     "image_size"?: number | null;
     "image_last_modification_time"?: Date | null;
     "is_image_seted"?: boolean | null;
+    "image_mimetype"?: string | null;
   }
   export interface ActivityCustomer extends BaseEntity {
     "customer_name"?: string | null;

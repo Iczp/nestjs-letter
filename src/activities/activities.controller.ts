@@ -143,10 +143,11 @@ export class ActivitiesController extends CrudController<
 
     console.log('typeof body', typeof body);
     console.log(body, id);
+    const mimetype = file.mimetype;
 
     body = typeof body === 'string' ? JSON.parse(body) : body;
     // return this.activitiesService.setTemplate(id, base64);
     // return true;
-    return await this.activitiesService.setTemplate(id, base64, body);
+    return await this.activitiesService.setTemplate(id, mimetype, base64, body);
   }
 }

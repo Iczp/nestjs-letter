@@ -133,7 +133,7 @@ export class ActivityTemplageDto extends BaseEntityDto {
 
 export class ActivityTemplageInput extends FileUploadInput {
   @ApiProperty({
-    required: false,
+    required: true,
     description: '二维码图片剪裁信息',
     type: CropDto,
   })

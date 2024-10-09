@@ -35,6 +35,30 @@ export class ActivitiesService extends CrudService<
   }
   public readonly entity = e.Activity;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected override listSelect(input: ActivityGetListInput, entity?: any) {
+    return {
+      // ...entity['*'],
+      // content: undefined,
+      // image_base64: undefined,
+      // image_crop: undefined,
+      id: true,
+      title: true,
+      cover_url: true,
+      description: true,
+      max_count: true,
+      start_time: true,
+      end_time: true,
+      is_actived: true,
+      creation_time: true,
+      is_enabled: true,
+      is_image_seted: true,
+      image_size: true,
+      customers_count: true,
+      inviter_configs_count: true,
+    };
+  }
+
   protected override listFilter(
     input: ActivityGetListInput,
     // entity: ExtractDBType<typeof e.Activity>,
@@ -124,11 +148,13 @@ export class ActivitiesService extends CrudService<
 
   public async setTemplate(
     id: string,
+    image_mimetype: string,
     base64: string,
     input: ActivityTemplageInput,
   ): Promise<ObjectResult> {
     return await this.updateEntity(id, {
       is_image_seted: true,
+      image_mimetype,
       image_base64: base64,
       image_crop: input.body,
       image_last_modification_time: e.datetime_current(),

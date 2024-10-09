@@ -279,6 +279,10 @@ module default {
             annotation title := '模板图片base64';
         };
 
+        property image_mimetype : str {
+            annotation title := '图片类型';
+        };
+
         property image_crop : json {
             annotation title := '模板二维码图片位置信息';
         };
