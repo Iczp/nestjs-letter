@@ -83,11 +83,6 @@ export class ActivityDto extends BaseEntityDto {
   is_enabled?: boolean;
 }
 
-export class ActivityDetailDto extends ActivityDto {
-  @ApiProperty({ description: '活动说明' })
-  content?: string;
-}
-
 export class CropBoxDto {
   @ApiProperty()
   left?: number;
@@ -121,6 +116,29 @@ export class CropDto {
   data?: CropDataDto;
   @ApiProperty({ description: '剪裁框信息', type: CropBoxDto })
   box?: CropBoxDto;
+}
+
+export class ActivityDetailDto extends ActivityDto {
+  @ApiProperty({ description: '活动说明' })
+  content?: string;
+
+  @ApiProperty({ description: '模板图片base64' })
+  image_base64?: string;
+
+  @ApiProperty({ description: '图片类型' })
+  image_mimetype?: string;
+
+  @ApiProperty({ description: '模板二维码图片位置信息', type: CropDto })
+  image_crop?: CropDto;
+
+  @ApiProperty({ description: '图片大小' })
+  image_size?: number;
+
+  @ApiProperty({ description: '是否设置了图片模板' })
+  is_image_seted?: boolean;
+
+  @ApiProperty({ description: '图片模板修改时间' })
+  image_last_modification_time?: Date;
 }
 
 export class ActivityTemplageDto extends BaseEntityDto {

@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Req,
   UploadedFile,
   UseInterceptors,
@@ -133,7 +132,7 @@ export class ActivitiesController extends CrudController<
   })
   public async setTemplate(
     @UploadedFile() file: Express.Multer.File,
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Body() body: ActivityTemplateInput,
     @Req() req: any,
   ): Promise<ObjectResult> {
