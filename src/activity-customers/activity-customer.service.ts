@@ -2,18 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { ActivityCustomerGetListInput } from './activity-customer.dto';
 import { BaseActivityCustomerService } from './activity-customer.service.base';
 import { ActivityCustomer, Activity } from 'dbschema/interfaces';
-// import sharp from 'sharp';
-// import QRCode from 'qrcode';
 import * as sharp from 'sharp';
 import * as QRCode from 'qrcode';
 import { CropDataDto, CropDto } from 'src/activities/activities.dto';
 
 @Injectable()
 export class ActivityCustomerService extends BaseActivityCustomerService<ActivityCustomerGetListInput> {
-  constructor() {
-    super();
-  }
-
   public async generateLetter(id: string) {
     const entity = await this.getEntityById<ActivityCustomer>(id, (entity) => ({
       ...entity['*'],
@@ -26,6 +20,7 @@ export class ActivityCustomerService extends BaseActivityCustomerService<Activit
           // image_crop: true,
           // is_image_seted: true,
           // image_mimetype: true,
+          // qrcode_template: true,
         },
       },
       // activity: { id: true },
@@ -53,6 +48,7 @@ export class ActivityCustomerService extends BaseActivityCustomerService<Activit
       qrData,
       image_crop.data,
     );
+
     return {
       buffer: outputImage,
       filename: `${activity.title}(${entity.customer_name}).png`,

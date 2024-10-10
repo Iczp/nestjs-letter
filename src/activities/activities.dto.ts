@@ -151,6 +151,12 @@ export class ActivityTemplageDto extends BaseEntityDto {
   @ApiProperty({ description: '模板图片base64' })
   image_base64?: string;
 
+  @ApiProperty({
+    description:
+      '二维码模板, 变量 {{id}} 如： https://iczp.net/letter?id={{id}}',
+  })
+  qrcode_template?: string;
+
   @ApiProperty({ description: '模板二维码图片位置信息', type: CropDto })
   image_crop?: CropDto;
 }
