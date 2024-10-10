@@ -64,6 +64,8 @@ export class ActivityCustomerController extends CrudController<
 
   protected Policy_Set_IsSigned =
     AcitvitiyCustomersPermissions.ActivityCustomer_Set_IsSigned;
+  protected Policy_Get_Letter =
+    AcitvitiyCustomersPermissions.ActivityCustomer_Get_Letter;
 
   constructor(readonly service: ActivityCustomerService) {
     super(service);
@@ -179,12 +181,41 @@ export class ActivityCustomerController extends CrudController<
     return super.exportExcel(res, input, req);
   }
 
-  // @Post('excel/import')
-  // override importExcel(
-  //   @UploadedFile() file: Express.Multer.File,
-  //   @Query() query: any,
-  //   @Body() body: any,
-  // ): Promise<ExcelImportResult> {
-  //   return super.importExcel(file, query, body);
-  // }
+  private async resImage({
+    res,
+    fileName,
+    attachment = false,
+  }: {
+    res: Response;
+    fileName: string;
+    attachment?: boolean;
+  }) {
+    const formatFileName = encodeURIComponent(fileName).replace(
+      /[!'()*]/g,
+      (c) => '%' + c.charCodeAt(0).toString(16),
+    );
+    // attachment;
+    const headers = {
+      'Content-Type': 'image/png',
+      'Content-Disposition': `${attachment ? 'attachment;' : ''} filename="${formatFileName}";`,
+    };
+    Object.entries(headers).forEach((item) => {
+      res.setHeader(item[0], item[1]);
+    });
+  }
+
+  @Get('letter/:id')
+  @ApiOperation({ summary: '邀请函', description: `邀请函图片` })
+  public async letter(
+    @Res() res: Response,
+    @Req() req: any,
+    @Param('id') id: string,
+  ) {
+    this.setServiceRequest(req);
+    await this.checkPolicyName(req, this.Policy_Get_Letter);
+    const { filename, buffer } = await this.service.generateLetter(id);
+    this.resImage({ res, fileName: filename });
+    res.end(buffer, 'binary'); // 使用 'binary' 编码发送 Buffer
+    res.end();
+  }
 }

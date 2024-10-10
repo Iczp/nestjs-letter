@@ -359,7 +359,9 @@ module default {
 
         # activity_title := .activity.title;
 
-        activity_title := .inviterConfig.activity.title;
+        activity := .inviterConfig.activity;
+
+        activity_title := .activity.title;
 
         property customer_name : str {
             annotation title := '客户名称';

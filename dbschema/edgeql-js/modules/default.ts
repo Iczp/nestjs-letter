@@ -54,6 +54,7 @@ export type $ActivityλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "is_image_seted": $.PropertyDesc<_std.$bool, $.Cardinality.AtMostOne, false, false, false, true>;
   "image_mimetype": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, false, false, false>;
   "<activity[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;
+  "<activity[is ActivityCustomer]": $.LinkDesc<$ActivityCustomer, $.Cardinality.Many, {}, false, false,  false, false>;
   "<activity": $.LinkDesc<$.ObjectType, $.Cardinality.Many, {}, false, false,  false, false>;
 }>;
 type $Activity = $.ObjectType<"default::Activity", $ActivityλShape, null, [
@@ -74,12 +75,13 @@ export type $ActivityCustomerλShape = $.typeutil.flatten<$BaseEntityλShape & {
   "last_invite_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "inviterConfig": $.LinkDesc<$InviterConfig, $.Cardinality.AtMostOne, {}, false, false,  false, false>;
   "inviterConfig_Name": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
-  "activity_title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "customer_gender": $.PropertyDesc<$Gender, $.Cardinality.AtMostOne, false, false, false, false>;
   "check_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "gift_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "invite_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
   "sign_time": $.PropertyDesc<_std.$datetime, $.Cardinality.AtMostOne, false, false, false, false>;
+  "activity": $.LinkDesc<$Activity, $.Cardinality.AtMostOne, {}, false, true,  false, false>;
+  "activity_title": $.PropertyDesc<_std.$str, $.Cardinality.AtMostOne, false, true, false, false>;
   "<owner[is GiftLog]": $.LinkDesc<$GiftLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<owner[is SignLog]": $.LinkDesc<$SignLog, $.Cardinality.Many, {}, false, false,  false, false>;
   "<customers[is InviterConfig]": $.LinkDesc<$InviterConfig, $.Cardinality.Many, {}, false, false,  false, false>;

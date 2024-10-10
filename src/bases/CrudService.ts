@@ -84,15 +84,42 @@ export abstract class CrudService<
       .and();
   }
 
-  protected getItemQuery(id: string) {
+  protected getItemQuery(
+    id: string,
+    selector?: object | ((entity: any) => object),
+  ) {
     const query = e.select(this.entity, (entity) => {
       const filter = this.itemFilter(id, entity);
+      const selValue =
+        typeof selector === 'function' ? selector(entity) : selector;
       return {
         filter_single: filter,
-        ...this.itemSelect(id, this.entity),
+        ...this.itemSelect(id, entity),
+        ...selValue,
       };
     });
     return query;
+  }
+
+  public async getEntityById<T>(
+    id: string,
+    selector?: object | ((entity: any) => object),
+  ) {
+    const entity = await this.findEntityById<T>(id, selector);
+    if (!entity) {
+      throw new NotFoundException(`Item not found,id:${id}`);
+    }
+    return entity;
+  }
+
+  public async findEntityById<T>(
+    id: string,
+    selector?: object | ((entity: any) => object),
+  ) {
+    await this.checkGetItem(id);
+    const query = this.getItemQuery(id, selector);
+    const entity = await query.run(client);
+    return entity as T;
   }
   protected async checkGetItem(id: string) {
     Assert.IfNotGuid(id);
@@ -100,15 +127,9 @@ export abstract class CrudService<
 
   public async getItem(id: string): Promise<TDetailDto> {
     Logger.log(`getItem id:${id}`, CrudService.name);
-    await this.checkGetItem(id);
-    const query = this.getItemQuery(id);
-    const entity = await query.run(client);
 
+    const entity = await this.getEntityById(id);
     // console.log('getItem result', user);
-
-    if (!entity) {
-      throw new NotFoundException(`Item not found,id:${id}`);
-    }
     return await this.mapToDetailDto(entity);
   }
 
