@@ -62,7 +62,7 @@ export class ActivityCustomerService extends BaseActivityCustomerService<Activit
   protected formatQrData(tmp: string, data: { [key: string]: string }) {
     let text = tmp;
     for (const key in data) {
-      text = text.replace(`{${key}}`, data[key]);
+      text = text.replace(`{{${key}}}`, data[key]);
     }
     return text;
   }
