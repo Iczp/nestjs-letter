@@ -292,6 +292,11 @@ module default {
         #     annotation title := '图片大小';
         # };
 
+        property qrcode_template : str {
+            annotation title := '二维码模板';
+            annotation description := '变量 {{id}} 如： https://iczp.net/letter?id={{id}}';
+        };
+
         property is_image_seted : bool {
             annotation title := '是否设置了图片模板';
             default := (false);

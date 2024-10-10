@@ -139,6 +139,12 @@ export class ActivityDetailDto extends ActivityDto {
 
   @ApiProperty({ description: '图片模板修改时间' })
   image_last_modification_time?: Date;
+
+  @ApiProperty({
+    description:
+      '二维码模板, 变量 {{id}} 如： https://iczp.net/letter?id={{id}}',
+  })
+  qrcode_template?: string;
 }
 
 export class ActivityTemplageDto extends BaseEntityDto {
